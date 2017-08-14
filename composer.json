@@ -1,29 +1,19 @@
 {
-    "name": "p3in/pilot-io",
-    "description": "Plus 3 Interactive CMS Core Module",
-    "authors": [
-        {
-            "name": "Plus 3 Interactive, LLC",
-            "email": "support@p3in.com"
-        }
-    ],
-    "require": {
-        "php": ">=7.0.0",
-        "laravelcollective/remote": "5.*",
-        "langemike/laravel5-less": "~1.0",
-        "chumper/zipper": "0.6.x",
-        "google/recaptcha": "~1.1",
-        "roumen/sitemap": "2.6.*",
-        "pusher/pusher-php-server": "~2.0",
-        "league/flysystem-sftp": "~1.0",
-        "guzzlehttp/guzzle": "~6.0",
-        "tymon/jwt-auth": "dev-develop",
-        "laravel/passport": "^1.0",
-        "intervention/image": "^2.3",
-        "facebook/graph-sdk": "^5.4",
-        "herzult/php-ssh": "^1.1",
-        "p3in/modular": "dev-develop",
-        "p3in/disks-module": "dev-develop"
-    },
-    "minimum-stability": "dev"
+  "name": "p3in/app-compass",
+  "description": "Plus 3 Interactive's App Management System",
+  "authors": [
+    {
+      "name": "Plus 3 Interactive, LLC",
+      "email": "support@p3in.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "pusher/pusher-php-server": "~2.0",
+    "guzzlehttp/guzzle": "~6.0",
+    "tymon/jwt-auth": "dev-develop@dev",
+    "laravel/passport": "^1.0",
+    "p3in/modular": "dev-develop@dev",
+    "p3in/form-builder": "dev-develop@dev"
+  }
 }

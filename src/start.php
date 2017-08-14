@@ -1,13 +1,13 @@
 <?php
 
-$module_class_name = "\P3in\PilotIoModule";
+$module_class_name = "\P3in\AppCompassModule";
 
-$dependencies = ['disks'];
+$dependencies = [];
 
 if (isset($path)) {
-    require_once($path . '/PilotIoModule.php');
+    require_once($path . '/AppCompassModule.php');
 
     return $module_class_name::makeInstance($path);
 }
 
-throw new \Exception('Path not specified while trying to load <pilot-io> module.');
+throw new \Exception('Path not specified while trying to load <app-compass> module.');
