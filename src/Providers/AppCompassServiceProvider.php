@@ -132,6 +132,8 @@ class AppCompassServiceProvider extends BaseServiceProvider
         $this->publishes([
             __DIR__ . '/../config/app-compass.php' => config_path('app-compass.php'),
         ]);
+
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
 
     // @TODO: remove with Laravel 5.5
@@ -141,6 +143,8 @@ class AppCompassServiceProvider extends BaseServiceProvider
      */
     protected function registerDependentPackages()
     {
+        $this->app->register(ModuleServiceProvider::class);
+        $this->app->register(FormBuilderServiceProvider::class);
         $this->app->register(AppCompassEventServiceProvider::class);
         $this->app->register(LaravelServiceProvider::class);
     }

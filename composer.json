@@ -26,6 +26,8 @@
   "extra": {
     "laravel": {
       "providers": [
+        "P3in\\Providers\\ModuleServiceProvider",
+        "P3in\\Providers\\FormBuilderServiceProvider",
         "P3in\\Providers\\AppCompassServiceProvider",
         "P3in\\Providers\\AppCompassEventServiceProvider",
         "Tymon\\JWTAuth\\Providers\\LaravelServiceProvider"
