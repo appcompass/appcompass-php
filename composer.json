@@ -15,5 +15,19 @@
     "laravel/passport": "^1.0",
     "p3in/modular": "dev-develop@dev",
     "p3in/form-builder": "dev-develop@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "P3in\\": "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "P3in\\Providers\\AppCompassServiceProvider",
+        "P3in\\Providers\\AppCompassEventServiceProvider",
+        "Tymon\\JWTAuth\\Providers\\LaravelServiceProvider"
+      ]
+    }
   }
 }

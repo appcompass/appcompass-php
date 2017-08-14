@@ -127,6 +127,15 @@ class AppCompassServiceProvider extends BaseServiceProvider
         $this->registerDependentPackages();
     }
 
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__ . '/../config/app-compass.php' => config_path('app-compass.php'),
+        ]);
+    }
+
+    // @TODO: remove with Laravel 5.5
+
     /**
      * Load dependent packages.
      */
