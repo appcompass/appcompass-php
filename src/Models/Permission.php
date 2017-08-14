@@ -3,19 +3,20 @@
 namespace P3in\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use P3in\Models\Role;
-use P3in\Models\User;
 use P3in\ModularBaseModel;
+use P3in\Traits\SetsAndChecksPermission;
 
 class Permission extends ModularBaseModel
 {
+    use SetsAndChecksPermission;
+
     protected $table = 'permissions';
 
     protected $fillable = [
-        'type',
+        'name',
         'label',
         'description',
-        'locked',
+        'system',
     ];
 
     /**
@@ -23,9 +24,29 @@ class Permission extends ModularBaseModel
      *
      */
     public static $rules = [
+        'name'  => 'required',
         'label' => 'required',
-        'type' => 'required'
     ];
+
+    public function permissionFieldName()
+    {
+        return 'assignable_by_id';
+    }
+
+    public function permissionRelationshipName()
+    {
+        return 'assignable_by';
+    }
+
+    public function allowNullPermission()
+    {
+        return false;
+    }
+
+    public function assignable_by()
+    {
+        return $this->belongsTo(Permission::class, $this->permissionFieldName());
+    }
 
     public function users()
     {
@@ -33,9 +54,9 @@ class Permission extends ModularBaseModel
     }
 
     /**
-    *   Get roles having this permission
-    *
-    */
+     *   Get roles having this permission
+     *
+     */
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -44,8 +65,8 @@ class Permission extends ModularBaseModel
     /**
      *
      *
-     * @param      \Illuminate\Database\Eloquent\Builder  $builder  The builder
-     * @param      \P3in\Models\User                      $user     The user
+     * @param      \Illuminate\Database\Eloquent\Builder $builder The builder
+     * @param      \App\User                             $user    The user
      *
      * @return     <type>                                 ( description_of_the_return_value )
      */
@@ -55,11 +76,11 @@ class Permission extends ModularBaseModel
     // }
 
     /**
-    *   Get permission by type
-    *
-    */
-    public function scopeByType($query, $type)
+     *   Get permission by name
+     *
+     */
+    public function scopeByName($query, $name)
     {
-        return $query->where('type', '=', $type);
+        return $query->where('name', $name);
     }
 }

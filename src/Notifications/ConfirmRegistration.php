@@ -51,7 +51,7 @@ class ConfirmRegistration extends Notification
 
         return (new MailMessage)
             ->line("You are receiving this email because you registered an account on {$website->url}.")
-            ->action('Confirm account', route('activate-account', $this->activation_code))
+            ->action('Confirm account', route('cp-activate-account', $this->activation_code))
             ->line('If you did not register this account, no further action is required.');
     }
 }

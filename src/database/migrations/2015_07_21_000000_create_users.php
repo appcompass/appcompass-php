@@ -5,6 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateUsers extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -17,7 +18,7 @@ class CreateUsers extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
-            $table->string('phone', 24);
+            $table->string('phone', 24)->nullable();
             $table->string('password', 64);
             $table->boolean('active')->default(false);
             $table->string('activation_code', 64)->nullable();
@@ -25,6 +26,7 @@ class CreateUsers extends Migration
             $table->timestamp('last_login', 64)->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('password_resets', function (Blueprint $table) {

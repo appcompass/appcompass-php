@@ -3,7 +3,6 @@
 namespace P3in\Controllers;
 
 use Illuminate\Database\Eloquent\Model;
-use P3in\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use P3in\Policies\ResourcesPolicy;
 use P3in\Requests\FormRequest;
@@ -73,7 +72,7 @@ abstract class AbstractChildController extends Controller
         $this->repo
             ->setParent($parent)
             ->fromModel($model)
-            ->update($request->all());
+            ->update($request->except(['pivot']));
 
         return ['message' => 'Model updated.'];
     }

@@ -3,24 +3,15 @@
 namespace P3in\Controllers;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Foundation\Auth\ResetsPasswords;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Route;
 use P3in\Events\Login;
 use P3in\Events\Logout;
-use P3in\Models\Resource;
-use P3in\Models\User;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\User;
 
 class AuthController extends Controller
 {
@@ -46,8 +37,6 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // for testing.
-        User::where('email', $request->email)->delete();
         $this->validate($request, $this->rules(), $this->validationMessages());
 
         $user = $this->create($request->all());
@@ -78,18 +67,17 @@ class AuthController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->noCodeResponse($request);
         }
+
         return $user;
     }
 
     protected function rules()
     {
-        return [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'phone' => 'required|min:10',
-            'password' => 'required|min:6|confirmed',
-        ];
+        $rules = User::$rules;
+        $rules['email'] .= '|unique:users';
+        $rules['password'] .= '|required';
+
+        return $rules;
     }
 
     protected function validationMessages()
@@ -101,12 +89,12 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'password' => bcrypt($data['password']),
-            'activation_code' => str_random(64)
+            'first_name'      => $data['first_name'],
+            'last_name'       => $data['last_name'],
+            'email'           => $data['email'],
+            'phone'           => $data['phone'],
+            'password'        => $data['password'],
+            'activation_code' => str_random(64),
         ]);
     }
 
@@ -118,6 +106,7 @@ class AuthController extends Controller
         if ($token = $this->guard()->attempt($this->credentials($request))) {
             return $this->afterLoginAttempt($token);
         }
+
         return $token;
     }
 
@@ -135,9 +124,10 @@ class AuthController extends Controller
     protected function validateLogin(Request $request)
     {
         // we add remember => true to the request since all token auth are set to remember (no session).
-        $request->merge(array('remember' => true));
+        $request->merge(['remember' => true]);
         $this->validate($request, [
-            $this->username() => 'required', 'password' => 'required',
+            $this->username() => 'required',
+            'password'        => 'required',
         ]);
     }
 
@@ -145,6 +135,7 @@ class AuthController extends Controller
     {
         $creds = $request->only($this->username(), 'password');
         $creds['active'] = 1;
+
         return $creds;
     }
 
@@ -155,12 +146,18 @@ class AuthController extends Controller
         } else {
             return $this->sendFailedLoginResponse($request);
         }
+        $user->makeHidden([
+            'roles',
+            'created_at',
+            'updated_at',
+            'deleted_at',
+        ]);
 
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'Bearer',
-            'expires_in' => config('jwt.ttl') * 60,
-            'user' => $user
+            'token_type'   => 'Bearer',
+            'expires_in'   => config('jwt.ttl') * 60,
+            'user'         => $user,
         ]);
     }
 
@@ -168,30 +165,28 @@ class AuthController extends Controller
     {
         return response()->json([
             'message' => trans('registration.check-email'),
-            'user' => $user
+            'user'    => $user,
         ]);
     }
 
-    // @TODO: needs error code, can't be 401.
     protected function noCodeResponse(Request $request)
     {
         return response()->json([
             'message' => trans('registration.activation-failed'),
-        ]);
+        ], 422);
     }
 
-    // @TODO: needs error code, can't be 401.
     protected function alreadyActiveResponse(Request $request)
     {
         return response()->json([
             'message' => trans('registration.already-active'),
-        ]);
+        ], 422);
     }
 
     protected function sendFailedLoginResponse(Request $request)
     {
         return response()->json([
             'message' => trans('auth.failed'),
-        ], 401);
+        ], 422);
     }
 }

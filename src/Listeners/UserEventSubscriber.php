@@ -3,6 +3,7 @@
 namespace P3in\Listeners;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use P3in\Events\Login;
 use P3in\Events\Logout;
 
@@ -17,6 +18,10 @@ class UserEventSubscriber
         // lets save the last_login timestamp.
         $user->last_login = Carbon::now();
         $user->save();
+
+        $permissions = $user->allPermissions();
+
+        Cache::tags('auth_permissions')->forever($user->id, $permissions);
     }
 
     /**

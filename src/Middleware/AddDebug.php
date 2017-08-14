@@ -3,21 +3,19 @@
 namespace P3in\Middleware;
 
 use Closure;
+use DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use P3in\Models\Form;
-use P3in\Models\FormAlias;
-use P3in\Models\PageComponentContent;
-use Route;
 
 class AddDebug
 {
     private $logged = [];
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure                 $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -38,20 +36,20 @@ class AddDebug
     {
     }
 
-    private function enableLogging()
+    public function enableLogging()
     {
-        \DB::enableQueryLog();
+        DB::enableQueryLog();
 
         \Event::listen('illuminate.log', function ($level, $message, $context) {
-            $this->logged['logged'][] = [
-                'level' => $level,
+            $this->setLogged('logged', [
+                'level'   => $level,
                 'message' => $message,
-                'context' => $context
-            ];
+                'context' => $context,
+            ], true);
         });
     }
 
-    private function setOutput($response)
+    public function setOutput($response, Closure $callback = null)
     {
         if ($response instanceof JsonResponse) {
             $content = $response->getData(true);
@@ -61,12 +59,29 @@ class AddDebug
             $rtn_method = 'setContent';
         }
 
-        $this->logged['queries'] = \DB::getQueryLog();
+        $this->setLogged('queries', DB::getQueryLog());
 
+        if ($callback) {
+            $callback();
+        }
         if (is_array($content)) {
-            $content['debug'] = $this->logged;
+            $content['debug'] = $this->getLogged();
         }
 
         return $response->$rtn_method($content);
+    }
+
+    public function setLogged($key, $val, $append = false)
+    {
+        if ($append) {
+            $this->logged[$key][] = $val;
+        } else {
+            $this->logged[$key] = $val;
+        }
+    }
+
+    public function getLogged()
+    {
+        return $this->logged;
     }
 }

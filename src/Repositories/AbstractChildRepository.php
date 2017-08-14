@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class AbstractChildRepository extends AbstractRepository
 {
 
+    // There are situations where we need to only display the children.
+    const CHILDREN_ONLY = 0;
+
     // child model
     protected $parent;
 
@@ -24,7 +27,8 @@ class AbstractChildRepository extends AbstractRepository
 
     /**
      * Sets the parent model.
-     *  @NOTE explicit model binding lets us resolve the class directly, se we don't need to fetch sheit
+     *
+     * @NOTE       explicit model binding lets us resolve the class directly, se we don't need to fetch sheit
      *
      * @param      <type>  $parent_id  The parent id
      */
@@ -88,7 +92,11 @@ class AbstractChildRepository extends AbstractRepository
 
         switch ($this->relation) {
             case 'BelongsToMany':
-                $this->builder = $this->model;
+                if (static::CHILDREN_ONLY) {
+                    $this->builder = $this->parent->{$this->parentToChild}();
+                } else {
+                    $this->builder = $this->model;
+                }
                 break;
 
             case 'BelongsTo':
@@ -177,11 +185,12 @@ class AbstractChildRepository extends AbstractRepository
         //     'disk' =>
         // ];
     }
+
     /**
      * { function_description }
      *
      * @param      <type>   $page      The page
-     * @param      integer  $per_page  The per page
+     * @param      integer $per_page The per page
      *
      * @return     <type>   ( description_of_the_return_value )
      */
@@ -206,6 +215,7 @@ class AbstractChildRepository extends AbstractRepository
                 $record['abilities'] = ['edit', 'view', 'create', 'destroy'];
             }
         }
-        return $data;
+
+        return array_except($data->toArray(), ['next_page_url', 'path', 'prev_page_url']);
     }
 }

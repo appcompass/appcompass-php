@@ -4,11 +4,9 @@ namespace P3in\Controllers;
 
 use Gate;
 use Illuminate\Database\Eloquent\Model;
-use P3in\Controllers\BaseController;
-use P3in\Models\Form;
+
 use P3in\Policies\ResourcesPolicy;
 use P3in\Requests\FormRequest;
-use Route;
 
 abstract class AbstractController extends BaseController
 {
@@ -62,7 +60,9 @@ abstract class AbstractController extends BaseController
 
         Gate::authorize('update', $this->repo);
 
-        $model->update($request->all());
+        $this->repo->update($request->all());
+
+//        $model->update($request->all());
 
         return response()->json(['message' => 'Model updated.']);
     }
@@ -98,13 +98,13 @@ abstract class AbstractController extends BaseController
         if ($model) {
             return response()->json([
                 'message' => 'Model Created.',
-                'id' => $model['id'],
+                'id'      => $model['id'],
                 // 'model' => $success['model']
-                'model' => $model
+                'model'   => $model,
             ]);
         } else {
             return response()->json([
-                'message' => 'Error'
+                'message' => 'Error',
             ], 503);
         }
     }

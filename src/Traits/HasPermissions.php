@@ -2,73 +2,93 @@
 
 namespace P3in\Traits;
 
+use Illuminate\Database\Eloquent\Collection;
 use P3in\Models\Permission;
 use P3in\Models\PermissionsRequired;
-use P3in\Models\PermissionsRequired\PermissionItems\Element;
-use P3in\Models\PermissionsRequired\PermissionItems\Model;
 
 trait HasPermissions
 {
-    //
-    //  @TODO Better naming convention
-    //  SET
-    //      - setCollectionPerms
-    //      - setRecordPerms
-    //
-    //  GET
-    //      - getCollectionPerms
-    //      - getRecordPerms
-    //
-    //  User::setCollectionPerms(Permission::byName('cp-users-manager'), 'index')
-    //  User::find(6)->getRecordRequires('index')
-    //
+    /**
+    *   Role permissions
+    *
+    */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class)->withTimestamps();
+    }
 
     /**
-     * get the required permission
+     * { function_description }
+     *
+     * @param      <type>  $perm   The permission
+     *
+     * @return     <type>  ( description_of_the_return_value )
      */
-    // public function getRequiredPermission($action = null)
-    // {
-    //     return PermissionsRequired::retrieve($this->getElementPointer($action));
-    // }
+    public function grantPermission($perm)
+    {
+        return $this->grantPermissions($perm);
+    }
+
+    /**
+      * Grant Permission(s)
+      *
+      * @param mixed $perm  (string) Permission Type | (Permission) Permission Instance | Collection eleoquent collection of perms to sync | (array)
+      */
+    public function grantPermissions($perm)
+    {
+        if (is_null($perm)) {
+            return;
+        } elseif ($perm instanceof Collection) {
+            return $this->permissions()->sync($perm);
+        } elseif (is_string($perm)) {
+            return $this->grantPermissions(Permission::byName($perm)->firstOrFail());
+        } elseif ($perm instanceof Permission) {
+            if (!$this->permissions->contains($perm->id)) {
+                return $this->permissions()->attach($perm);
+            }
+
+            return false;
+        } elseif (is_array($perm)) {
+            foreach ($perm as $single_permission) {
+                $this->grantPermissions($single_permission);
+            }
+        }
+    }
+
+    /**
+     *  Revoke all permissions
+     */
+    public function revokeAll()
+    {
+        return $this->revokePermissions($this->permissions->lists('name')->toArray());
+    }
 
     /**
      *
      */
-    // public static function getStaticRequiredPermission($action = null)
-    // {
-    //     return PermissionsRequired::retrieve((new self)->getElementPointer($action));
-    // }
+    public function revokePermission($perm)
+    {
+        return $this->revokePermissions($perm);
+    }
 
     /**
-     * set a required permission for the owner
-     */
-    // public function setRequiredPermission(Permission $permission, $action = null)
-    // {
-    //     return PermissionsRequired::requirePermission($this->getElementPointer($action), $permission);
-    // }
+      * Revoke permission(s)
+      *
+      * @param mixed $perm  (string) Permission Type | (Permission) Permission Instance | (array)
+      */
+    public function revokePermissions($perm)
+    {
+        if (is_null($perm)) {
+            return;
+        } elseif (is_string($perm)) {
+            return $this->revokePermissions(Permission::byName($perm)->firstOrFail());
+        } elseif ($perm instanceof Permission) {
+            return $this->permissions()->detach($perm);
+        } elseif (is_array($perm)) {
+            foreach ($perm as $single_permission) {
+                $this->revokePermissions($single_permission);
+            }
+        }
+    }
 
-    /**
-     * set a required permission for the owner
-     */
-    // public static function setStaticRequiredPermission(Permission $permission, $action = null)
-    // {
-    //     return PermissionsRequired::requirePermission((new static())->getElementPointer($action), $permission);
-    // }
-
-    //////////// PRIVATE
-
-    // private function getElementPointer($action = null)
-    // {
-    //     $class = __CLASS__;
-
-    //     if (null !== $this->getAttribute('id')) {
-    //         $class = $class . '@' . $this->getAttribute('id');
-    //     }
-
-    //     $action = is_null($action) ? '' : '@' . $action;
-
-    //     // \Log::info($class);
-
-    //     return new Model($class . $action);
-    // }
 }

@@ -2,7 +2,6 @@
 
 namespace P3in\Models;
 
-use Exception;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -10,13 +9,13 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
-use P3in\Models\Gallery;
-use P3in\Models\Photo;
-use P3in\Models\Role;
+
 use P3in\ModularBaseModel;
 use P3in\Notifications\ConfirmRegistration;
 use P3in\Notifications\ResetPassword;
 use P3in\Traits\HasCardView;
+use P3in\Traits\HasPermissions;
+use P3in\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 
 // use P3in\Traits\HasProfileTrait;
@@ -32,9 +31,9 @@ class User extends ModularBaseModel implements
         Authorizable,
         CanResetPassword,
         Notifiable,
-        HasCardView
-        // HasPermissions
-        // HasProfileTrait
+        HasCardView,
+        HasPermissions,
+        HasRoles // , HasProfileTrait
         ;
 
     /**
@@ -61,19 +60,19 @@ class User extends ModularBaseModel implements
         'email',
         'password',
         'active',
-        'activation_code'
+        'activation_code',
     ];
 
     /**
      *  The attributes excluded from the model's JSON form.
      *
-     *  @var array
+     * @var array
      */
     protected $hidden = [
         'password',
         'remember_token',
         'activated_at',
-        'activation_code'
+        'activation_code',
     ];
 
     /**
@@ -85,31 +84,12 @@ class User extends ModularBaseModel implements
 
     public static $rules = [
         'first_name' => 'required|max:255',
-        'last_name' => 'required|max:255',
-        'phone' => 'required|max:255',
-        'email' => 'required|email|unique:users|max:255',
-        'password' => 'required|min:2|max:255',
+        'last_name'  => 'required|max:255',
+        'email'      => 'required|email|max:255', //|unique:users when registrering only
+        'phone'      => 'min:10|max:255',
+        // 'password'   => 'min:6|confirmed', //|required when registering only.
     ];
 
-    /**
-     *  Get all the roles this user belongs to
-     *
-     *
-     */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class)->withTimestamps();
-    }
-
-    /**
-     * Permissions
-     *
-     * @return     <type>  ( description_of_the_return_value )
-     */
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class)->withTimestamps();
-    }
 
     /**
      * Photos
@@ -172,82 +152,40 @@ class User extends ModularBaseModel implements
     public function getJWTCustomClaims()
     {
         return [
-             'user' => [
-                'id' => $this->id,
+            'user' => [
+                'id'   => $this->id,
                 'name' => $this->full_name,
-             ]
+            ],
         ];
     }
 
     /**
-     * Get users having a specific rol e
+     *  Set user's password
      *
-     * @param      <type>  $query  The query
-     * @param      <type>  $role   The role
-     *
-     * @return     <type>  ( description_of_the_return_value )
      */
-    public static function scopeHavingRole($query, $role)
+    public function setPasswordAttribute($value)
     {
-        return Role::whereName($role)->firstOrFail()->users();
+        $this->attributes['password'] = bcrypt($value);
     }
 
     /**
-      * Add current user to a group
-      *
-      * @param      mixed $role  The role
-      *
-      * @return     <type>  ( description_of_the_return_value )
-      */
-    public function assignRole($role)
-    {
-        if (is_int($role)) {
-            $role = Role::findOrFail($role);
-        } elseif (is_string($role)) {
-            $role = Role::whereName($role)->firstOrFail();
-        }
-
-        return $role->addUser($this);
-    }
-
-    /**
-      *  Remove current user from a group
-      */
-    public function revokeRole(Role $role)
-    {
-        return $role->removeUser($this);
-    }
-
-    /**
-     * Determines if it has role.
+     *  Set user's password
      *
-     * @param      <type>   $role  The role
-     *
-     * @return     boolean  True if has role, False otherwise.
      */
-    public function hasRole($role)
+    public function setEmailAttribute($value)
     {
-        try {
-            if (is_string($role)) {
-                $role = Role::whereName($role)->firstOrFail();
-            } elseif (is_int($role)) {
-                $role = Role::findOrFail($role);
-            }
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return false;
-        }
-
-        return $role->hasUser($this);
+        $this->attributes['email'] = strtolower($value);
     }
 
     /**
-     * keep this to avoid breaking the api. consider removal. maybe. i'm def in a remove-it-all mood
      *
      * @return     <type>  ( description_of_the_return_value )
      */
     public function allPermissions()
     {
         $this->load('roles.permissions');
+
+        $user_permissions = $this->permissions()->allRelatedIds()->toArray();
 
         $roles_permissions = [];
 
@@ -259,24 +197,9 @@ class User extends ModularBaseModel implements
             $roles_permissions = array_merge($roles_permissions, $role_permissions);
         }
 
+        $roles_permissions = array_merge($roles_permissions, $user_permissions);
+
         return array_unique($roles_permissions);
-    }
-
-    /**
-     * Allows for role/group matching using  is[name] pattern
-     *
-     * @param      <type>  $method  The method
-     * @param      <type>  $args    The arguments
-     *
-     * @return     <type>  ( description_of_the_return_value )
-     */
-    public function __call($method, $args)
-    {
-        if (preg_match('/^is/', $method)) {
-            return $this->hasRole(lcfirst(substr($method, 2)));
-        }
-
-        return parent::__call($method, $args);
     }
 
     /**
@@ -335,7 +258,7 @@ class User extends ModularBaseModel implements
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param  string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)

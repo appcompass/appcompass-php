@@ -23,16 +23,16 @@ class ResourcesPolicy
 
     public function index(User $user)
     {
-        $role = Resource::resolve(Route::currentRouteName())->req_role;
+        return (bool) Resource::byAllowed($user)->whereResource(Route::currentRouteName())->first();
 
-        if (is_null($role)) {
-            return true;
-        }
+        // if (is_null($role)) {
+        //     return true;
+        // }
 
-        return $user->hasRole($role);
+        // return $user->hasRole($role);
 
 
-        return false;
+        // return false;
     }
 
     public function show(User $user)

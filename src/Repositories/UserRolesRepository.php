@@ -9,6 +9,7 @@ use P3in\Interfaces\UserRolesRepositoryInterface;
 class UserRolesRepository extends AbstractChildRepository implements UserRolesRepositoryInterface
 {
     protected $view_types = ['MultiSelect'];
+    const REQUIRES_PERMISSION = 1;
 
     public function __construct(Role $model, User $parent)
     {

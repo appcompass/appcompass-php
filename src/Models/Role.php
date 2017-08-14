@@ -4,17 +4,40 @@ namespace P3in\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use P3in\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Notifications\Notification;
+use P3in\Traits\HasPermissions;
+use P3in\Traits\SetsAndChecksPermission;
 
 class Role extends Model
 {
+    use HasPermissions, SetsAndChecksPermission;
+
     protected $fillable = [
-      'name',
-      'label',
-      'description',
-      'active'
+        'name',
+        'label',
+        'description',
+        'active',
     ];
+
+    public function permissionFieldName()
+    {
+        return 'assignable_by_id';
+    }
+
+    public function permissionRelationshipName()
+    {
+        return 'assignable_by';
+    }
+
+    public function allowNullPermission()
+    {
+        return false;
+    }
+
+    public function assignable_by()
+    {
+        return $this->belongsTo(Permission::class, $this->permissionFieldName());
+    }
 
     /**
      * Get a role by name
@@ -25,17 +48,17 @@ class Role extends Model
     }
 
     /**
-    *   Link roles and users
-    *
-    */
+     *   Link roles and users
+     *
+     */
     public function users()
     {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
 
     /**
-      * Add a User to the Role
-      */
+     * Add a User to the Role
+     */
     public function addUser(User $user)
     {
         if (!$this->users->contains($user->id)) {
@@ -54,53 +77,6 @@ class Role extends Model
     }
 
     /**
-    *   Role permissions
-    *
-    */
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class)->withTimestamps();
-    }
-
-    /**
-     * { function_description }
-     *
-     * @param      <type>  $perm   The permission
-     *
-     * @return     <type>  ( description_of_the_return_value )
-     */
-    public function grantPermission($perm)
-    {
-        return $this->grantPermissions($perm);
-    }
-
-    /**
-      * Grant Permission(s)
-      *
-      * @param mixed $perm  (string) Permission Type | (Permission) Permission Instance | Collection eleoquent collection of perms to sync | (array)
-      */
-    public function grantPermissions($perm)
-    {
-        if (is_null($perm)) {
-            return;
-        } elseif ($perm instanceof \Illuminate\Database\Eloquent\Collection) {
-            return $this->permissions()->sync($perm);
-        } elseif (is_string($perm)) {
-            return $this->grantPermissions(Permission::byType($perm)->firstOrFail());
-        } elseif ($perm instanceof Permission) {
-            if (!$this->permissions->contains($perm->id)) {
-                return $this->permissions()->attach($perm);
-            }
-
-            return false;
-        } elseif (is_array($perm)) {
-            foreach ($perm as $single_permission) {
-                $this->grantPermissions($single_permission);
-            }
-        }
-    }
-
-    /**
      *
      */
     public function hasUser(User $user)
@@ -108,39 +84,8 @@ class Role extends Model
         return $this->users->contains($user->id);
     }
 
-    /**
-     *  Revoke all role's permissions
-     */
-    public function revokeAll()
+    public function notify(Notification $notification)
     {
-        return $this->revokePermissions($this->permissions->lists('type')->toArray());
-    }
-
-    /**
-     *
-     */
-    public function revokePermission($perm)
-    {
-        return $this->revokePermissions($perm);
-    }
-
-    /**
-      * Revoke permission(s)
-      *
-      * @param mixed $perm  (string) Permission Type | (Permission) Permission Instance | (array)
-      */
-    public function revokePermissions($perm)
-    {
-        if (is_null($perm)) {
-            return;
-        } elseif (is_string($perm)) {
-            return $this->revokePermissions(Permission::byType($perm)->firstOrFail());
-        } elseif ($perm instanceof Permission) {
-            return $this->permissions()->detach($perm);
-        } elseif (is_array($perm)) {
-            foreach ($perm as $single_permission) {
-                $this->revokePermissions($single_permission);
-            }
-        }
+        return \Notification::send($this->users, $notification);
     }
 }

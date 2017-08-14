@@ -19,23 +19,24 @@ use P3in\Events\Login;
 use P3in\Events\Logout;
 use P3in\Models\Resource;
 use P3in\Models\User;
-use P3in\Renderers\WebsiteRenderer;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CpResourcesController extends Controller
 {
+    public function getDashboard(Request $request)
+    {
+        return response()->json(['coming soon.']);
+    }
+
     public function routes(Request $request)
     {
-        $cacheKey = 'routes_'.$request->website->id.'_'.(Auth::check() ? Auth::user()->id : 'guest');
+        $cacheKey = $request->website->id.'_'.(Auth::check() ? Auth::user()->id : 'guest');
         // forever? we would then need to clear this cache when updating a user permission though.
         // @TODO: fix form render so it's not running queries in loops.
-        $data = Cache::remember($cacheKey, 0, function () use ($request) {
-            $renderer = new WebsiteRenderer($request->website);
-            return [
-                // 'resources' => $this->getResources(),
-                'routes' => $renderer->buildRoutesTree(),
-            ];
-        });
+        $data = [
+            // 'resources' => $this->getResources(),
+            'routes' => $request->website->renderer()->buildRoutesTree(),
+        ];
 
         return response()->json($data);
     }
@@ -47,7 +48,7 @@ class CpResourcesController extends Controller
 
     private function getResources(string $route = null)
     {
-        $query = Resource::byAllowedRole();
+        $query = Resource::byAllowed();
 
         if ($route) {
             $query->where('resource', $route);
