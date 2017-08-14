@@ -13,8 +13,8 @@
     "guzzlehttp/guzzle": "~6.0",
     "tymon/jwt-auth": "dev-develop@dev",
     "laravel/passport": "^1.0",
-    "p3in/modular": "3.0.*",
-    "p3in/form-builder": "0.0.*"
+    "p3in/modular": "dev-develop",
+    "p3in/form-builder": "dev-develop"
   },
   "autoload": {
     "psr-4": {
