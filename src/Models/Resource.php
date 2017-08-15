@@ -3,6 +3,7 @@
 namespace P3in\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use P3in\Interfaces\Linkable;
 use P3in\Traits\HasJsonConfigFieldTrait;
 use P3in\Traits\HasPermission;
@@ -30,6 +31,16 @@ class Resource extends Model implements Linkable
     public function form()
     {
         return $this->belongsTo(Form::class);
+    }
+
+    /**
+     * WebProperty
+     *
+     * @return     BelongsTo    WebProperty
+     */
+    public function web_property()
+    {
+        return $this->belongsTo(WebProperty::class);
     }
 
     /**
@@ -101,7 +112,7 @@ class Resource extends Model implements Linkable
      */
     public function setForm(Form $form)
     {
-        return $this->associate($form);
+        return $this->form()->associate($form);
     }
 
     public static function resolve($name)
@@ -111,7 +122,7 @@ class Resource extends Model implements Linkable
 
     public function vueRoute()
     {
-        $name = $this->resource;
+        $name = $this->name;
         $meta = (object)$this->getConfig('meta');
 
         // @TODO: can prob remove.  here for backwards compatibility only.
@@ -125,13 +136,36 @@ class Resource extends Model implements Linkable
         ];
     }
 
-    public static function build($val)
+    // @TODO: Convenience vs. Clarity, that is the question...
+    public static function build($name, WebProperty $web_property, Form $form = null, $permission = null)
     {
-        $resource = static::create([
-            'name' => $val,
-        ]);
+        try {
+            $resource = static::byRoute($name);
+        } catch (ModelNotFoundException $e) {
+            $resource = new static([
+                'name' => $name,
+            ]);
+        }
+
+        $resource->web_property()->associate($web_property);
+
+        if ($form) {
+            $resource->setForm($form);
+        }
+        if ($permission) {
+            $resource->setPermission($permission);
+        }
+
+        $resource->save();
 
         return $resource;
+    }
+
+    public static function buildAll(array $names, WebProperty $web_property, Form $form = null, $permission = null)
+    {
+        foreach ($names as $name) {
+            static::build($name, $web_property, $form, $permission);
+        }
     }
 
     public function setLayout(string $val = '')

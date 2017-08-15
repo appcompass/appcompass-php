@@ -18,6 +18,8 @@ class CreateResources extends Migration
             $table->increments('id');
             $table->string('name')->unique();
             $table->json('config')->nullable();
+            $table->integer('web_property_id')->unsigned();
+            $table->foreign('web_property_id')->references('id')->on('web_properties')->onDelete('cascade');
             $table->integer('form_id')->unsigned()->nullable();
             $table->foreign('form_id')->references('id')->on('forms')->onDelete('cascade');
             $table->integer('req_perm')->unsigned()->nullable();

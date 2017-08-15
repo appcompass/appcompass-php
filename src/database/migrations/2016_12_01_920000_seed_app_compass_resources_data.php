@@ -23,37 +23,157 @@ class SeedAppCompassResourcesData extends Migration
 
         $cp->save();
 
-        $dashboard = Resource::build('cp-dashboard')->setLayout('Private')->setComponent('Home')->setTitle('Dashbaord')->setPermission('cp_login')->requiresAuth();
+        $dashboard = Resource::build('cp-dashboard', $cp)
+            ->setLayout('Private')
+            ->setComponent('Home')
+            ->setTitle('Dashbaord')
+            ->setPermission('cp_login')
+            ->requiresAuth();
 
-        $users = Resource::build('users.index')->setLayout('Private')->setComponent('List')->setTitle('Users')->setPermission('users_admin')->requiresAuth();
-        $user = Resource::build('users.show')->setLayout('Private')->setComponent('Edit')->setTitle('User')->setPermission('users_admin')->requiresAuth();
-        $user_profile = Resource::build('users.edit')->setLayout('Private')->setComponent('Edit')->setTitle('Profile')->setPermission('users_admin')->requiresAuth();
-        $create_user = Resource::build('users.create')->setLayout('Private')->setComponent('Create')->setTitle('Create')->setPermission('users_admin')->requiresAuth();
+        $users = Resource::build('users.index', $cp)
+            ->setLayout('Private')
+            ->setComponent('List')
+            ->setTitle('Users')
+            ->setPermission('users_admin')
+            ->requiresAuth();
+        $user = Resource::build('users.show', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('User')
+            ->setPermission('users_admin')
+            ->requiresAuth();
+        $user_profile = Resource::build('users.edit', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('Profile')
+            ->setPermission('users_admin')
+            ->requiresAuth();
+        $create_user = Resource::build('users.create', $cp)
+            ->setLayout('Private')
+            ->setComponent('Create')
+            ->setTitle('Create')
+            ->setPermission('users_admin')
+            ->requiresAuth();
 
-        $user_roles = Resource::build('users.roles.index')->setLayout('Private')->setComponent('List')->setTitle('Roles')->setPermission('users_admin')->requiresAuth();
-        $user_permissions = Resource::build('users.permissions.index')->setLayout('Private')->setComponent('List')->setTitle('Permissions')->setPermission('users_admin')->requiresAuth();
+        $user_roles = Resource::build('users.roles.index', $cp)
+            ->setLayout('Private')
+            ->setComponent('List')
+            ->setTitle('Roles')
+            ->setPermission('users_admin')
+            ->requiresAuth();
+        $user_permissions = Resource::build('users.permissions.index', $cp)
+            ->setLayout('Private')
+            ->setComponent('List')
+            ->setTitle('Permissions')
+            ->setPermission('users_admin')
+            ->requiresAuth();
 
-        $permissions = Resource::build('permissions.index')->setLayout('Private')->setComponent('List')->setTitle('Permissions')->setPermission('permissions_admin')->requiresAuth();
-        $permission = Resource::build('permissions.show')->setLayout('Private')->setComponent('Edit')->setTitle('Permission')->setPermission('permissions_admin')->requiresAuth();
-        $permission_info = Resource::build('permissions.edit')->setLayout('Private')->setComponent('Edit')->setTitle('Info')->setPermission('permissions_admin')->requiresAuth();
-        $create_permission = Resource::build('permissions.create')->setLayout('Private')->setComponent('Create')->setTitle('Create')->setPermission('permissions_admin')->requiresAuth();
+        $permissions = Resource::build('permissions.index', $cp)
+            ->setLayout('Private')
+            ->setComponent('List')
+            ->setTitle('Permissions')
+            ->setPermission('permissions_admin')
+            ->requiresAuth();
+        $permission = Resource::build('permissions.show', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('Permission')
+            ->setPermission('permissions_admin')
+            ->requiresAuth();
+        $permission_info = Resource::build('permissions.edit', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('Info')
+            ->setPermission('permissions_admin')
+            ->requiresAuth();
+        $create_permission = Resource::build('permissions.create', $cp)
+            ->setLayout('Private')
+            ->setComponent('Create')
+            ->setTitle('Create')
+            ->setPermission('permissions_admin')
+            ->requiresAuth();
 
-        $roles = Resource::build('roles.index')->setLayout('Private')->setComponent('List')->setTitle('Roles')->setPermission('permissions_admin')->requiresAuth();
-        $role = Resource::build('roles.show')->setLayout('Private')->setComponent('Edit')->setTitle('Role')->setPermission('permissions_admin')->requiresAuth();
-        $role_info = Resource::build('roles.edit')->setLayout('Private')->setComponent('Edit')->setTitle('Info')->setPermission('permissions_admin')->requiresAuth();
-        $create_role = Resource::build('roles.create')->setLayout('Private')->setComponent('Create')->setTitle('Create')->setPermission('permissions_admin')->requiresAuth();
-        $role_permissions = Resource::build('roles.permissions.index')->setLayout('Private')->setComponent('List')->setTitle('Permissions')->setPermission('permissions_admin')->requiresAuth();
+        $roles = Resource::build('roles.index', $cp)
+            ->setLayout('Private')
+            ->setComponent('List')
+            ->setTitle('Roles')
+            ->setPermission('permissions_admin')
+            ->requiresAuth();
+        $role = Resource::build('roles.show', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('Role')
+            ->setPermission('permissions_admin')
+            ->requiresAuth();
+        $role_info = Resource::build('roles.edit', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('Info')
+            ->setPermission('permissions_admin')
+            ->requiresAuth();
+        $create_role = Resource::build('roles.create', $cp)
+            ->setLayout('Private')
+            ->setComponent('Create')
+            ->setTitle('Create')
+            ->setPermission('permissions_admin')
+            ->requiresAuth();
+        $role_permissions = Resource::build('roles.permissions.index', $cp)
+            ->setLayout('Private')
+            ->setComponent('List')
+            ->setTitle('Permissions')
+            ->setPermission('permissions_admin')
+            ->requiresAuth();
 
         // @TODO: do we really want to allow admins to edit resources end points via the UI?
-        $resources = Resource::build('resources.index')->setLayout('Private')->setComponent('List')->setTitle('Resources')->setPermission('resources_admin')->requiresAuth();
-        $resource = Resource::build('resources.show')->setLayout('Private')->setComponent('Edit')->setTitle('Resource')->setPermission('resources_admin')->requiresAuth();
-        $resource_info = Resource::build('resources.edit')->setLayout('Private')->setComponent('Edit')->setTitle('Info')->setPermission('resources_admin')->requiresAuth();
-        $create_resource = Resource::build('resources.create')->setLayout('Private')->setComponent('Create')->setTitle('Create')->setPermission('resources_admin')->requiresAuth();
+        $resources = Resource::build('resources.index', $cp)
+            ->setLayout('Private')
+            ->setComponent('List')
+            ->setTitle('Resources')
+            ->setPermission('resources_admin')
+            ->requiresAuth();
+        $resource = Resource::build('resources.show', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('Resource')
+            ->setPermission('resources_admin')
+            ->requiresAuth();
+        $resource_info = Resource::build('resources.edit', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('Info')
+            ->setPermission('resources_admin')
+            ->requiresAuth();
+        $create_resource = Resource::build('resources.create', $cp)
+            ->setLayout('Private')
+            ->setComponent('Create')
+            ->setTitle('Create')
+            ->setPermission('resources_admin')
+            ->requiresAuth();
 
-        $forms = Resource::build('forms.index')->setLayout('Private')->setComponent('List')->setTitle('Forms')->setPermission('forms_admin')->requiresAuth();
-        $form = Resource::build('forms.show')->setLayout('Private')->setComponent('Edit')->setTitle('Form')->setPermission('forms_admin')->requiresAuth();
-        $form_info = Resource::build('forms.edit')->setLayout('Private')->setComponent('Edit')->setTitle('Info')->setPermission('forms_admin')->requiresAuth();
-        $create_form = Resource::build('forms.create')->setLayout('Private')->setComponent('Create')->setTitle('Create')->setPermission('forms_admin')->requiresAuth();
+        $forms = Resource::build('forms.index', $cp)
+            ->setLayout('Private')
+            ->setComponent('List')
+            ->setTitle('Forms')
+            ->setPermission('forms_admin')
+            ->requiresAuth();
+        $form = Resource::build('forms.show', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('Form')
+            ->setPermission('forms_admin')
+            ->requiresAuth();
+        $form_info = Resource::build('forms.edit', $cp)
+            ->setLayout('Private')
+            ->setComponent('Edit')
+            ->setTitle('Info')
+            ->setPermission('forms_admin')
+            ->requiresAuth();
+        $create_form = Resource::build('forms.create', $cp)
+            ->setLayout('Private')
+            ->setComponent('Create')
+            ->setTitle('Create')
+            ->setPermission('forms_admin')
+            ->requiresAuth();
 
         $user_nav = MenuBuilder::new('user_nav', $cp);
         $user_nav->add(['title' => 'Profile', 'url' => '/users/:current_user_id', 'alt' => 'Profile'], 1)->icon('user');

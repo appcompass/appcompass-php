@@ -34,6 +34,16 @@ class WebProperty extends Model
     }
 
     /**
+     * Menus
+     *
+     * @return     hasMany
+     */
+    public function resources()
+    {
+        return $this->hasMany(Resource::class);
+    }
+
+    /**
      * Gets the url attribute.
      *
      * @return     <type>  The url attribute.
@@ -56,13 +66,13 @@ class WebProperty extends Model
     }
 
     /**
-     * builds CP router.
+     * builds router.
      *
      * @return     <array>  vue router structured array.
      */
     public function buildRoutesTree()
     {
-        $resources = Resource::byConfig('layout', '!=', '')
+        $resources = $this->resources()->byConfig('layout', '!=', '')
             ->byAllowed()
             ->get();
 
