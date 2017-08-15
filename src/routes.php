@@ -1,15 +1,16 @@
 <?php
 Route::group([
-    'middleware' => ['web', 'cp'],
+    'middleware' => ['api'],
     'namespace'  => 'P3in\Controllers',
 ], function ($router) {
-    $router->get('routes', 'CpResourcesController@routes');
-    $router->get('get-resources/{route?}', 'CpResourcesController@resources');
+    $router->get('routes', 'AppResourcesController@routes');
+    $router->get('get-resources/{route?}', 'AppResourcesController@resources');
+    $router->get('menus', 'AppResourcesController@getMenus');
 });
 
 Route::group([
     'prefix'     => 'auth',
-    'middleware' => ['web'],
+    'middleware' => ['api'],
     'namespace'  => 'P3in\Controllers',
 ], function ($router) {
     // login and auth check
@@ -30,7 +31,7 @@ Route::group([
     'namespace'  => 'P3in\Controllers',
     'middleware' => ['auth', 'api'],
 ], function ($router) {
-    $router->get('dashboard', 'CpResourcesController@getDashboard')->name('cp-dashboard');
+    $router->get('dashboard', 'AppResourcesController@getDashboard')->name('cp-dashboard');
     $router->resource('users', UsersController::class);
     $router->resource('roles', RolesController::class);
     $router->resource('roles.permissions', RolePermissionsController::class);

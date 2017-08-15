@@ -7,7 +7,7 @@ use P3in\Interfaces\Linkable;
 use P3in\Traits\HasJsonConfigFieldTrait;
 use P3in\Traits\HasPermission;
 
-class Resource extends Model
+class Resource extends Model implements Linkable
 {
     use HasPermission, HasJsonConfigFieldTrait;
 
@@ -32,42 +32,41 @@ class Resource extends Model
         return $this->belongsTo(Form::class);
     }
 
-    // @TODO: handle Linkable logic now that cms module it's it's own thing.
+    /**
+     * Makes a menu item.
+     *
+     * @return     MenuItem
+     */
+    public function makeMenuItem($order = 0) : MenuItem
+    {
 
-//    /**
-//     * Makes a menu item.
-//     *
-//     * @return     MenuItem
-//     */
-//    public function makeMenuItem($order = 0) : MenuItem
-//    {
-//
-//        // @TODO find a way to auto-determine order based on previous insertions
-//
-//        $item = new MenuItem([
-//            'title'     => $this->getConfig('meta.title'),
-//            'alt'       => $this->getConfig('meta.title'),
-//            'order'     => $order,
-//            'new_tab'   => false,
-//            'url'       => null,
-//            'clickable' => true,
-//            'icon'      => null,
-//        ]);
-//
-//        $item->navigatable()->associate($this);
-//
-//        return $item;
-//    }
-//
-//    /**
-//     * Menu Handling
-//     *
-//     * @return     <type>  The type attribute.
-//     */
-//    public function getTypeAttribute()
-//    {
+        // @TODO find a way to auto-determine order based on previous insertions
+
+        $item = new MenuItem([
+            'title'     => $this->getConfig('meta.title'),
+            'alt'       => $this->getConfig('meta.title'),
+            'order'     => $order,
+            'new_tab'   => false,
+            'url'       => null,
+            'clickable' => true,
+            'icon'      => null,
+        ]);
+
+        $item->navigatable()->associate($this);
+
+        return $item;
+    }
+
+    /**
+     * Menu Handling
+     *
+     * @return     <type>  The type attribute.
+     */
+    public function getTypeAttribute()
+    {
+        return get_class($this);
 //        return 'Resource';
-//    }
+    }
 
     public function getUrlAttribute()
     {
@@ -158,5 +157,34 @@ class Resource extends Model
     public static function byRoute($name)
     {
         return self::whereName($name)->firstOrFail();
+    }
+
+    public function renderForm($mode = null)
+    {
+        $form = $this->form->attributes;
+
+        $fields = null;
+
+        switch ($mode) {
+            case 'list': //@TODO: Delete/rename, index is the resource to use.
+            case 'index':
+                $fields = $this->form->fields->where('to_list', true);
+                break;
+            case 'edit': //@TODO: Delete/rename, show is the resource to use.
+            case 'show': //@TODO: show and update use the same set of fields.
+            case 'update':
+            case 'create': //@TODO: create and store use the same set of fields.
+            case 'store':
+            case 'destroy': //@TODO: add field(s) for validation on delete. for example, "hey this is a related field, first please move or delete xyz".
+                $fields = $this->form->fields->where('to_edit', true);
+                break;
+            default:
+                $fields = $this->form->fields;
+                break;
+        }
+
+        $form['fields'] = $this->form->buildTree($fields);
+
+        return $form;
     }
 }

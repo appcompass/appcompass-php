@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use Intervention\Image\Exception\NotFoundException;
 
 class WebProperty extends Model
 {
@@ -23,6 +22,16 @@ class WebProperty extends Model
      */
     public $appends = ['url'];
 
+
+    /**
+     * Menus
+     *
+     * @return     hasMany
+     */
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
+    }
 
     /**
      * Gets the url attribute.

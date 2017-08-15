@@ -5,6 +5,7 @@ namespace P3in\Providers;
 use App\User;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use P3in\Commands\AddUserCommand;
 use P3in\Interfaces\FormsRepositoryInterface;
 use P3in\Interfaces\PermissionsRepositoryInterface;
@@ -61,6 +62,10 @@ class AppCompassServiceProvider extends BaseServiceProvider
             // 'jwt.refresh'
         ],
         'api'  => [
+            'web',
+            // @TODO: fix this so we don't have to use the internal web middleware that does extra stuff we don't need in an API based system.
+//            'throttle:60,1',
+//            SubstituteBindings::class,
             ValidateWebProperty::class,
             SanitizeEmail::class,
         ],

@@ -533,12 +533,12 @@ abstract class AbstractRepository implements AbstractRepositoryInterface
     public function getResourceForm()
     {
         $resource = Resource::byAllowed()
-            ->where('resource', $this->route_name)
+            ->where('name', $this->route_name)
             ->with('form')
             ->first();
 
         if (!empty($resource->form)) {
-            return $resource->form->render($this->getRouteType());
+            return $resource->renderForm($this->getRouteType());
         }
     }
 

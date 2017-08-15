@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use P3in\Models\Permission;
 use P3in\Models\Resource;
 
-class CpResourcesController extends Controller
+class AppResourcesController extends Controller
 {
     public function getDashboard(Request $request)
     {
@@ -18,13 +18,6 @@ class CpResourcesController extends Controller
 
     public function routes(Request $request)
     {
-        $perm = new Permission([
-            'name'  => 'random-perm',
-            'label' => 'random-perm',
-        ]);
-        $perm->save();
-        $perm->delete();
-
         $cacheKey = $request->web_property->id . '_' . (Auth::check() ? Auth::user()->id : 'guest');
         // forever? we would then need to clear this cache when updating a user permission though.
         // @TODO: fix form render so it's not running queries in loops.
@@ -39,6 +32,22 @@ class CpResourcesController extends Controller
     public function resources(Request $request, string $route = null)
     {
         return response()->json($this->getResources($route));
+    }
+
+    public function getMenus(Request $request)
+    {
+        $rtn = [];
+
+        $menus = $request
+            ->web_property
+            ->menus()->with('items')->get();
+
+        $permIds = Auth::check() ? (array)Cache::tags('auth_permissions')->get(Auth::user()->id) : [];
+        foreach ($menus as $menu) {
+            $rtn[$menu->name] = $menu->render(true, $permIds);
+        }
+
+        return $rtn;
     }
 
     private function getResources(string $route = null)
@@ -56,7 +65,7 @@ class CpResourcesController extends Controller
                 $route = $resource->resource;
                 $route_type = substr($route, strrpos($route, '.') + 1);
 
-                $resource->form = $resource->form->render($route_type);
+                $resource->form = $resource->renderForm($route_type);
             }
         });
 
