@@ -20,6 +20,7 @@ use P3in\Middleware\ValidateControlPanel;
 use P3in\Middleware\ValidateWebProperty;
 use P3in\Models\Field;
 use P3in\Models\Form;
+use P3in\Models\Menu;
 use P3in\Models\Permission;
 use P3in\Models\Resource;
 use P3in\Models\Role;
@@ -112,6 +113,7 @@ class AppCompassServiceProvider extends BaseServiceProvider
         'user'       => User::class,
         'permission' => Permission::class,
         'role'       => Role::class,
+        'menu'       => Menu::class,
         'resource'   => Resource::class,
         'form'       => Form::class,
     ];
