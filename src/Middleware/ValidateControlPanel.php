@@ -5,25 +5,27 @@ namespace P3in\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use P3in\Models\Website;
+use P3in\Models\WebProperty;
 
 class ValidateControlPanel
 {
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure                 $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        $request->website = $website = Website::fromRequest($request, env('ADMIN_WEBSITE_HOST'));
+        //        dd(config('app-compass'));
+        $request->web_property = $property = WebProperty::fromRequest($request, config('app-compass.admin_site_host'));
 
-        Config::set('app.url', $website->url);
-        Config::set('app.name', $website->name);
-        Config::set('mail.from.address', 'website@'.$website->host);
-        Config::set('mail.from.name', $website->name);
+        Config::set('app.url', $property->url);
+        Config::set('app.name', $property->name);
+        Config::set('mail.from.address', 'website@' . $property->host);
+        Config::set('mail.from.name', $property->name);
 
         return $next($request);
     }

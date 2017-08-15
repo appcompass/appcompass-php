@@ -16,7 +16,7 @@ class CreateResources extends Migration
     {
         Schema::create('resources', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('resource')->unique();
+            $table->string('name')->unique();
             $table->json('config')->nullable();
             $table->integer('form_id')->unsigned()->nullable();
             $table->foreign('form_id')->references('id')->on('forms')->onDelete('cascade');
@@ -24,7 +24,7 @@ class CreateResources extends Migration
             $table->foreign('req_perm')->references('id')->on('permissions')->onDelete('set null');
             $table->timestamps();
 
-            $table->index('resource');
+            $table->index('name');
             $table->index('form_id');
         });
     }

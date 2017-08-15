@@ -11,12 +11,12 @@ class Resource extends Model
 {
     use HasPermission, HasJsonConfigFieldTrait;
 
-    protected $fillable = [
-        'form_id',
-        'config',
-        'resource',
-    ];
+//    protected $fillable = [
+//        'config',
+//        'name',
+//    ];
 
+    protected static $unguarded = true;
 
     protected $casts = [
         'config' => 'object',
@@ -33,24 +33,25 @@ class Resource extends Model
     }
 
     // @TODO: handle Linkable logic now that cms module it's it's own thing.
+
 //    /**
 //     * Makes a menu item.
 //     *
 //     * @return     MenuItem
 //     */
-//    public function makeMenuItem($order = 0): MenuItem
+//    public function makeMenuItem($order = 0) : MenuItem
 //    {
 //
 //        // @TODO find a way to auto-determine order based on previous insertions
 //
 //        $item = new MenuItem([
-//            'title' => $this->getConfig('meta.title'),
-//            'alt' => $this->getConfig('meta.title'),
-//            'order' => $order,
-//            'new_tab' => false,
-//            'url' => null,
+//            'title'     => $this->getConfig('meta.title'),
+//            'alt'       => $this->getConfig('meta.title'),
+//            'order'     => $order,
+//            'new_tab'   => false,
+//            'url'       => null,
 //            'clickable' => true,
-//            'icon' => null,
+//            'icon'      => null,
 //        ]);
 //
 //        $item->navigatable()->associate($this);
@@ -67,30 +68,30 @@ class Resource extends Model
 //    {
 //        return 'Resource';
 //    }
-//
-//    public function getUrlAttribute()
-//    {
-//        $name = $this->attributes['resource'];
-//
-//        // Validate the route.  It must exist in the list of routes for this app.
-//        $router = app()->make('router');
-//        $route = $router->getRoutes()->getByName($name);
-//
-//        if (is_null($route)) {
-//            throw new \Exception('The Resource ('.$name.') does not have a coresponding route definition.  Please specify it in the routes.php file and then proceed.');
-//
-//        }
-//
-//        $params = $route->parameterNames();
-//        array_walk($params, function(&$val){
-//            $val = ':'.str_plural($val);
-//            return $val;
-//        });
-//
-//        $url = route($name, $params, false);
-//
-//        return preg_replace(['/\/edit$/', '/\/show$/'], ['/',''], $url);
-//    }
+
+    public function getUrlAttribute()
+    {
+        $name = $this->attributes['name'];
+
+        // Validate the route.  It must exist in the list of routes for this app.
+        $router = app()->make('router');
+        $route = $router->getRoutes()->getByName($name);
+
+        if (is_null($route)) {
+            throw new \Exception('The Resource (' . $name . ') does not have a coresponding route definition.  Please specify it in the routes.php file and then proceed.');
+        }
+
+        $params = $route->parameterNames();
+        array_walk($params, function (&$val) {
+            $val = ':' . str_plural($val);
+
+            return $val;
+        });
+
+        $url = route($name, $params, false);
+
+        return preg_replace(['/\/edit$/', '/\/show$/'], ['/', ''], $url);
+    }
 
     /**
      * Sets the form.
@@ -106,7 +107,7 @@ class Resource extends Model
 
     public static function resolve($name)
     {
-        return static::whereResource($name)->firstOrFail();
+        return static::whereName($name)->firstOrFail();
     }
 
     public function vueRoute()
@@ -128,7 +129,7 @@ class Resource extends Model
     public static function build($val)
     {
         $resource = static::create([
-            'resource' => $val,
+            'name' => $val,
         ]);
 
         return $resource;
@@ -156,6 +157,6 @@ class Resource extends Model
 
     public static function byRoute($name)
     {
-        return self::whereResource($name)->firstOrFail();
+        return self::whereName($name)->firstOrFail();
     }
 }

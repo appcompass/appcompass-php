@@ -45,4 +45,39 @@ class WebProperty extends Model
             app()->abort(401, $host . ' Not Authorized');
         }
     }
+
+    /**
+     * builds CP router.
+     *
+     * @return     <array>  vue router structured array.
+     */
+    public function buildRoutesTree()
+    {
+        $resources = Resource::byConfig('layout', '!=', '')
+            ->byAllowed()
+            ->get();
+
+        $rtn = [];
+        foreach ($resources->unique('config.layout')->pluck('config.layout') as $layout) {
+            if ($layout) {
+                $rtn[] = [
+                    'path'      => '',
+                    'component' => $layout,
+                    'children'  => $this->formatRoutesBranch($resources->where('config.layout', $layout)),
+                ];
+            }
+        }
+
+        return $rtn;
+    }
+
+    private function formatRoutesBranch($resources)
+    {
+        $rtn = [];
+        foreach ($resources as $resource) {
+            $rtn[] = $resource->vueRoute();
+        }
+
+        return $rtn;
+    }
 }

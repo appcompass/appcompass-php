@@ -20,7 +20,7 @@ class AddDebug
      */
     public function handle(Request $request, Closure $next)
     {
-        if (env('APP_DEBUG')) {
+        if (config('app.debug')) {
             $this->enableLogging();
 
             // get response

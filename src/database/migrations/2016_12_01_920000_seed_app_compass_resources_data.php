@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use P3in\Models\Resource;
+use P3in\Models\WebProperty;
 
 class SeedAppCompassResourcesData extends Migration
 {
@@ -13,6 +14,14 @@ class SeedAppCompassResourcesData extends Migration
      */
     public function up()
     {
+        $cp = new WebProperty([
+            'name'   => config('app-compass.admin_site_name'),
+            'scheme' => config('app-compass.admin_site_scheme'),
+            'host'   => config('app-compass.admin_site_host'),
+        ]);
+
+        $cp->save();
+
         Resource::build('cp-dashboard')->setLayout('Private')->setComponent('Home')->setTitle('Dashbaord')->setPermission('cp_login')->requiresAuth();
 
         Resource::build('users.index')->setLayout('Private')->setComponent('List')->setTitle('Users')->setPermission('users_admin')->requiresAuth();
