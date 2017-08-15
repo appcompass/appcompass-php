@@ -5,6 +5,7 @@ namespace P3in\Requests;
 use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;
 use Illuminate\Http\Request;
 use P3in\Models\Form;
+use P3in\Models\Resource;
 use Route;
 
 class FormRequest extends BaseFormRequest
@@ -27,20 +28,20 @@ class FormRequest extends BaseFormRequest
             return [];
         }
 
-        $form = Form::byResource(Route::current()->getName())->first();
+        $resource = Resource::whereName(Route::current()->getName())->with('form')->first();
 
-        if ($form) {
-            return $form->rules();
+        if (isset($resource->form)) {
+            return $resource->form->rules();
         } else {
 
             // @TODO we hit a route that has a path parameter (not final)
             if ($this->route('path')) {
                 $form_name = $this->route('path') . '.store';
 
-                $form = Form::byResource($form_name)->first();
+                $resource = Resource::whereName($form_name)->with('form')->first();
 
-                if ($form) {
-                    return $form->rules();
+                if (isset($resource->form)) {
+                    return $resource->form->rules();
                 }
             }
 
