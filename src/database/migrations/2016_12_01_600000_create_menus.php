@@ -23,7 +23,7 @@ class CreateMenus extends Migration
             $table->string('name');
             $table->timestamps();
 
-            $table->unique(['name']); // just for sanity check
+            $table->unique(['name', 'web_property_id']); // just for sanity check
             $table->index('name');
         });
     }
