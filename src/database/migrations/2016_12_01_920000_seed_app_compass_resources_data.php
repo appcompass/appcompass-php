@@ -194,7 +194,7 @@ class SeedAppCompassResourcesData extends Migration
             ->add($permission_info, 1)->icon('edit')
             ->parent()
             ->parent()
-            ->add(['title' => 'Settings', 'alt' => 'Settings'], 5)->sub()
+            ->add(['title' => 'Settings', 'alt' => 'Settings'], 99)->sub()
             ->add($forms, 2)->icon('file')->sub()
             ->add($form_info, 1)->icon('file')
             ->parent()
