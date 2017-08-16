@@ -5,13 +5,18 @@ namespace P3in\Traits;
 use P3in\Models\Menu;
 use P3in\Models\Scopes\WebPropertyScope;
 use P3in\Models\WebProperty;
+use P3in\Observers\IsWebPropertyObserver;
 
 trait IsWebProperty
 {
     protected static function boot()
     {
+        //for handling changes.
+        static::observe(IsWebPropertyObserver::class);
+
         parent::boot();
 
+        // for handling reads.
         static::addGlobalScope(new WebPropertyScope());
     }
 
