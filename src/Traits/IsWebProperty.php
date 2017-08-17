@@ -9,13 +9,11 @@ use P3in\Observers\IsWebPropertyObserver;
 
 trait IsWebProperty
 {
-    protected static function boot()
+    protected static function bootIsWebProperty()
     {
         //for handling changes.
         static::observe(IsWebPropertyObserver::class);
-
-        parent::boot();
-
+        
         // for handling reads.
         static::addGlobalScope(new WebPropertyScope());
     }

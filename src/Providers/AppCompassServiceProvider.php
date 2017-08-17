@@ -5,16 +5,7 @@ namespace P3in\Providers;
 use App\User;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
-use Illuminate\Routing\Middleware\SubstituteBindings;
 use P3in\Commands\AddUserCommand;
-use P3in\Interfaces\FormsRepositoryInterface;
-use P3in\Interfaces\PermissionsRepositoryInterface;
-use P3in\Interfaces\ResourcesRepositoryInterface;
-use P3in\Interfaces\RolePermissionsRepositoryInterface;
-use P3in\Interfaces\RolesRepositoryInterface;
-use P3in\Interfaces\UserPermissionsRepositoryInterface;
-use P3in\Interfaces\UserRolesRepositoryInterface;
-use P3in\Interfaces\UsersRepositoryInterface;
 use P3in\Middleware\SanitizeEmail;
 use P3in\Middleware\ValidateControlPanel;
 use P3in\Middleware\ValidateWebProperty;
@@ -26,14 +17,6 @@ use P3in\Models\Resource;
 use P3in\Models\Role;
 use P3in\Observers\FieldObserver;
 use P3in\Observers\PermissionObserver;
-use P3in\Repositories\FormsRepository;
-use P3in\Repositories\PermissionsRepository;
-use P3in\Repositories\ResourcesRepository;
-use P3in\Repositories\RolePermissionsRepository;
-use P3in\Repositories\RolesRepository;
-use P3in\Repositories\UserPermissionsRepository;
-use P3in\Repositories\UserRolesRepository;
-use P3in\Repositories\UsersRepository;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 use Tymon\JWTAuth\Providers\LaravelServiceProvider;
 
@@ -99,14 +82,6 @@ class AppCompassServiceProvider extends BaseServiceProvider
     ];
 
     protected $appBindings = [
-        UsersRepositoryInterface::class           => UsersRepository::class,
-        UserPermissionsRepositoryInterface::class => UserPermissionsRepository::class,
-        PermissionsRepositoryInterface::class     => PermissionsRepository::class,
-        RolesRepositoryInterface::class           => RolesRepository::class,
-        RolePermissionsRepositoryInterface::class => RolePermissionsRepository::class,
-        UserRolesRepositoryInterface::class       => UserRolesRepository::class,
-        ResourcesRepositoryInterface::class       => ResourcesRepository::class,
-        FormsRepositoryInterface::class           => FormsRepository::class,
     ];
 
     protected $routeBindings = [

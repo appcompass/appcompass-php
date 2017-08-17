@@ -3,11 +3,11 @@
 namespace P3in\Builders;
 
 use Closure;
+use P3in\Interfaces\WebPropertyModelInterface;
 use P3in\Models\Page;
 use P3in\Models\Link;
 use P3in\Models\Menu;
 use P3in\Models\MenuItem;
-use P3in\Models\WebProperty;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MenuBuilder
@@ -40,11 +40,10 @@ class MenuBuilder
      *
      * @return     <type>   ( description_of_the_return_value )
      */
-    public static function new($name, WebProperty $web_property, Closure $closure = null)
+    public static function new($name, WebPropertyModelInterface $web_property, Closure $closure = null)
     {
         $menu = new Menu(['name' => $name]);
-        $menu->web_property()->associate($web_property);
-        $menu->save();
+        $web_property->menus()->save($menu);
 
         $instance = new static($menu);
 

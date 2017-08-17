@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use P3in\Interfaces\WebPropertyModelInterface;
 
-class WebProperty extends Model
+class WebProperty extends Model implements WebPropertyModelInterface
 {
     use SoftDeletes;
 

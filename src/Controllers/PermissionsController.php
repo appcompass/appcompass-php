@@ -2,11 +2,11 @@
 
 namespace P3in\Controllers;
 
-use P3in\Interfaces\PermissionsRepositoryInterface;
+use P3in\Repositories\PermissionsRepository;
 
 class PermissionsController extends AbstractController
 {
-    public function __construct(PermissionsRepositoryInterface $repo)
+    public function __construct(PermissionsRepository $repo)
     {
         $this->repo = $repo;
     }
