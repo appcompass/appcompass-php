@@ -2,11 +2,10 @@
 
 namespace P3in\Repositories;
 
-use P3in\Models\User;
 use P3in\Models\Permission;
-use P3in\Interfaces\UserPermissionsRepositoryInterface;
+use P3in\Models\User;
 
-class UserPermissionsRepository extends AbstractChildRepository implements UserPermissionsRepositoryInterface
+class UserPermissionsRepository extends AbstractChildRepository
 {
     protected $view_types = ['MultiSelect'];
     const REQUIRES_PERMISSION = 1;
