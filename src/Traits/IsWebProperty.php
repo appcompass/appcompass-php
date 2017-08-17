@@ -29,4 +29,18 @@ trait IsWebProperty
     {
         return $this->hasMany(Menu::class, 'web_property_id', 'web_property_id');
     }
+
+    public function scopeByHost($query, $host)
+    {
+        $query->where('web_properties.host', $host);
+    }
+
+    public static function create(array $attributes = [])
+    {
+        $model = static::query()->create($attributes);
+
+        $model->refresh();
+
+        return $model;
+    }
 }
