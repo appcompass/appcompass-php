@@ -7,9 +7,9 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
-
 use P3in\ModularBaseModel;
 use P3in\Notifications\ConfirmRegistration;
 use P3in\Notifications\ResetPassword;
@@ -109,6 +109,11 @@ class User extends ModularBaseModel implements
     public function galleries()
     {
         return $this->hasMany(Gallery::class);
+    }
+
+    public function scopeSystem(Builder $query)
+    {
+        $query->where('email', config('app-compass.system_user'));
     }
 
     /**
