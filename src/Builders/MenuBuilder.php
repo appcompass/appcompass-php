@@ -3,6 +3,7 @@
 namespace P3in\Builders;
 
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use P3in\Interfaces\WebPropertyModelInterface;
 use P3in\Models\Page;
 use P3in\Models\Link;
@@ -117,7 +118,16 @@ class MenuBuilder
             throw new \Exception('Menu not selected.');
         }
 
-        if (is_array($item)) {
+        if ($item instanceof MenuItem) {
+
+            $this->menu_item = $item;
+
+        } elseif ($item instanceof Model) {
+
+            $this->menu_item = MenuItem::fromModel($item, $order);
+
+        } elseif (is_array($item)) {
+
             $item = new Link($item);
             if ($web_property = $this->menu->web_property) {
                 $item->web_property()->associate($web_property);
@@ -125,12 +135,8 @@ class MenuBuilder
             $item->save();
             // relying on default values requires a fresh() copy of the model
             $item = $item->fresh();
-        }
 
-        if ($item instanceof MenuItem) {
-            $this->menu_item = $item;
-        } else {
-            $this->menu_item = MenuItem::fromModel($item, $order);
+            $this->menu_item = $item->makeMenuItem($order);
         }
 
         if ($this->hasParent()) {
@@ -291,22 +297,9 @@ class MenuBuilder
         if (isset($item['navigatable_id'])) {
             $menuitem = MenuItem::findOrFail($item['id']);
         } else {
-
-//            // doing the extra mile here to greatly simplify the frontend stuff
-//            switch ($item['type']) {
-//                case 'Link':
-//                    $class_name = Link::class;
-//                    break;
-//                case 'Page':
-//                    $class_name = Page::class;
-//                    break;
-//            }
-
-            // otherwise generate a MenuItem instance from model being added
-            $menuitem = MenuItem::fromModel($item['type']::findOrFail($item['id']), $item['order']);
+            $menuitem = $item['type']::findOrFail($item['id'])->makeMenuItem($item['order']);
+            $menuitem->save();
         }
-
-        $menuitem->fill($item)->save();
 
         return $menuitem;
     }
@@ -320,7 +313,7 @@ class MenuBuilder
      *
      * @return     array    ( description_of_the_return_value )
      */
-    private function flatten(array $menu, $parent_id = null, $order = null)
+    private function flatten(array $menu, $parent_id = null, &$order = null)
     {
         $res = [];
 
@@ -337,7 +330,7 @@ class MenuBuilder
 
             $menuitem->save();
 
-            $children = $branch['children'];
+            $children = isset($branch['children']) ? $branch['children'] : [];
 
             $res[] = $menuitem;
 

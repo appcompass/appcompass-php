@@ -62,7 +62,7 @@ class Link extends Model implements Linkable
 
     public function getTypeAttribute()
     {
-        return get_class($this);
+        return self::class;
 //        return 'Link';
     }
 }
