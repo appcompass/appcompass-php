@@ -46,8 +46,7 @@ class ResetPassword extends Notification
      */
     public function toMail($notifiable)
     {
-        $request = Request::capture();
-        $website = Website::fromRequest($request);
+        $website = request()->web_property;
 
         // @TODO: we shouldn't assume the end point for a password reset form on the frontend will always be /reset-password
         // we should set this as a page of a specific type or set config info pointing to the reset password page for a given website.
