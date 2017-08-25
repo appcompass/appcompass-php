@@ -9,28 +9,28 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "pusher/pusher-php-server": "~2.0",
+    "laravel/framework": "5.5.*",
+    "laravel/passport": "^3.0",
+    "tymon/jwt-auth": "dev-develop",
+    "pusher/pusher-php-server": "~3.0",
     "guzzlehttp/guzzle": "~6.0",
-    "tymon/jwt-auth": "dev-develop@dev",
-    "laravel/passport": "^1.0",
     "p3in/modular": "dev-develop",
     "p3in/form-builder": "dev-develop"
   },
-  "autoload": {
-    "psr-4": {
-      "P3in\\": "src"
-    }
-  },
   "minimum-stability": "dev",
   "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "P3in\\": "src/"
+    }
+  },
   "extra": {
     "laravel": {
       "providers": [
         "P3in\\Providers\\ModuleServiceProvider",
         "P3in\\Providers\\FormBuilderServiceProvider",
         "P3in\\Providers\\AppCompassServiceProvider",
-        "P3in\\Providers\\AppCompassEventServiceProvider",
-        "Tymon\\JWTAuth\\Providers\\LaravelServiceProvider"
+        "P3in\\Providers\\AppCompassEventServiceProvider"
       ]
     }
   }

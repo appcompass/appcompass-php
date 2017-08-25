@@ -2,10 +2,12 @@
 
 namespace P3in\Commands;
 
+use Firebase\JWT\JWT;
 use Illuminate\Console\Command;
 use P3in\Models\User;
+use P3in\Models\WebProperty;
 
-class AddUserCommand extends Command
+class AddUser extends Command
 {
 
     /**
@@ -40,7 +42,7 @@ class AddUserCommand extends Command
     public function handle()
     {
         $this->info('Lets get started!');
-        $userInput = $this->fetchInput();
+        $this->fetchInput();
     }
 
     private function fetchInput()
