@@ -46,8 +46,7 @@ class ConfirmRegistration extends Notification
      */
     public function toMail($notifiable)
     {
-        $request = Request::capture();
-        $website = Website::fromRequest($request);
+        $website = request()->web_property;
 
         return (new MailMessage)
             ->line("You are receiving this email because you registered an account on {$website->url}.")

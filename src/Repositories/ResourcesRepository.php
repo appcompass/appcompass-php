@@ -2,10 +2,9 @@
 
 namespace P3in\Repositories;
 
-use P3in\Interfaces\ResourcesRepositoryInterface;
 use P3in\Models\Resource;
 
-class ResourcesRepository extends AbstractRepository implements ResourcesRepositoryInterface
+class ResourcesRepository extends AbstractRepository
 {
     public $model;
 

@@ -9,7 +9,6 @@ class AppCompassModule extends BaseModule
     protected $publishes = [
     ];
 
-    // @TODO: programatically run: php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\JWTAuthServiceProvider"
     public function __construct()
     {
         // \Log::info('Loading <Cp> Module');

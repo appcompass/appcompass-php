@@ -3,9 +3,8 @@
 namespace P3in\Repositories;
 
 use P3in\Models\Permission;
-use P3in\Interfaces\PermissionsRepositoryInterface;
 
-class PermissionsRepository extends AbstractRepository implements PermissionsRepositoryInterface
+class PermissionsRepository extends AbstractRepository
 {
     const REQUIRES_PERMISSION = 1;
 

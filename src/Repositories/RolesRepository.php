@@ -2,10 +2,9 @@
 
 namespace P3in\Repositories;
 
-use P3in\Interfaces\RolesRepositoryInterface;
 use P3in\Models\Role;
 
-class RolesRepository extends AbstractRepository implements RolesRepositoryInterface
+class RolesRepository extends AbstractRepository
 {
     public $model;
     const REQUIRES_PERMISSION = 1;

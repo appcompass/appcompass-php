@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Password;
 use P3in\Events\Login;
 use P3in\Events\Logout;
 use App\User;
+use P3in\Traits\HasApiOutput;
 
 class AuthController extends Controller
 {
-    use AuthenticatesUsers;
+    use AuthenticatesUsers, HasApiOutput;
 
     public function logout(Request $request)
     {
@@ -25,14 +26,12 @@ class AuthController extends Controller
 
         event(new Logout($user));
 
-        return response()->json([
-            'message' => 'Logged out',
-        ]);
+        return $this->success('Logged out');
     }
 
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        return $this->success($request->user());
     }
 
     public function register(Request $request)
@@ -153,7 +152,7 @@ class AuthController extends Controller
             'deleted_at',
         ]);
 
-        return response()->json([
+        return $this->success([
             'access_token' => $token,
             'token_type'   => 'Bearer',
             'expires_in'   => config('jwt.ttl') * 60,
@@ -163,7 +162,7 @@ class AuthController extends Controller
 
     protected function registered(Request $request, $user)
     {
-        return response()->json([
+        return $this->success([
             'message' => trans('registration.check-email'),
             'user'    => $user,
         ]);
@@ -171,22 +170,16 @@ class AuthController extends Controller
 
     protected function noCodeResponse(Request $request)
     {
-        return response()->json([
-            'message' => trans('registration.activation-failed'),
-        ], 422);
+        return $this->error(trans('registration.activation-failed'), 422);
     }
 
     protected function alreadyActiveResponse(Request $request)
     {
-        return response()->json([
-            'message' => trans('registration.already-active'),
-        ], 422);
+        return $this->error(trans('registration.already-active'), 422);
     }
 
     protected function sendFailedLoginResponse(Request $request)
     {
-        return response()->json([
-            'message' => trans('auth.failed'),
-        ], 422);
+        return $this->error(trans('auth.failed'), 422);
     }
 }

@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Route;
 use P3in\Interfaces\AbstractRepositoryInterface;
-use P3in\Models\Form;
 use P3in\Models\Resource;
-use P3in\Models\User;
 
 abstract class AbstractRepository implements AbstractRepositoryInterface
 {
@@ -465,8 +463,7 @@ abstract class AbstractRepository implements AbstractRepositoryInterface
             }
 
             info("File '{$file->getClientOriginalName()}' submitted for storage in the '{$storage}' disk.");
-            // $this->model->storeFile($storage, $file, true);
-            $this->model->storeFile($storage, $file, true);
+            $this->model->getDiskAndStoreFile($storage, $file, true);
         }
     }
 
@@ -533,12 +530,12 @@ abstract class AbstractRepository implements AbstractRepositoryInterface
     public function getResourceForm()
     {
         $resource = Resource::byAllowed()
-            ->where('resource', $this->route_name)
+            ->where('name', $this->route_name)
             ->with('form')
             ->first();
 
         if (!empty($resource->form)) {
-            return $resource->form->render($this->getRouteType());
+            return $resource->renderForm($this->getRouteType());
         }
     }
 

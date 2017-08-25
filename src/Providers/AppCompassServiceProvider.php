@@ -5,35 +5,21 @@ namespace P3in\Providers;
 use App\User;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
-use P3in\Commands\AddUserCommand;
-use P3in\Interfaces\FormsRepositoryInterface;
-use P3in\Interfaces\PermissionsRepositoryInterface;
-use P3in\Interfaces\ResourcesRepositoryInterface;
-use P3in\Interfaces\RolePermissionsRepositoryInterface;
-use P3in\Interfaces\RolesRepositoryInterface;
-use P3in\Interfaces\UserPermissionsRepositoryInterface;
-use P3in\Interfaces\UserRolesRepositoryInterface;
-use P3in\Interfaces\UsersRepositoryInterface;
+use Laravel\Passport\Passport;
+use P3in\Commands\AddUser;
+use P3in\Commands\Install;
 use P3in\Middleware\SanitizeEmail;
 use P3in\Middleware\ValidateControlPanel;
 use P3in\Middleware\ValidateWebProperty;
 use P3in\Models\Field;
 use P3in\Models\Form;
+use P3in\Models\Menu;
 use P3in\Models\Permission;
 use P3in\Models\Resource;
 use P3in\Models\Role;
 use P3in\Observers\FieldObserver;
 use P3in\Observers\PermissionObserver;
-use P3in\Repositories\FormsRepository;
-use P3in\Repositories\PermissionsRepository;
-use P3in\Repositories\ResourcesRepository;
-use P3in\Repositories\RolePermissionsRepository;
-use P3in\Repositories\RolesRepository;
-use P3in\Repositories\UserPermissionsRepository;
-use P3in\Repositories\UserRolesRepository;
-use P3in\Repositories\UsersRepository;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
-use Tymon\JWTAuth\Providers\LaravelServiceProvider;
 
 class AppCompassServiceProvider extends BaseServiceProvider
 {
@@ -61,6 +47,10 @@ class AppCompassServiceProvider extends BaseServiceProvider
             // 'jwt.refresh'
         ],
         'api'  => [
+            'web',
+            // @TODO: fix this so we don't have to use the internal web middleware that does extra stuff we don't need in an API based system.
+            // 'throttle:60,1',
+            // SubstituteBindings::class,
             ValidateWebProperty::class,
             SanitizeEmail::class,
         ],
@@ -78,13 +68,14 @@ class AppCompassServiceProvider extends BaseServiceProvider
      * @var array
      */
     protected $routeMiddleware = [
-//        'jwt.auth'    => GetUserFromToken::class,
+        // 'jwt.auth'    => GetUserFromToken::class,
         'jwt.refresh' => RefreshToken::class,
 
     ];
 
     protected $commands = [
-        AddUserCommand::class,
+        Install::class,
+        AddUser::class,
     ];
 
     protected $observe = [
@@ -93,20 +84,13 @@ class AppCompassServiceProvider extends BaseServiceProvider
     ];
 
     protected $appBindings = [
-        UsersRepositoryInterface::class           => UsersRepository::class,
-        UserPermissionsRepositoryInterface::class => UserPermissionsRepository::class,
-        PermissionsRepositoryInterface::class     => PermissionsRepository::class,
-        RolesRepositoryInterface::class           => RolesRepository::class,
-        RolePermissionsRepositoryInterface::class => RolePermissionsRepository::class,
-        UserRolesRepositoryInterface::class       => UserRolesRepository::class,
-        ResourcesRepositoryInterface::class       => ResourcesRepository::class,
-        FormsRepositoryInterface::class           => FormsRepository::class,
     ];
 
     protected $routeBindings = [
         'user'       => User::class,
         'permission' => Permission::class,
         'role'       => Role::class,
+        'menu'       => Menu::class,
         'resource'   => Resource::class,
         'form'       => Form::class,
     ];
@@ -123,16 +107,20 @@ class AppCompassServiceProvider extends BaseServiceProvider
     public function register()
     {
         parent::register();
-
-        $this->registerDependentPackages();
     }
 
-    /**
-     * Load dependent packages.
-     */
-    protected function registerDependentPackages()
+    public function boot()
     {
-        $this->app->register(AppCompassEventServiceProvider::class);
-        $this->app->register(LaravelServiceProvider::class);
+        parent::boot();
+
+        $this->publishes([
+            __DIR__ . '/../config/app-compass.php' => config_path('app-compass.php'),
+        ]);
+
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        $this->loadRoutesFrom(__DIR__ . '/../routes.php');
+
+        Passport::routes();
     }
 }

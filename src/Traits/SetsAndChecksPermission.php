@@ -53,7 +53,7 @@ trait SetsAndChecksPermission
             if (!$user && Auth::check()) {
                 $user = Auth::user();
             }
-            if ($this->allowNullPermission() || $user->isAdmin()) {
+            if ($this->allowNullPermission() || ($user && $user->isAdmin())) {
                 $query->whereNull($this->permissionFieldName());
             }
             $query->orWhereHas($this->permissionRelationshipName(), function ($query) {

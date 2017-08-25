@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use Intervention\Image\Exception\NotFoundException;
+use P3in\Interfaces\WebPropertyModelInterface;
 
-class WebProperty extends Model
+class WebProperty extends Model implements WebPropertyModelInterface
 {
     use SoftDeletes;
 
@@ -23,6 +23,26 @@ class WebProperty extends Model
      */
     public $appends = ['url'];
 
+
+    /**
+     * Menus
+     *
+     * @return     hasMany
+     */
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
+    }
+
+    /**
+     * Menus
+     *
+     * @return     hasMany
+     */
+    public function resources()
+    {
+        return $this->hasMany(Resource::class);
+    }
 
     /**
      * Gets the url attribute.
@@ -44,5 +64,40 @@ class WebProperty extends Model
         } catch (ModelNotFoundException $e) {
             app()->abort(401, $host . ' Not Authorized');
         }
+    }
+
+    /**
+     * builds router.
+     *
+     * @return     <array>  vue router structured array.
+     */
+    public function buildRoutesTree()
+    {
+        $resources = $this->resources()->byConfig('layout', '!=', '')
+            ->byAllowed()
+            ->get();
+
+        $rtn = [];
+        foreach ($resources->unique('config.layout')->pluck('config.layout') as $layout) {
+            if ($layout) {
+                $rtn[] = [
+                    'path'      => '',
+                    'component' => $layout,
+                    'children'  => $this->formatRoutesBranch($resources->where('config.layout', $layout)),
+                ];
+            }
+        }
+
+        return $rtn;
+    }
+
+    private function formatRoutesBranch($resources)
+    {
+        $rtn = [];
+        foreach ($resources as $resource) {
+            $rtn[] = $resource->vueRoute();
+        }
+
+        return $rtn;
     }
 }

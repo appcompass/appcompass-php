@@ -2,46 +2,47 @@
 
 namespace P3in\Commands;
 
+use Firebase\JWT\JWT;
 use Illuminate\Console\Command;
-use P3in\Models\Role;
-use P3in\Models\Permission;
 use P3in\Models\User;
+use P3in\Models\WebProperty;
 
-class AddUserCommand extends Command
+class AddUser extends Command
 {
-    /**
-    * The name and signature of the console command.
-    *
-    * @var string
-    */
-    protected $name = 'pilot-io:create-users';
 
     /**
-    * The console command description.
-    *
-    * @var string
-    */
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $name = 'app-compass:create-user';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Create a super admin User';
 
     /**
-    * Create a new command instance.
-    *
-    * @return void
-    */
+     * Create a new command instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
     }
 
     /**
-    * Execute the console command.
-    *
-    * @return mixed
-    */
+     * Execute the console command.
+     *
+     * @return mixed
+     */
     public function handle()
     {
         $this->info('Lets get started!');
-        $userInput = $this->fetchInput();
+        $this->fetchInput();
     }
 
     private function fetchInput()
@@ -54,19 +55,17 @@ class AddUserCommand extends Command
 
         $user = User::create([
             'first_name' => $first_name,
-            'last_name' => $last_name,
-            'email' => $email,
-            'password' => bcrypt($password),
-            'phone' => $phone,
-            'active' => true
+            'last_name'  => $last_name,
+            'email'      => $email,
+            'password'   => $password,
+            'phone'      => $phone,
+            'active'     => true,
         ]);
-
-        $user->permissions()
-            ->attach(Permission::firstOrFail()->id);
 
         $user->assignRole('admin');
         $this->info('User created successfully!');
     }
+
     private function fetchEmail()
     {
         $email = $this->ask('Enter your email address to be used as your username.');
@@ -83,6 +82,7 @@ class AddUserCommand extends Command
 
         return $email;
     }
+
     private function fetchPassword()
     {
         $password = $this->secret('Enter your desired password.');

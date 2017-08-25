@@ -3,9 +3,8 @@
 namespace P3in\Repositories;
 
 use App\User;
-use P3in\Interfaces\UsersRepositoryInterface;
 
-class UsersRepository extends AbstractRepository implements UsersRepositoryInterface
+class UsersRepository extends AbstractRepository
 {
 
 //    const SEE_OWNED = 1;

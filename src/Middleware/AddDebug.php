@@ -6,6 +6,7 @@ use Closure;
 use DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AddDebug
 {
@@ -20,7 +21,7 @@ class AddDebug
      */
     public function handle(Request $request, Closure $next)
     {
-        if (env('APP_DEBUG')) {
+        if (config('app.debug')) {
             $this->enableLogging();
 
             // get response
@@ -54,6 +55,8 @@ class AddDebug
         if ($response instanceof JsonResponse) {
             $content = $response->getData(true);
             $rtn_method = 'setData';
+        } elseif ($response instanceof BinaryFileResponse) {
+            return $response->sendContent();
         } else {
             $content = $response->getOriginalContent();
             $rtn_method = 'setContent';

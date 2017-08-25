@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use P3in\Builders\FormBuilder;
 use P3in\Models\FieldSource;
 use P3in\Models\Permission;
+use P3in\Models\Resource;
+use P3in\Models\WebProperty;
 
 class SeedAppCompassFormBuilderData extends Migration
 {
@@ -15,7 +17,13 @@ class SeedAppCompassFormBuilderData extends Migration
      */
     public function up()
     {
-        FormBuilder::new('users', function (FormBuilder $builder) {
+        $cp = WebProperty::where([
+            'name'   => config('app-compass.admin_site_name'),
+            'scheme' => config('app-compass.admin_site_scheme'),
+            'host'   => config('app-compass.admin_site_host'),
+        ])->firstOrFail();
+
+        $users = FormBuilder::new('users', function (FormBuilder $builder) {
             $builder->string('First Name', 'first_name')->list()->required()->sortable()->searchable();
             $builder->string('Last Name', 'last_name')->list()->required()->sortable()->searchable();
             $builder->string('Email', 'email')->list()->validation(['required', 'email'])->sortable()->searchable();
@@ -25,27 +33,35 @@ class SeedAppCompassFormBuilderData extends Migration
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Last Login', 'last_login')->list()->edit(false)->sortable()->searchable();
             $builder->secret('Password', 'password'); // ->required()
-        })->linkToResources([
+        })->getForm();
+
+        Resource::buildAll([
             'users.index',
             'users.show',
             'users.create',
             'users.update',
             'users.store',
-        ], 'users_admin');
+        ], $cp, $users, 'users_admin');
 
-        FormBuilder::new('user-roles', function (FormBuilder $builder) {
+        $userRoles = FormBuilder::new('user-roles', function (FormBuilder $builder) {
             $builder->string('Name', 'label')->list()->required()->sortable()->searchable();
             $builder->string('Description', 'description')->list()->required()->sortable()->searchable();
-        })->linkToResources([
+        })->getForm();
+
+        Resource::buildAll([
             'users.roles.index',
-        ], 'users_admin');
+        ], $cp, $userRoles, 'users_admin');
 
-        FormBuilder::new('user-permissions', function (FormBuilder $builder) {
+        $userPermissions = FormBuilder::new('user-permissions', function (FormBuilder $builder) {
             $builder->string('Name', 'label')->list()->required()->sortable()->searchable();
             $builder->string('Description', 'description')->list()->required()->sortable()->searchable();
-        })->linkToResources(['users.permissions.index'], 'users_admin');
+        })->getForm();
 
-        FormBuilder::new('permissions', function (FormBuilder $builder) {
+        Resource::buildAll([
+            'users.permissions.index',
+        ], $cp, $userPermissions, 'users_admin');
+
+        $permissions = FormBuilder::new('permissions', function (FormBuilder $builder) {
             $builder->string('Name', 'label')->list()->required()->sortable()->searchable();
             $builder->text('Description', 'description')->list(false)->required()->sortable()->searchable();
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
@@ -55,15 +71,17 @@ class SeedAppCompassFormBuilderData extends Migration
                 ->dynamic(Permission::class, function (FieldSource $source) {
                     $source->select(['id AS index', 'name AS label']);
                 })->list(false);
-        })->linkToResources([
+        })->getForm();
+
+        Resource::buildAll([
             'permissions.index',
             'permissions.show',
             'permissions.create',
             'permissions.store',
             'permissions.update',
-        ], 'permissions_admin');
+        ], $cp, $permissions, 'permissions_admin');
 
-        FormBuilder::new('roles', function (FormBuilder $builder) {
+        $roles = FormBuilder::new('roles', function (FormBuilder $builder) {
             $builder->string('Role Name', 'name')->list()->required()->sortable()->searchable();
             $builder->string('Role Label', 'label')->list()->required()->sortable()->searchable();
             $builder->text('Description', 'description')->list(false)->required()->sortable()->searchable();
@@ -73,18 +91,25 @@ class SeedAppCompassFormBuilderData extends Migration
                 })->list(false);
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
-        })->linkToResources([
+        })->getForm();
+
+        Resource::buildAll([
             'roles.index',
             'roles.show',
+            'roles.create',
             'roles.store',
             'roles.update',
-        ], 'permissions_admin');
+        ], $cp, $roles, 'permissions_admin');
 
-        FormBuilder::new('role-permissions', function (FormBuilder $builder) {
+        $rolePermissions = FormBuilder::new('role-permissions', function (FormBuilder $builder) {
             $builder->string('Name', 'label')->list()->required()->sortable()->searchable();
-        })->linkToResource('roles.permissions.index', 'permissions_admin');
+        })->getForm();
 
-        FormBuilder::new('resources', function (FormBuilder $builder) {
+        Resource::buildAll([
+            'roles.permissions.index',
+        ], $cp, $rolePermissions, 'permissions_admin');
+
+        $resources = FormBuilder::new('resources', function (FormBuilder $builder) {
             $builder->string('Resource', 'resource')->list()->sortable()->searchable()->required();
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
@@ -92,23 +117,27 @@ class SeedAppCompassFormBuilderData extends Migration
                 function (FieldSource $source) {
                     $source->select(['id As index', 'label']);
                 })->nullable();
-        })->linkToResources([
+        })->getForm();
+
+        Resource::buildAll([
             'resources.index',
             'resources.show',
             'resources.create',
-        ], 'resources_admin');
+        ], $cp, $resources, 'resources_admin');
 
-        FormBuilder::new('forms', function (FormBuilder $builder) {
+        $forms = FormBuilder::new('forms', function (FormBuilder $builder) {
             $builder->string('Name', 'name')->list(true)->sortable()->searchable();
             $builder->string('Editor', 'editor');
             $builder->string('Fields', 'fieldsCount')->edit(false)->list();
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Updated', 'updated_at')->edit(false);
-        })->linkToResources([
+        })->getForm();
+        Resource::buildAll([
             'forms.index',
             'forms.show',
-        ], 'forms_admin');
+            'forms.create',
+        ], $cp, $forms, 'forms_admin');
     }
 
     /**

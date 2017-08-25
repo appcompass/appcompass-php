@@ -27,7 +27,9 @@ trait HasRoles
      */
     public static function scopeHavingRole($query, $role)
     {
-        return Role::whereName($role)->firstOrFail()->users();
+        $query->whereHas('roles', function ($query) use ($role) {
+            $query->whereName($role);
+        });
     }
 
     /**
@@ -85,10 +87,14 @@ trait HasRoles
         try {
             if ($role instanceof Role) {
                 // do nothing.
-            } elseif (is_string($role)) {
-                $role = Role::whereName($role)->firstOrFail();
-            } elseif (is_int($role)) {
-                $role = Role::findOrFail($role);
+            } else {
+                if (is_string($role)) {
+                    $role = Role::whereName($role)->firstOrFail();
+                } else {
+                    if (is_int($role)) {
+                        $role = Role::findOrFail($role);
+                    }
+                }
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return false;
@@ -107,8 +113,13 @@ trait HasRoles
      */
     public function __call($method, $args)
     {
+        // boolean check.
         if (preg_match('/^is/', $method)) {
             return $this->hasRole(lcfirst(substr($method, 2)));
+        }
+
+        if (preg_match('/^of/', $method)) {
+            return $this->havingRole(lcfirst(substr($method, 2)));
         }
 
         return parent::__call($method, $args);
