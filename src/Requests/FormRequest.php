@@ -10,8 +10,22 @@ use Route;
 
 class FormRequest extends BaseFormRequest
 {
+    protected $resource;
+
+    private function getResource()
+    {
+        if ($this->resource) {
+            return $this->resource;
+        }
+        $this->resource = Resource::whereName(request()->route()->getName())->with('form')->first();
+
+        return $this->resource;
+    }
+
     public function authorize()
     {
+        $resource = $this->getResource();
+        // @TODO: check if usr has access to this resource.
         return true;
     }
 
@@ -24,28 +38,32 @@ class FormRequest extends BaseFormRequest
      */
     public function rules(Request $request)
     {
+        //@TODO: we should only be calling this class when we need to validate the request, so the below check would not be needed.
         if (!in_array($request->getMethod(), ['POST', 'PUT'])) {
             return [];
         }
 
-        $resource = Resource::whereName(Route::current()->getName())->with('form')->first();
+        $resource = $this->getResource();
 
         if (isset($resource->form)) {
             return $resource->form->rules();
-        } else {
-
-            // @TODO we hit a route that has a path parameter (not final)
-            if ($this->route('path')) {
-                $form_name = $this->route('path') . '.store';
-
-                $resource = Resource::whereName($form_name)->with('form')->first();
-
-                if (isset($resource->form)) {
-                    return $resource->form->rules();
-                }
-            }
-
-            return [];
         }
+        return [];
+
+        // } else {
+        //
+        //     // @TODO we hit a route that has a path parameter (not final)
+        //     if ($this->route('path')) {
+        //         $form_name = $this->route('path') . '.store';
+        //
+        //         $resource = Resource::whereName($form_name)->with('form')->first();
+        //
+        //         if (isset($resource->form)) {
+        //             return $resource->form->rules();
+        //         }
+        //     }
+        //
+        //     return [];
+        // }
     }
 }

@@ -17,7 +17,7 @@ class CreateLinks extends Migration
         Schema::create('links', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->text('alt');
+            $table->string('alt', 100)->nullable();
             $table->boolean('new_tab')->default(false);
             $table->string('url', 2083)->nullable(); // null for separators
             $table->boolean('clickable')->default(true); // sometimes we just want separators
