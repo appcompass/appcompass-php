@@ -3,13 +3,12 @@
 namespace P3in\Providers;
 
 use App\User;
-use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Laravel\Passport\Passport;
 use P3in\Commands\AddUser;
 use P3in\Commands\Install;
 use P3in\Middleware\SanitizeEmail;
-use P3in\Middleware\ValidateControlPanel;
 use P3in\Middleware\ValidateWebProperty;
 use P3in\Models\Field;
 use P3in\Models\Form;
@@ -20,6 +19,7 @@ use P3in\Models\Role;
 use P3in\Observers\FieldObserver;
 use P3in\Observers\PermissionObserver;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
+use Tymon\JWTAuth\Http\Middleware\Authenticate;
 
 class AppCompassServiceProvider extends BaseServiceProvider
 {
@@ -42,21 +42,16 @@ class AppCompassServiceProvider extends BaseServiceProvider
      * @var array
      */
     protected $middlewareGroups = [
-        'auth' => [
+        'app_compass_auth' => [
             Authenticate::class,
             // 'jwt.refresh'
         ],
-        'api'  => [
-            'web',
-            // @TODO: fix this so we don't have to use the internal web middleware that does extra stuff we don't need in an API based system.
-            // 'throttle:60,1',
-            // SubstituteBindings::class,
+        'app_compass_api'  => [
+            // // 'throttle:60,1',
             ValidateWebProperty::class,
+            SubstituteBindings::class,
             SanitizeEmail::class,
-        ],
-        'cp'   => [
-            ValidateControlPanel::class,
-            ValidatePostSize::class,
+            //     ValidatePostSize::class,
         ],
     ];
 
@@ -69,8 +64,7 @@ class AppCompassServiceProvider extends BaseServiceProvider
      */
     protected $routeMiddleware = [
         // 'jwt.auth'    => GetUserFromToken::class,
-        'jwt.refresh' => RefreshToken::class,
-
+        'app_compass_refresh_token' => RefreshToken::class,
     ];
 
     protected $commands = [

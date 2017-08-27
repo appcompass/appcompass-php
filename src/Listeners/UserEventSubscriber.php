@@ -29,6 +29,9 @@ class UserEventSubscriber
      */
     public function onUserLogout($event)
     {
+        $user = $event->user;
+
+        Cache::tags('auth_permissions')->forget($user->id);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 Route::group([
-    'middleware' => ['api'],
+    'middleware' => ['app_compass_api'],
     'namespace'  => 'P3in\Controllers',
 ], function ($router) {
     $router->get('routes', 'AppResourcesController@routes');
@@ -10,13 +10,16 @@ Route::group([
 
 Route::group([
     'prefix'     => 'auth',
-    'middleware' => ['api'],
+    'middleware' => ['app_compass_api'],
     'namespace'  => 'P3in\Controllers',
 ], function ($router) {
     // login and auth check
     $router->post('login', 'AuthController@login');
-    $router->get('logout', 'AuthController@logout')->middleware(['auth']);
-    $router->get('user', 'AuthController@user')->middleware('auth');
+    $router->get('logout', 'AuthController@logout')->middleware(['app_compass_api']);
+    $router->get('user', 'AuthController@user')->middleware('app_compass_api');
+
+    // jwt token stuff.
+    $router->get('token/refresh', 'AuthController@refreshToken')->middleware('app_compass_refresh_token');
 
     // registration
     $router->post('register', 'AuthController@register');
@@ -29,7 +32,7 @@ Route::group([
 
 Route::group([
     'namespace'  => 'P3in\Controllers',
-    'middleware' => ['auth', 'api'],
+    'middleware' => ['app_compass_auth', 'app_compass_api'],
 ], function ($router) {
     $router->get('dashboard', 'AppResourcesController@getDashboard')->name('cp-dashboard');
     $router->resource('users', UsersController::class);

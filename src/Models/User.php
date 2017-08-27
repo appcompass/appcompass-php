@@ -87,7 +87,7 @@ class User extends ModularBaseModel implements
         'last_name'  => 'required|max:255',
         'email'      => 'required|email|max:255', //|unique:users when registrering only
         'phone'      => 'min:10|max:255',
-        // 'password'   => 'min:6|confirmed', //|required when registering only.
+        'password'   => 'min:6|confirmed', //|required when registering only.
     ];
 
 
