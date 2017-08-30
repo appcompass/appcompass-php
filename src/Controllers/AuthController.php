@@ -10,12 +10,11 @@ use Illuminate\Support\Facades\Password;
 use P3in\Events\Login;
 use P3in\Events\Logout;
 use App\User;
-use P3in\Traits\HasApiOutput;
 use P3in\Traits\RegistersUsers;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
-    use AuthenticatesUsers, RegistersUsers, HasApiOutput;
+    use AuthenticatesUsers, RegistersUsers;
 
     public function logout()
     {

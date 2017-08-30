@@ -49,21 +49,5 @@ class FormRequest extends BaseFormRequest
             return $resource->form->rules();
         }
         return [];
-
-        // } else {
-        //
-        //     // @TODO we hit a route that has a path parameter (not final)
-        //     if ($this->route('path')) {
-        //         $form_name = $this->route('path') . '.store';
-        //
-        //         $resource = Resource::whereName($form_name)->with('form')->first();
-        //
-        //         if (isset($resource->form)) {
-        //             return $resource->form->rules();
-        //         }
-        //     }
-        //
-        //     return [];
-        // }
     }
 }

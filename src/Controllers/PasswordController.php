@@ -2,16 +2,15 @@
 
 namespace P3in\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use P3in\Traits\HasApiOutput;
 
-class PasswordController extends Controller
+class PasswordController extends BaseController
 {
-    use SendsPasswordResetEmails, ResetsPasswords, HasApiOutput;
+
+    use SendsPasswordResetEmails, ResetsPasswords;
 
     protected function broker()
     {

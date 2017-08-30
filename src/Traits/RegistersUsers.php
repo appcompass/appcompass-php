@@ -6,7 +6,7 @@ namespace P3in\Traits;
 use Illuminate\Http\Request;
 use P3in\Events\Registered;
 use P3in\Events\Registering;
-use P3in\Models\User;
+use App\User;
 
 trait RegistersUsers
 {
@@ -64,11 +64,20 @@ trait RegistersUsers
         ];
     }
 
+    protected function createUserRecord(array $data)
+    {
+        $user = new User();
+        $user->fill(array_only($data, $user->getFillable()));
+        $user->active = false;
+        $user->activation_code = str_random(64);
+
+        $user->save();
+
+        return $user;
+    }
     protected function createRegisteredUser(array $data)
     {
-        $user = new User($data);
-        $user->activation_code = str_random(64);
-        $user->save();
+        $user = $this->createUserRecord($data);
 
         return $user;
     }

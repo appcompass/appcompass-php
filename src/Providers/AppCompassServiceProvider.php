@@ -3,7 +3,6 @@
 namespace P3in\Providers;
 
 use App\User;
-use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Laravel\Passport\Passport;
 use P3in\Commands\AddUser;
