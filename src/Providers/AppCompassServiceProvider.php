@@ -17,6 +17,7 @@ use P3in\Models\Resource;
 use P3in\Models\Role;
 use P3in\Observers\FieldObserver;
 use P3in\Observers\PermissionObserver;
+use Tymon\JWTAuth\Http\Middleware\Check;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 use Tymon\JWTAuth\Http\Middleware\Authenticate;
 
@@ -47,6 +48,7 @@ class AppCompassServiceProvider extends BaseServiceProvider
         ],
         'app_compass_api'  => [
             // // 'throttle:60,1',
+            Check::class,
             ValidateWebProperty::class,
             SubstituteBindings::class,
             SanitizeEmail::class,

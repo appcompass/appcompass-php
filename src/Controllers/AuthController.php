@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Password;
 use P3in\Events\Login;
 use P3in\Events\Logout;
 use App\User;
+use P3in\Events\UserCheck;
 use P3in\Traits\RegistersUsers;
 
 class AuthController extends BaseController
@@ -44,7 +45,17 @@ class AuthController extends BaseController
 
     public function user(Request $request)
     {
-        return $this->success($request->user());
+        $user = $request->user();
+        event(new UserCheck($user));
+
+        $user->makeHidden([
+            'roles',
+            'created_at',
+            'updated_at',
+            'deleted_at',
+        ]);
+
+        return $this->success($user);
     }
 
     // we need to do things a bit differently using JWTAuth since it doesn't

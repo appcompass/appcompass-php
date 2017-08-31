@@ -15,8 +15,8 @@ Route::group([
 ], function ($router) {
     // login and auth check
     $router->post('login', 'AuthController@login');
-    $router->get('logout', 'AuthController@logout')->middleware(['app_compass_api']);
-    $router->get('user', 'AuthController@user')->middleware('app_compass_api');
+    $router->get('logout', 'AuthController@logout')->middleware(['app_compass_auth']);
+    $router->get('user', 'AuthController@user')->middleware(['app_compass_auth']);
 
     // jwt token stuff.
     $router->get('token/refresh', 'AuthController@refreshToken')->middleware('app_compass_refresh_token');

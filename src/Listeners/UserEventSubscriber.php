@@ -6,9 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use P3in\Events\Login;
 use P3in\Events\Logout;
+use P3in\Events\UserCheck;
 
 class UserEventSubscriber
 {
+
     /**
      * Handle user login events.
      */
@@ -19,9 +21,7 @@ class UserEventSubscriber
         $user->last_login = Carbon::now();
         $user->save();
 
-        $permissions = $user->allPermissions();
-
-        Cache::tags('auth_permissions')->forever($user->id, $permissions);
+        $this->setPermissions($user);
     }
 
     /**
@@ -35,9 +35,24 @@ class UserEventSubscriber
     }
 
     /**
+     * Handle user check events.
+     */
+    public function onUserCheck($event)
+    {
+        $this->setPermissions($event->user);
+    }
+
+    private function setPermissions($user)
+    {
+        $permissions = $user->allPermissions();
+
+        Cache::tags('auth_permissions')->forever($user->id, $permissions);
+    }
+
+    /**
      * Register the listeners for the subscriber.
      *
-     * @param  Illuminate\Events\Dispatcher  $events
+     * @param  Illuminate\Events\Dispatcher $events
      */
     public function subscribe($events)
     {
@@ -49,6 +64,11 @@ class UserEventSubscriber
         $events->listen(
             Logout::class,
             'P3in\Listeners\UserEventSubscriber@onUserLogout'
+        );
+
+        $events->listen(
+            UserCheck::class,
+            'P3in\Listeners\UserEventSubscriber@onUserCheck'
         );
     }
 }
