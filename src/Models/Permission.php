@@ -3,10 +3,10 @@
 namespace P3in\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use P3in\ModularBaseModel;
+use Illuminate\Database\Eloquent\Model;
 use P3in\Traits\SetsAndChecksPermission;
 
-class Permission extends ModularBaseModel
+class Permission extends Model
 {
     use SetsAndChecksPermission;
 

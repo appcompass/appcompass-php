@@ -48,7 +48,7 @@ class AppCompassServiceProvider extends BaseServiceProvider
         ],
         'app_compass_api'  => [
             // // 'throttle:60,1',
-            Check::class,
+            // Check::class,
             ValidateWebProperty::class,
             SubstituteBindings::class,
             SanitizeEmail::class,

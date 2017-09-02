@@ -13,7 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
 use Propaganistas\LaravelPhone\PhoneNumber;
-use P3in\ModularBaseModel;
+use Illuminate\Database\Eloquent\Model;
 use P3in\Notifications\ConfirmRegistration;
 use P3in\Notifications\ResetPassword;
 use P3in\Traits\HasCardView;
@@ -23,12 +23,13 @@ use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 
 // use P3in\Traits\HasProfileTrait;
 
-class User extends ModularBaseModel implements
+class User extends Model implements
     AuthenticatableContract,
     AuthenticatableUserContract,
     AuthorizableContract,
     CanResetPasswordContract
 {
+
     use
         Authenticatable,
         Authorizable,
@@ -209,29 +210,29 @@ class User extends ModularBaseModel implements
      */
     public function allPermissions()
     {
-        $this->load('roles.permissions');
+        // $this->load('roles.permissions');
 
-        $user_permissions = $this->permissions()->allRelatedIds()->toArray();
 
-        $roles_permissions = [];
+        $user_permissions = $this->permissions()->allRelatedIds();
+        $user_roles = $this->roles->load('permissions');
+
+        $roles_permissions = $user_permissions;
+
 
         foreach ($this->roles as $role) {
-            $role_permissions = $role->permissions()
-                ->allRelatedIds()
-                ->toArray();
+            $role_permissions = $role->permissions->pluck('id');
 
-            $roles_permissions = array_merge($roles_permissions, $role_permissions);
+            $roles_permissions = $roles_permissions->union($role_permissions);
         }
 
-        $roles_permissions = array_merge($roles_permissions, $user_permissions);
-
-        return array_unique($roles_permissions);
+        return $roles_permissions->toArray();
     }
 
     /**
      * Send the password reset notification.
      *
      * @param  string $token
+     *
      * @return void
      */
     public function sendPasswordResetNotification($token)

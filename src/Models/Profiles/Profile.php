@@ -3,9 +3,9 @@
 namespace P3in\Models\Profiles;
 
 use P3in\Models\User;
-use P3in\ModularBaseModel;
+use Illuminate\Database\Eloquent\Model;
 
-class Profile extends ModularBaseModel
+class Profile extends Model
 {
     public $table = 'profiles';
 
