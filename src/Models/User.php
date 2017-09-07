@@ -216,16 +216,15 @@ class User extends Model implements
         $user_permissions = $this->permissions()->allRelatedIds();
         $user_roles = $this->roles->load('permissions');
 
-        $roles_permissions = $user_permissions;
+        $all_permissions = collect($user_permissions);
 
-
-        foreach ($this->roles as $role) {
+        foreach ($user_roles as $role) {
             $role_permissions = $role->permissions->pluck('id');
 
-            $roles_permissions = $roles_permissions->union($role_permissions);
+            $all_permissions = $all_permissions->merge($role_permissions);
         }
 
-        return $roles_permissions->toArray();
+        return $all_permissions->unique()->values()->all();
     }
 
     /**
