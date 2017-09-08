@@ -9,6 +9,8 @@ class PermissionObserver
 {
     public function created(Model $model)
     {
-        Role::whereName('admin')->firstOrFail()->grantPermission($model);
+        if ($model->name !== 'guest'){
+            Role::whereName('admin')->firstOrFail()->grantPermission($model);
+        }
     }
 }

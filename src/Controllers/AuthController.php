@@ -56,7 +56,7 @@ class AuthController extends BaseController
             'deleted_at',
         ]);
 
-        return $this->success([]);
+        return $this->success($user);
     }
 
     // we need to do things a bit differently using JWTAuth since it doesn't

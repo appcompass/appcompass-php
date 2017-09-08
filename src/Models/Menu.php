@@ -95,7 +95,7 @@ class Menu extends Model
     /**
      * render
      */
-    public function render($clean = false, array $permissions = [])
+    public function render($clean = false)
     {
         if ($clean) {
             $this->makeHidden(['id', 'crated_at']);
@@ -113,7 +113,7 @@ class Menu extends Model
             });
         }
 
-        return $this->buildTree($this->items, null, $permissions);
+        return $this->buildTree($this->items, null);
     }
 
     /**
@@ -124,13 +124,13 @@ class Menu extends Model
      *
      * @return     array   The tree.
      */
-    private function buildTree(Collection &$items, $parent_id = null, array $permissions = [])
+    private function buildTree(Collection &$items, $parent_id = null)
     {
         $tree = [];
 
         foreach ($items as $key => &$node) {
             if ($node->parent_id === $parent_id) {
-                $children = $this->buildTree($items, $node->id, $permissions);
+                $children = $this->buildTree($items, $node->id);
 
                 $node->children = $children ?? [];
 
@@ -138,15 +138,7 @@ class Menu extends Model
                     continue;
                 }
 
-                if ($node->req_perm) {
-                    if (isset($permissions[0]) && $permissions[0] == '*') {
-                        $tree[] = $node;
-                    } elseif (in_array($node->req_perm, $permissions)) {
-                        $tree[] = $node;
-                    }
-                } else {
-                    $tree[] = $node;
-                }
+                $tree[] = $node;
 
                 unset($items[$key]);
             }

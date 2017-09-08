@@ -36,11 +36,12 @@ class AppResourcesController extends Controller
 
         $menus = $request
             ->web_property
-            ->menus()->with('items')->get();
+            ->menus()->with(['items' => function($query){
+                $query->byAllowed(Auth::user(), true);
+            }])->get();
 
-        $permIds = Auth::check() ? (array)Cache::tags('auth_permissions')->get(Auth::user()->id) : [];
         foreach ($menus as $menu) {
-            $rtn[$menu->name] = $menu->render(true, $permIds);
+            $rtn[$menu->name] = $menu->render(true);
         }
 
         return $rtn;

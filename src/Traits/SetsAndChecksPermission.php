@@ -47,18 +47,20 @@ trait SetsAndChecksPermission
         return $this;
     }
 
-    public function scopeByAllowed(Builder $query, User $user = null)
+    public function scopeByAllowed(Builder $query, User $user = null, $strict = false)
     {
-        $query->where(function ($query) use ($user) {
+        $query->where(function ($query) use ($user, $strict) {
             if (!$user && Auth::check()) {
                 $user = Auth::user();
             }
-            if ($this->allowNullPermission() || ($user && $user->isAdmin())) {
+            if ($this->allowNullPermission() || ($user && $user->isAdmin() && !$strict)) {
                 $query->whereNull($this->permissionFieldName());
             }
-            $query->orWhereHas($this->permissionRelationshipName(), function ($query) {
-                $query->where('name', 'guest');
-            });
+            if (!$strict){
+                $query->orWhereHas($this->permissionRelationshipName(), function ($query) {
+                    $query->where('name', 'guest');
+                });
+            }
 
             if ($user) {
                 // the cache way
