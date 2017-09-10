@@ -4,11 +4,16 @@ namespace P3in\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
 use P3in\Traits\SetsAndChecksPermission;
 
 class Permission extends Model
 {
     use SetsAndChecksPermission;
+
+    const GUEST_PERM_NAME = 'guest';
+    const LOGGED_IN_PERM_NAME = 'logged-user';
 
     protected $table = 'permissions';
 
@@ -62,6 +67,15 @@ class Permission extends Model
         return $this->belongsToMany(Role::class);
     }
 
+    public static function getAuthPerms()
+    {
+        //@TODO: we should probably perma cache the guest ID so it's the same flow every time.
+        if (Auth::check()) {
+            return (array) Cache::tags('auth_permissions')->get(Auth::user()->id);
+        } else {
+            return static::byName(static::GUEST_PERM_NAME)->get()->pluck('id')->toArray();
+        }
+    }
     /**
      *
      *

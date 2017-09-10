@@ -47,35 +47,15 @@ trait SetsAndChecksPermission
         return $this;
     }
 
-    public function scopeByAllowed(Builder $query, User $user = null, $strict = false)
+    public function scopeByAllowed(Builder $query)
     {
-        $query->where(function ($query) use ($user, $strict) {
-            if (!$user && Auth::check()) {
-                $user = Auth::user();
-            }
-            if ($this->allowNullPermission() || ($user && $user->isAdmin() && !$strict)) {
-                $query->whereNull($this->permissionFieldName());
-            }
-            if (!$strict){
-                $query->orWhereHas($this->permissionRelationshipName(), function ($query) {
-                    $query->where('name', 'guest');
-                });
-            }
+        $query->where(function ($query) {
+            // the cache way
+            $query->whereIn($this->permissionFieldName(), Permission::getAuthPerms());
 
-            if ($user) {
-                // the cache way
-                $permIds = (array)Cache::tags('auth_permissions')->get($user->id);
-                $query->orWhereIn($this->permissionFieldName(), $permIds);
-                // the query way.
-                // $query->orWhereHas($this->permissionRelationshipName(), function ($query) use ($user) {
-                //     $query->whereHas('users', function($query) use ($user) {
-                //         $query->where('user_id', $user->id);
-                //     })->orWhereHas('roles', function($query) use ($user) {
-                //         $query->orWhereHas('users', function($query) use ($user) {
-                //             $query->where('user_id', $user->id);
-                //         });
-                //     });
-                // });
+            $user = Auth::check() ? Auth::user() : null;
+            if ($this->allowNullPermission() || ($user && $user->isAdmin())) {
+                $query->orWhereNull($this->permissionFieldName());
             }
         });
     }

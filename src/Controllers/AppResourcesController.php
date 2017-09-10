@@ -37,7 +37,7 @@ class AppResourcesController extends Controller
         $menus = $request
             ->web_property
             ->menus()->with(['items' => function($query){
-                $query->byAllowed(Auth::user(), true);
+                $query->byAllowed();
             }])->get();
 
         foreach ($menus as $menu) {
