@@ -124,13 +124,15 @@ class Menu extends Model
      *
      * @return     array   The tree.
      */
-    private function buildTree(Collection &$items, $parent_id = null)
+    private function buildTree(Collection &$items, $parent_id = null, $permissions = null)
     {
         $tree = [];
-
+        if (is_null($permissions)){
+            $permissions = Permission::getAuthPerms();
+        }
         foreach ($items as $key => &$node) {
             if ($node->parent_id === $parent_id) {
-                $children = $this->buildTree($items, $node->id);
+                $children = $this->buildTree($items, $node->id, $permissions);
 
                 $node->children = $children ?? [];
 
@@ -138,7 +140,15 @@ class Menu extends Model
                     continue;
                 }
 
-                $tree[] = $node;
+                if ($node->req_perm) {
+                    if (in_array($node->req_perm, $permissions)) {
+                        $tree[] = $node;
+                    }
+                } else {
+                    $tree[] = $node;
+                }
+                //
+                // $tree[] = $node;
 
                 unset($items[$key]);
             }
