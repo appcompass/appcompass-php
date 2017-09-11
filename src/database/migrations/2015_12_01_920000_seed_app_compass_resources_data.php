@@ -26,7 +26,7 @@ class SeedAppCompassResourcesData extends Migration
         $dashboard = Resource::build('cp-dashboard', $cp)
             ->setLayout('Private')
             ->setComponent('Home')
-            ->setTitle('Dashbaord')
+            ->setTitle('Dashboard')
             ->setPermission('cp_login')
             ->requiresAuth();
 
