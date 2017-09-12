@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use P3in\Events\Login;
 use P3in\Events\Logout;
 use P3in\Events\UserCheck;
+use P3in\Events\UserUpdated;
 
 class UserEventSubscriber
 {
@@ -42,6 +43,11 @@ class UserEventSubscriber
         $this->setPermissions($event->user);
     }
 
+    public function onUserUpdated($event)
+    {
+        $this->setPermissions($event->user);
+    }
+
     private function setPermissions($user)
     {
         $permissions = $user->allPermissions();
@@ -69,6 +75,11 @@ class UserEventSubscriber
         $events->listen(
             UserCheck::class,
             'P3in\Listeners\UserEventSubscriber@onUserCheck'
+        );
+
+        $events->listen(
+            UserUpdated::class,
+            'P3in\Listeners\UserEventSubscriber@onUserUpdated'
         );
     }
 }

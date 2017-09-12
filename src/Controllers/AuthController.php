@@ -11,6 +11,7 @@ use P3in\Events\Login;
 use P3in\Events\Logout;
 use App\User;
 use P3in\Events\UserCheck;
+use P3in\Events\UserUpdated;
 use P3in\Traits\RegistersUsers;
 
 class AuthController extends BaseController
@@ -43,11 +44,13 @@ class AuthController extends BaseController
         ]);
     }
 
-    public function user(Request $request)
+    public function user($fire_event = true)
     {
-        $user = Auth()->user();
+        $user = auth()->user();
 
-        event(new UserCheck($user));
+        if ($fire_event){
+            event(new UserCheck($user));
+        }
 
         $user->makeHidden([
             'roles',
@@ -57,6 +60,18 @@ class AuthController extends BaseController
         ]);
 
         return $this->success($user);
+    }
+
+    public function updateUser(Request $request)
+    {
+        $data = $request->validate(User::$rules);
+        $user = $request->user();
+
+        $user->update($data);
+
+        event(new UserUpdated($user));
+
+        return $this->user(false);
     }
 
     // we need to do things a bit differently using JWTAuth since it doesn't
