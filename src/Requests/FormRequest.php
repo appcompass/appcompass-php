@@ -44,9 +44,23 @@ class FormRequest extends BaseFormRequest
         }
 
         $resource = $this->getResource();
-
         if (isset($resource->form)) {
-            return $resource->form->rules();
+            $rules = $resource->form->rules();
+            //This is specifically for situations like a validation rule of 'unique:users,email' on update.
+            // @TODO: find a better way to do this.
+            $record_id = $request->get('id');
+
+            foreach ($rules as &$rule) {
+                $rule = explode('|', $rule);
+                if ($record_id){
+                    foreach ($rule as &$single) {
+                        if (preg_match('/^unique\:(.*),(.*)/', $single, $checks)){
+                            $single .=','.$record_id;
+                        }
+                    }
+                }
+            }
+            return $rules;
         }
         return [];
     }
