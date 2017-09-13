@@ -12,6 +12,7 @@ use P3in\Events\Logout;
 use App\User;
 use P3in\Events\UserCheck;
 use P3in\Events\UserUpdated;
+use P3in\Rules\UserPassword;
 use P3in\Traits\RegistersUsers;
 
 class AuthController extends BaseController
@@ -64,8 +65,14 @@ class AuthController extends BaseController
 
     public function updateUser(Request $request)
     {
-        $data = $request->validate(User::$rules);
         $user = $request->user();
+
+        $rules = User::$rules;
+        $rules['current_password'] = ['required', new UserPassword($user)];
+        $data = $request->validate($rules);
+
+        //@TODO: look into laravel to see if there is a better way to exclude a value from validated data.  i.e. check only.
+        unset($data['current_password']);
 
         $user->update($data);
 
