@@ -32,7 +32,7 @@ class SeedAppCompassFormBuilderData extends Migration
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Last Login', 'last_login')->list()->edit(false)->sortable()->searchable();
-            $builder->secret('Password', 'password')->validation(['min:6', 'confirmed']); // ->required()
+            $builder->password('Password', 'password')->validation(['min:6', 'confirmed']);
         })->getForm();
 
         Resource::buildAll([

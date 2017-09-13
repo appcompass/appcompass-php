@@ -60,9 +60,9 @@ abstract class AbstractController extends BaseController
 
         Gate::authorize('update', $this->repo);
 
-        $this->repo->update($request->all());
+        $this->repo->update($request->validated());
 
-//        $model->update($request->all());
+//        $model->update($request->validated());
 
         return response()->json(['message' => 'Model updated.']);
     }
