@@ -68,7 +68,9 @@ class AuthController extends BaseController
         $user = $request->user();
 
         $rules = User::$rules;
-        $rules['current_password'] = ['required', new UserPassword($user)];
+
+        $rules['current_password'] = ['required_with:password', new UserPassword($user)];
+
         $data = $request->validate($rules);
 
         //@TODO: look into laravel to see if there is a better way to exclude a value from validated data.  i.e. check only.
