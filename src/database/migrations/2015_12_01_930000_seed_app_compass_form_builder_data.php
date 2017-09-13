@@ -26,7 +26,7 @@ class SeedAppCompassFormBuilderData extends Migration
         $users = FormBuilder::new('users', function (FormBuilder $builder) {
             $builder->string('First Name', 'first_name')->list()->validation(['required', 'max:255'])->sortable()->searchable();
             $builder->string('Last Name', 'last_name')->list()->validation(['required', 'max:255'])->sortable()->searchable();
-            $builder->string('Email', 'email')->list()->validation(['required', 'email', 'unique:users', 'max:255'])->sortable()->searchable();
+            $builder->string('Email', 'email')->list()->validation(['required', 'email', 'unique:users,email', 'max:255'])->sortable()->searchable();
             $builder->string('Phone Number', 'phone')->list()->validation(['phone:AUTO,US'])->sortable()->searchable();
             $builder->boolean('Active', 'active')->list()->sortable();
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
