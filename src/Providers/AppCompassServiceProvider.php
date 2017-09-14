@@ -108,6 +108,9 @@ class AppCompassServiceProvider extends BaseServiceProvider
     {
         parent::boot();
 
+
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'app-compass');
+
         $this->publishes([
             __DIR__ . '/../config/app-compass.php' => config_path('app-compass.php'),
         ]);

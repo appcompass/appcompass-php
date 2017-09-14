@@ -85,18 +85,18 @@ trait RegistersUsers
     protected function registered($user)
     {
         return $this->success([
-            'message' => trans('registration.check-email'),
+            'message' => trans('app-compass::registration.check-email'),
             'user'    => $user,
         ]);
     }
 
     protected function noCodeResponse()
     {
-        return $this->error(trans('registration.activation-failed'), 422);
+        return $this->error(trans('app-compass::registration.activation-failed'), 422);
     }
 
     protected function alreadyActiveResponse()
     {
-        return $this->error(trans('registration.already-active'), 422);
+        return $this->error(trans('app-compass::registration.already-active'), 422);
     }
 }
