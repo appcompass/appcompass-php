@@ -136,6 +136,10 @@ class SeedAppCompassUsersData extends Migration
 
         $userRole->setPermission($users_admin);
 
+        $userRole->grantPermissions([
+            $loggedInPerm
+        ]);
+
         $loggedInPerm->setPermission($users_admin);
 
         User::create([

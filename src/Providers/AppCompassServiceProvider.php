@@ -17,6 +17,7 @@ use P3in\Models\Resource;
 use P3in\Models\Role;
 use P3in\Observers\FieldObserver;
 use P3in\Observers\PermissionObserver;
+use P3in\Observers\UserObserver;
 use Tymon\JWTAuth\Http\Middleware\Check;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 use Tymon\JWTAuth\Http\Middleware\Authenticate;
@@ -76,6 +77,7 @@ class AppCompassServiceProvider extends BaseServiceProvider
     protected $observe = [
         PermissionObserver::class => Permission::class,
         FieldObserver::class      => Field::class,
+        UserObserver::class      => User::class,
     ];
 
     protected $appBindings = [
