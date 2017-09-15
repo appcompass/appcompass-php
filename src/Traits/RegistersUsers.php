@@ -46,7 +46,10 @@ trait RegistersUsers
             return $this->noCodeResponse();
         }
 
-        return $user;
+        return $this->success([
+            'message' => trans('app-compass::registration.activation-successful'),
+            'user'    => $user,
+        ]);
     }
 
     protected function registrationValidationRules()
