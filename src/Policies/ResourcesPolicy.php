@@ -21,7 +21,7 @@ class ResourcesPolicy
 
     public function index(User $user)
     {
-        return (bool)Resource::byAllowed($user)->whereName(Route::currentRouteName())->first();
+        return (bool)Resource::byAllowed()->whereName(Route::currentRouteName())->first();
 
         // if (is_null($role)) {
         //     return true;

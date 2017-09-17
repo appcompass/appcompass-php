@@ -3,8 +3,6 @@
 namespace P3in\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,13 +10,16 @@ use Illuminate\Support\Facades\Password;
 use P3in\Events\Login;
 use P3in\Events\Logout;
 use App\User;
-use P3in\Traits\HasApiOutput;
+use P3in\Events\UserCheck;
+use P3in\Events\UserUpdated;
+use P3in\Rules\UserPassword;
+use P3in\Traits\RegistersUsers;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
-    use AuthenticatesUsers, HasApiOutput;
+    use AuthenticatesUsers, RegistersUsers;
 
-    public function logout(Request $request)
+    public function logout()
     {
         $user = $this->guard()->user();
 
@@ -29,72 +30,57 @@ class AuthController extends Controller
         return $this->success('Logged out');
     }
 
-    public function user(Request $request)
+    public function refreshToken()
     {
-        return $this->success($request->user());
-    }
-
-    public function register(Request $request)
-    {
-        $this->validate($request, $this->rules(), $this->validationMessages());
-
-        $user = $this->create($request->all());
-
-        $user->sendRegistrationConfirmationNotification();
-
-        event(new Registered($user));
-
-        return $this->registered($request, $user);
-    }
-
-    public function activate(Request $request, $code)
-    {
-        try {
-            $user = User::where('activation_code', $code)->firstOrFail();
-
-            if ($user->active) {
-                return $this->alreadyActiveResponse($request);
-            }
-            $user->active = true;
-            $user->save();
-
-            if ($this->afterLoginAttempt(($this->guard()->login($user)))) {
-                return $this->sendLoginResponse($request);
-            } else {
-                return $this->sendFailedLoginResponse($request);
-            }
-        } catch (ModelNotFoundException $e) {
-            return $this->noCodeResponse($request);
+        if ($token = $this->guard()->getToken()) {
+            $token = $token->get();
+        } else {
+            return $this->sendFailedTokenRefreshResponse();
         }
 
-        return $user;
-    }
-
-    protected function rules()
-    {
-        $rules = User::$rules;
-        $rules['email'] .= '|unique:users';
-        $rules['password'] .= '|required';
-
-        return $rules;
-    }
-
-    protected function validationMessages()
-    {
-        return [
-        ];
-    }
-
-    protected function create(array $data)
-    {
-        return User::create([
-            'first_name'      => $data['first_name'],
-            'last_name'       => $data['last_name'],
-            'email'           => $data['email'],
-            'phone'           => $data['phone'],
-            'password'        => $data['password'],
-            'activation_code' => str_random(64),
+        return $this->success([
+            'access_token' => $token,
+            'token_type'   => 'Bearer',
+            'expires_in'   => config('jwt.ttl') * 60,
         ]);
+    }
+
+    public function user($fire_event = true)
+    {
+        $user = auth()->user();
+
+        if ($fire_event){
+            event(new UserCheck($user));
+        }
+
+        $user->makeHidden([
+            'roles',
+            'created_at',
+            'updated_at',
+            'deleted_at',
+        ]);
+
+        return $this->success($user);
+    }
+
+    public function updateUser(Request $request)
+    {
+        $user = $request->user();
+
+        $rules = User::$rules;
+
+        $rules['current_password'] = ['required_with:password', new UserPassword($user)];
+
+        $data = $request->validate($rules);
+
+        //@TODO: look into laravel to see if there is a better way to exclude a value from validated data.  i.e. check only.
+        unset($data['current_password']);
+
+        $user->update($data);
+
+        event(new UserUpdated($user));
+
+        return $this->user(false);
     }
 
     // we need to do things a bit differently using JWTAuth since it doesn't
@@ -120,11 +106,20 @@ class AuthController extends Controller
         return $token;
     }
 
+    protected function sendLoginResponse(Request $request)
+    {
+        $this->clearLoginAttempts($request);
+
+        return $this->authenticated($this->guard()->user());
+    }
+
     protected function validateLogin(Request $request)
     {
         // we add remember => true to the request since all token auth are set to remember (no session).
         $request->merge(['remember' => true]);
-        $this->validate($request, [
+
+        return $this->validate($request, [
+            'remember'        => 'boolean',
             $this->username() => 'required',
             'password'        => 'required',
         ]);
@@ -138,12 +133,12 @@ class AuthController extends Controller
         return $creds;
     }
 
-    protected function authenticated(Request $request, $user)
+    protected function authenticated($user)
     {
         if ($token = $this->guard()->getToken()) {
             $token = $token->get();
         } else {
-            return $this->sendFailedLoginResponse($request);
+            return $this->sendFailedLoginResponse();
         }
         $user->makeHidden([
             'roles',
@@ -158,28 +153,5 @@ class AuthController extends Controller
             'expires_in'   => config('jwt.ttl') * 60,
             'user'         => $user,
         ]);
-    }
-
-    protected function registered(Request $request, $user)
-    {
-        return $this->success([
-            'message' => trans('registration.check-email'),
-            'user'    => $user,
-        ]);
-    }
-
-    protected function noCodeResponse(Request $request)
-    {
-        return $this->error(trans('registration.activation-failed'), 422);
-    }
-
-    protected function alreadyActiveResponse(Request $request)
-    {
-        return $this->error(trans('registration.already-active'), 422);
-    }
-
-    protected function sendFailedLoginResponse(Request $request)
-    {
-        return $this->error(trans('auth.failed'), 422);
     }
 }

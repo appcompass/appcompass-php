@@ -195,14 +195,14 @@ class Resource extends Model implements Linkable
 
     public function renderForm($mode = null)
     {
-        $form = $this->form->attributes;
+        $form = $this->form;
 
-        $fields = null;
+        $form->setRenderWhere(['type' => 'String']);
 
         switch ($mode) {
             case 'list': //@TODO: Delete/rename, index is the resource to use.
             case 'index':
-                $fields = $this->form->fields->where('to_list', true);
+                $form->setRenderWhere(['to_list' => true]);
                 break;
             case 'edit': //@TODO: Delete/rename, show is the resource to use.
             case 'show': //@TODO: show and update use the same set of fields.
@@ -210,15 +210,10 @@ class Resource extends Model implements Linkable
             case 'create': //@TODO: create and store use the same set of fields.
             case 'store':
             case 'destroy': //@TODO: add field(s) for validation on delete. for example, "hey this is a related field, first please move or delete xyz".
-                $fields = $this->form->fields->where('to_edit', true);
-                break;
-            default:
-                $fields = $this->form->fields;
+                $form->setRenderWhere(['to_edit' => true]);
                 break;
         }
 
-        $form['fields'] = $this->form->buildTree($fields);
-
-        return $form;
+        return $form->render();
     }
 }

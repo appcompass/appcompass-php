@@ -2,10 +2,10 @@
 
 namespace P3in\Models\Profiles;
 
-use P3in\ModularBaseModel;
+use Illuminate\Database\Eloquent\Model;
 use P3in\Traits\IsProfileTrait;
 
-class Facebook extends ModularBaseModel
+class Facebook extends Model
 {
     use IsProfileTrait;
 

@@ -37,14 +37,14 @@ class SeedAppCompassUsersData extends Migration
         ]);
 
         Permission::create([
-            'name'        => 'guest',
+            'name'        => Permission::GUEST_PERM_NAME,
             'label'       => 'Guest',
             'description' => 'Permission used to allow resources to be viewable only to guest users.',
             'system'      => true,
         ]);
 
         $loggedInPerm = Permission::create([
-            'name'        => 'logged-user',
+            'name'        => Permission::LOGGED_IN_PERM_NAME,
             'label'       => 'User',
             'description' => 'The user can log into the application frontend (websites)',
             'system'      => true,
@@ -135,6 +135,10 @@ class SeedAppCompassUsersData extends Migration
         ]);
 
         $userRole->setPermission($users_admin);
+
+        $userRole->grantPermissions([
+            $loggedInPerm
+        ]);
 
         $loggedInPerm->setPermission($users_admin);
 

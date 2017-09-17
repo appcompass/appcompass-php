@@ -71,7 +71,10 @@ class MenuItem extends Model
         return $this->hasMany(MenuItem::class, 'parent_id');
     }
 
-
+    public function allowNullPermission()
+    {
+        return true;
+    }
     /**
      * Gets the url attribute.
      *

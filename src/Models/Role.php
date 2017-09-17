@@ -44,7 +44,7 @@ class Role extends Model
      */
     public function scopeByName(Builder $query, $name)
     {
-        return $query->where('name', str_replace(' ', '-', strtolower($name)));
+        return $query->where('name', str_replace(' ', '_', strtolower($name)));
     }
 
     /**

@@ -10,7 +10,10 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
-use P3in\ModularBaseModel;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberUtil;
+use Propaganistas\LaravelPhone\PhoneNumber;
+use Illuminate\Database\Eloquent\Model;
 use P3in\Notifications\ConfirmRegistration;
 use P3in\Notifications\ResetPassword;
 use P3in\Traits\HasCardView;
@@ -20,12 +23,13 @@ use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 
 // use P3in\Traits\HasProfileTrait;
 
-class User extends ModularBaseModel implements
+class User extends Model implements
     AuthenticatableContract,
     AuthenticatableUserContract,
     AuthorizableContract,
     CanResetPasswordContract
 {
+
     use
         Authenticatable,
         Authorizable,
@@ -86,8 +90,8 @@ class User extends ModularBaseModel implements
         'first_name' => 'required|max:255',
         'last_name'  => 'required|max:255',
         'email'      => 'required|email|max:255', //|unique:users when registrering only
-        'phone'      => 'min:10|max:255',
-        // 'password'   => 'min:6|confirmed', //|required when registering only.
+        'phone'      => 'phone:AUTO,US',
+        'password'   => 'min:6|confirmed', //|required when registering only.
     ];
 
 
@@ -114,6 +118,24 @@ class User extends ModularBaseModel implements
     public function scopeSystem(Builder $query)
     {
         $query->where('email', config('app-compass.system_user'));
+    }
+
+    public function getPhoneAttribute($value)
+    {
+        $country = $this->country ?? 'US';
+        try {
+            $lib = PhoneNumberUtil::getInstance();
+
+            $phoneNumber = PhoneNumber::make($value, $country);
+
+            $phoneNumberInstance = $phoneNumber->getPhoneNumberInstance();
+
+            if ($lib->isValidNumber($phoneNumberInstance)) {
+                return $phoneNumber->formatInternational();
+            }
+        } catch (NumberParseException $e) {
+            return $value;
+        }
     }
 
     /**
@@ -188,82 +210,28 @@ class User extends ModularBaseModel implements
      */
     public function allPermissions()
     {
-        $this->load('roles.permissions');
+        // $this->load('roles.permissions');
 
-        $user_permissions = $this->permissions()->allRelatedIds()->toArray();
 
-        $roles_permissions = [];
+        $user_permissions = $this->permissions()->allRelatedIds();
+        $user_roles = $this->roles->load('permissions');
 
-        foreach ($this->roles as $role) {
-            $role_permissions = $role->permissions()
-                ->allRelatedIds()
-                ->toArray();
+        $all_permissions = collect($user_permissions);
 
-            $roles_permissions = array_merge($roles_permissions, $role_permissions);
+        foreach ($user_roles as $role) {
+            $role_permissions = $role->permissions->pluck('id');
+
+            $all_permissions = $all_permissions->merge($role_permissions);
         }
 
-        $roles_permissions = array_merge($roles_permissions, $user_permissions);
-
-        return array_unique($roles_permissions);
+        return $all_permissions->unique()->values()->all();
     }
-
-    /**
-     *  Get either all or a specific profile type of a user
-     *
-     *
-     *  TODO: this needs to be refactored a little
-     *   -- in pause until we get there
-     */
-    // public function linkProfile(Model $model)
-    // {
-    //     $profile = $this->profiles()->firstOrNew([
-    //         'profileable_id' => $model->getKey(),
-    //         'profileable_type' => get_class($model),
-    //     ]);
-    //     $profile->save();
-    // }
-
-    /**
-     * { function_description }
-     *
-     * @param      <type>  $model_name  The model name
-     *
-     * @return     <type>  ( description_of_the_return_value )
-     */
-    // @TODO on a break until we get there
-    // public function profile($model_name)
-    // {
-    //     $base_profile = $this->profiles()->where('profileable_type', $model_name)->first();
-
-    //     return $base_profile ? $base_profile->profileable : null;
-    // }
-
-    /**
-     * { function_description }
-     *
-     * @param      <type>  $field_name  The field name
-     *
-     * @return     array   ( description_of_the_return_value )
-     */
-    // @TODO this is not being called from codebase
-    // public function populateField($field_name)
-    // {
-    //     switch ($field_name) {
-    //         case 'users_list':
-    //             $users = User::select(\DB::raw("concat(first_name,' ',last_name) as name"), 'id')->get();
-
-    //             return $users->pluck('name', 'id');
-    //             break;
-    //         default:
-    //             return [];
-    //             break;
-    //     }
-    // }
 
     /**
      * Send the password reset notification.
      *
      * @param  string $token
+     *
      * @return void
      */
     public function sendPasswordResetNotification($token)

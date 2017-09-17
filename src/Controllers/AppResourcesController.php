@@ -18,11 +18,7 @@ class AppResourcesController extends Controller
 
     public function routes(Request $request)
     {
-        $cacheKey = $request->web_property->id . '_' . (Auth::check() ? Auth::user()->id : 'guest');
-        // forever? we would then need to clear this cache when updating a user permission though.
-        // @TODO: fix form render so it's not running queries in loops.
         $data = [
-            // 'resources' => $this->getResources(),
             'routes' => $request->web_property->buildRoutesTree(),
         ];
 
@@ -40,11 +36,12 @@ class AppResourcesController extends Controller
 
         $menus = $request
             ->web_property
-            ->menus()->with('items')->get();
+            ->menus()->with(['items' => function($query){
+                $query->byAllowed();
+            }])->get();
 
-        $permIds = Auth::check() ? (array)Cache::tags('auth_permissions')->get(Auth::user()->id) : [];
         foreach ($menus as $menu) {
-            $rtn[$menu->name] = $menu->render(true, $permIds);
+            $rtn[$menu->name] = $menu->render(true);
         }
 
         return $rtn;

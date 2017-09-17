@@ -35,6 +35,22 @@ class FormStored extends Notification
         return ['mail'];
     }
 
+    private function formatLine(&$email, $key, $val)
+    {
+        if (is_array($val) || is_object($val)){
+            $email->line("---");
+            $email->line("{$key}:");
+            foreach ($val as $s_key => $s_val) {
+                $this->formatLine($email, $s_key, $s_val);
+            }
+            $email->line("---");
+        }else{
+            if ($val) {
+                $email->line("{$key}: {$val}");
+            }
+        }
+    }
+
     public function toLog($notifiable)
     {
         return info('');
@@ -52,11 +68,16 @@ class FormStored extends Notification
         // info('Sending Mail');
         // return;
         // info($notifiable->toArray());
+        $email = new MailMessage;
 
-        return (new MailMessage)
-                    ->line('Hey! Somebody submitted a form.');
-                    // ->action('Notification Action', url('/'))
-                    // ->line('Thank you for using our application!');
+        $email->line('Hey! Somebody submitted a form.');
+
+        if ($this->form->content){
+            foreach ($this->form->content as $key => $val) {
+                $this->formatLine($email, $key, $val);
+            }
+        }
+        return $email;
     }
 
     /**

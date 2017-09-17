@@ -46,7 +46,7 @@ trait HasApiOutput
                 $this->cleanupFormat($row);
             }
         } else {
-            $data = is_numeric($data) ? floatval($data) : $data;
+            $data = is_numeric($data) ? floatval($data) : trim($data);
         }
     }
 }
