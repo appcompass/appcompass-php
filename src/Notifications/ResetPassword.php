@@ -52,7 +52,7 @@ class ResetPassword extends Notification
         // we should set this as a page of a specific type or set config info pointing to the reset password page for a given website.
         return (new MailMessage)
             ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password', $website->url.'/reset-password/'.$this->token)
+            ->action('Reset Password', $website->url.'/login/reset/'.$this->token)
             ->line('If you did not request a password reset, no further action is required.');
     }
 }
