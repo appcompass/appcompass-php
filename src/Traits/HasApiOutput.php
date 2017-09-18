@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 
 trait HasApiOutput
 {
+
     public function error($error, $code = 400)
     {
         return $this->output([
@@ -46,7 +47,15 @@ trait HasApiOutput
                 $this->cleanupFormat($row);
             }
         } else {
-            $data = is_numeric($data) ? floatval($data) : trim($data);
+            if (is_numeric($data)) {
+                if (strpos($data, '0') !== 0){
+                    $data = floatval($data);
+                }else{
+                    $data = trim($data);
+                }
+            } else {
+                $data = trim($data);
+            }
         }
     }
 }

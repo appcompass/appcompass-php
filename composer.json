@@ -16,7 +16,7 @@
     "propaganistas/laravel-phone": "^3.0",
     "pusher/pusher-php-server": "~3.0",
     "guzzlehttp/guzzle": "~6.0",
-    "p3in/form-builder": "dev-develop"
+    "p3in/form-builder": "^1.0.0"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
