@@ -35,21 +35,21 @@ class ResourcesPolicy
 
     public function show(User $user)
     {
-        info('Hit Show');
+        // info('Hit Show');
 
         return true;
     }
 
     public function update(User $user)
     {
-        info('Hit Update');
+        // info('Hit Update');
 
         return true;
     }
 
     public function destroy(User $user)
     {
-        info('Hit Destroy');
+        // info('Hit Destroy');
 
         return true;
     }
