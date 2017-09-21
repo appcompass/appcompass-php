@@ -21,6 +21,6 @@ class BaseController extends Controller
 
     protected function handleValidationException(ValidationException $e)
     {
-        return $this->error($e->errors(), $e->status);
+        return $this->error($e->getMessage(), $e->status, $e->errors());
     }
 }

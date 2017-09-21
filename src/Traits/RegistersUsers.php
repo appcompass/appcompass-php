@@ -95,11 +95,11 @@ trait RegistersUsers
 
     protected function noCodeResponse()
     {
-        return $this->error(trans('app-compass::registration.activation-failed'), 422);
+        return $this->error(trans('app-compass::registration.activation-failed'), 421);
     }
 
     protected function alreadyActiveResponse()
     {
-        return $this->error(trans('app-compass::registration.already-active'), 422);
+        return $this->error(trans('app-compass::registration.already-active'), 421);
     }
 }

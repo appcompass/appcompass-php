@@ -7,12 +7,14 @@ use Illuminate\Support\Collection;
 
 trait HasApiOutput
 {
+    protected $validation_message = 'The given data was invalid.';
 
-    public function error($error, $code = 400)
+    public function error($message, $code = 400, $context = null)
     {
         return $this->output([
             'success' => false,
-            'error'   => $error,
+            'message' => $message,
+            'data'   => $context,
         ], $code);
     }
 
@@ -48,9 +50,9 @@ trait HasApiOutput
             }
         } else {
             if (is_numeric($data)) {
-                if (strpos($data, '0') !== 0){
+                if (strpos($data, '0') !== 0) {
                     $data = floatval($data);
-                }else{
+                } else {
                     $data = trim($data);
                 }
             } else {
