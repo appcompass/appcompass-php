@@ -90,7 +90,7 @@ class User extends Model implements
         'first_name' => 'required|max:255',
         'last_name'  => 'required|max:255',
         'email'      => 'required|email|max:255', //|unique:users when registrering only
-        'phone'      => 'phone:AUTO,US',
+        'phone'      => 'required', // @TODO: add better support for 'phone:AUTO,US',
         'password'   => 'min:6|confirmed', //|required when registering only.
     ];
 
