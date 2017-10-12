@@ -2,13 +2,14 @@
 
 namespace P3in\Providers;
 
-use App\User;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Laravel\Passport\Passport;
 use P3in\Commands\AddUser;
 use P3in\Commands\Install;
 use P3in\Middleware\SanitizeEmail;
 use P3in\Middleware\ValidateWebProperty;
+use App\User;
+use App\Company;
 use P3in\Models\Field;
 use P3in\Models\Form;
 use P3in\Models\Menu;
@@ -77,13 +78,14 @@ class AppCompassServiceProvider extends BaseServiceProvider
     protected $observe = [
         PermissionObserver::class => Permission::class,
         FieldObserver::class      => Field::class,
-        UserObserver::class      => User::class,
+        UserObserver::class       => User::class,
     ];
 
     protected $appBindings = [
     ];
 
     protected $routeBindings = [
+        'company'    => Company::class,
         'user'       => User::class,
         'permission' => Permission::class,
         'role'       => Role::class,
@@ -111,7 +113,7 @@ class AppCompassServiceProvider extends BaseServiceProvider
         parent::boot();
 
 
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'app-compass');
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'app-compass');
 
         $this->publishes([
             __DIR__ . '/../config/app-compass.php' => config_path('app-compass.php'),

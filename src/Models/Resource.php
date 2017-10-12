@@ -112,7 +112,11 @@ class Resource extends Model implements Linkable
      */
     public function setForm(Form $form)
     {
-        return $this->form()->associate($form);
+        $this->form()->associate($form);
+
+        $this->save();
+
+        return $this;
     }
 
     public static function resolve($name)

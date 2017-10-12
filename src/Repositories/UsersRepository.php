@@ -3,20 +3,22 @@
 namespace P3in\Repositories;
 
 use App\User;
+use P3in\Repositories\Eloquent\Repository;
 
-class UsersRepository extends AbstractRepository
+class UsersRepository extends Repository
 {
-
-//    const SEE_OWNED = 1;
-
-//    const EDIT_OWNED = 1;
-
     protected $owned_key = 'id';
-
     protected $view_types = ['Table', 'Card'];
+    protected $route_relationships = [
+        'company' => 'users',
+        'role' => 'users',
+        'permission' => 'users',
+    ];
 
-    public function __construct(User $model)
+    protected $with = ['roles'];
+
+    public function getModel()
     {
-        $this->model = $model;
+        return User::class;
     }
 }
