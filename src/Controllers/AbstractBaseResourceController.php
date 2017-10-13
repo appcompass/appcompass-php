@@ -11,13 +11,17 @@ use P3in\Policies\ResourcesPolicy;
 use P3in\Requests\FormRequest;
 use P3in\Traits\UsesRoute;
 
-class BaseResourceController extends BaseController
+abstract class AbstractBaseResourceController extends BaseController
 {
+
     use UsesRoute;
 
     protected $repo;
     protected $param_name;
 
+    protected $rules;
+
+    protected $selectable = [];
     protected $per_page = 20;
     protected $columns = ['*'];
 
@@ -25,60 +29,65 @@ class BaseResourceController extends BaseController
     protected $create_type = 'Page';
     protected $update_type = 'Page';
 
-    // /**
-    //  * Resolves a policy for the repo or defaults to ResourcesPolicy
-    //  */
-    // private function checkPolicy()
-    // {
-    //     if (!Gate::getPolicyFor($this->repo)) {
-    //         Gate::policy(get_class($this->repo), ResourcesPolicy::class);
-    //     }
-    //
-    //     return;
-    // }
+    abstract public function getPolicy();
+
+    /**
+     * Resolves a policy for the repo or defaults to ResourcesPolicy
+     */
+    private function checkPolicy()
+    {
+        if (!Gate::getPolicyFor($this->repo)) {
+            Gate::policy(get_class($this->repo), $this->getPolicy());
+        }
+
+        return;
+    }
+
+    public function callAction($method, $params)
+    {
+        if (method_exists($this, $method)){
+            $this->setRouteInfo();
+
+            $this->checkPolicy();
+
+            Gate::authorize($method, $this->repo);
+
+            return call_user_func_array(array($this,$method), $params);
+        }
+        return parent::callAction($method, $params);
+    }
 
     public function index()
     {
-        // $this->repo->all();
-        $data = $this->repo->paginate($this->per_page, $this->columns);
-        foreach ($data as $record) {
+        $result = $this->repo->paginate($this->per_page, $this->columns);
+
+        // @TODO: refactor to make properly functional.
+        foreach ($result as $record) {
             $record['abilities'] = ['edit', 'view', 'create', 'destroy'];
         }
 
-        return $this->formatOutput($data);
-        // $this->checkPolicy();
-        //
-        // Gate::authorize('index', $this->repo);
-        //
-        // return $this->repo->get();
+        $array = $result->toArray();
+
+        $data = [
+            'pagination' => array_except($array, ['data']),
+            'data'       => $array['data'],
+        ];
+
+        return $this->output($data);
     }
 
     public function create()
     {
-
-        // send form structure.
-
-        // $this->checkPolicy();
-        //
-        // Gate::authorize('create', $this->repo);
-        //
-        // return $this->repo->create();
+        return $this->output([]);
     }
 
     public function show()
     {
         $id = $this->getRouteParam($this->param_name);
 
-        $data = $this->repo->find($id, $this->columns);
-        return $this->formatOutput($data);
+        $data = ['data' => $this->repo->find($id, $this->columns)];
 
-        // $this->repo->setModel($model);
-        //
-        // $this->checkPolicy();
-        //
-        // Gate::authorize('show', $this->repo);
-        //
-        // return $this->repo->findByPrimaryKey($model->id);
+        return $this->output($data);
     }
 
     public function edit()
@@ -92,50 +101,41 @@ class BaseResourceController extends BaseController
         $id = $this->getRouteParam($this->param_name);
 
         return $this->repo->update($data, $id);
-        // $this->checkPolicy();
-
-//         Gate::authorize('update', $this->repo);
-//
-//         $this->repo->update($request->validated());
-//
-// //        $model->update($request->validated());
-//
-//         return response()->json(['message' => 'Model updated.']);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate($this->rules());
+
         return $this->repo->store($data);
     }
 
     public function destroy()
     {
-        // $this->checkPolicy();
-        //
-        // Gate::authorize('destroy', $this->repo);
         $id = $this->getRouteParam($this->param_name);
+
         return $this->repo->delete($id);
     }
 
-    public function formatOutput($data)
+    public function output($data, $code = 200)
     {
-        return [
+        $this->cleanupFormat($data);
+
+        $structured = array_merge([
             'route'       => $this->route_name,
             'parameters'  => $this->route_params,
             'api_url'     => $this->getApiUrl(),
             'view_types'  => $this->view_types,
             'create_type' => $this->create_type,
             'update_type' => $this->update_type,
-            // 'owned'       => $this->repo->owned,
             'abilities'   => ['create', 'edit', 'destroy', 'index', 'show'],
             // @TODO show is per-item in the collection
             'form'        => $this->getResourceForm(),
-            'collection'  => $data,
-        ];
+            'selectable'       => $this->selectable,
+        ], (array) $data);
 
+        return response()->json($structured, $code);
     }
-
 
     public function getResourceForm()
     {

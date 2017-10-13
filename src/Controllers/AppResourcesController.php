@@ -4,9 +4,6 @@ namespace P3in\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use P3in\Models\Permission;
 use P3in\Models\Resource;
 
 class AppResourcesController extends Controller

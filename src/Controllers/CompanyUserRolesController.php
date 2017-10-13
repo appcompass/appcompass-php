@@ -8,7 +8,7 @@ use P3in\Repositories\Criteria\HasCompany;
 use P3in\Repositories\Criteria\HasUser;
 use P3in\Repositories\RolesRepository;
 
-class UserRolesController extends AbstractBaseResourceController
+class CompanyUserRolesController extends AbstractBaseResourceController
 {
     protected $param_name = 'role';
     protected $view_types = ['MultiSelect'];
@@ -17,12 +17,11 @@ class UserRolesController extends AbstractBaseResourceController
     {
         $this->repo = $repo;
 
+        $company_id = $this->getRouteParam('company');
         $user_id = $this->getRouteParam('user');
+
+        $this->repo->pushCriteria(new HasCompany($company_id));
         $this->repo->pushCriteria(new HasUser($user_id));
-
-        // $company_id = $this->getRouteParam('company');
-        // $this->repo->pushCriteria(new HasCompany($company_id));
-
 
         $this->selectable = Role::byAllowed()->get();
     }

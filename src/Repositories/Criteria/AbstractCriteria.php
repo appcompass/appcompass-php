@@ -4,7 +4,7 @@ namespace P3in\Repositories\Criteria;
 
 use P3in\Interfaces\RepositoryInterface;
 
-abstract class Criteria
+abstract class AbstractCriteria
 {
 
     public abstract function apply($model, RepositoryInterface $repository);

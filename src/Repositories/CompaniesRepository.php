@@ -7,10 +7,6 @@ use P3in\Repositories\Eloquent\Repository;
 
 class CompaniesRepository extends Repository
 {
-    protected $owned_key = 'id';
-    protected $view_types = ['Table', 'Card'];
-    protected $with = [];
-
     public function getModel()
     {
         return Company::class;

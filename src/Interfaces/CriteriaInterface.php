@@ -2,7 +2,7 @@
 
 namespace P3in\Interfaces;
 
-use P3in\Repositories\Criteria\Criteria;
+use P3in\Repositories\Criteria\AbstractCriteria;
 
 interface CriteriaInterface
 {
@@ -11,9 +11,9 @@ interface CriteriaInterface
 
     public function getCriteria();
 
-    public function getByCriteria(Criteria $criteria);
+    public function getByCriteria(AbstractCriteria $criteria);
 
-    public function pushCriteria(Criteria $criteria);
+    public function pushCriteria(AbstractCriteria $criteria);
 
     public function applyCriteria();
 }

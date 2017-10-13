@@ -4,10 +4,11 @@ namespace P3in\Controllers;
 
 use P3in\Models\Permission;
 use P3in\Policies\ResourcesPolicy;
-use P3in\Repositories\Criteria\HasRole;
+use P3in\Repositories\Criteria\HasCompany;
+use P3in\Repositories\Criteria\HasUser;
 use P3in\Repositories\PermissionsRepository;
 
-class RolePermissionsController extends AbstractBaseResourceController
+class CompanyUserPermissionsController extends AbstractBaseResourceController
 {
     protected $param_name = 'permission';
     protected $view_types = ['MultiSelect'];
@@ -16,11 +17,11 @@ class RolePermissionsController extends AbstractBaseResourceController
     {
         $this->repo = $repo;
 
-        $role_id = $this->getRouteParam('role');
-        $this->repo->pushCriteria(new HasRole($role_id));
+        $company_id = $this->getRouteParam('company');
+        $user_id = $this->getRouteParam('user');
 
-        // $company_id = $this->getRouteParam('company');
-        // $this->repo->pushCriteria(new HasCompany($company_id));
+        $this->repo->pushCriteria(new HasCompany($company_id));
+        $this->repo->pushCriteria(new HasUser($user_id));
 
         $this->selectable = Permission::byAllowed()->get();
     }

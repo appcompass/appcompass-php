@@ -2,11 +2,11 @@
 
 namespace P3in\Controllers;
 
-use P3in\Repositories\Criteria\Users\OfCompany;
-use P3in\Repositories\Criteria\Users\OfUser;
+use P3in\Policies\ResourcesPolicy;
+use P3in\Repositories\Criteria\HasCompany;
 use P3in\Repositories\UsersRepository;
 
-class CompanyUsersController extends BaseResourceController
+class CompanyUsersController extends AbstractBaseResourceController
 {
     protected $param_name = 'user';
 
@@ -16,7 +16,11 @@ class CompanyUsersController extends BaseResourceController
 
         $company_id = $this->getRouteParam('company');
 
-        $this->repo->pushCriteria(new OfCompany($company_id));
+        $this->repo->pushCriteria(new HasCompany($company_id));
     }
 
+    public function getPolicy()
+    {
+        return ResourcesPolicy::class;
+    }
 }

@@ -3,13 +3,12 @@
 namespace P3in\Repositories;
 
 use P3in\Models\Resource;
+use P3in\Repositories\Eloquent\Repository;
 
-class ResourcesRepository extends AbstractRepository
+class ResourcesRepository extends Repository
 {
-    public $model;
-
-    public function __construct(Resource $model)
+    public function getModel()
     {
-        $this->model = $model;
+        return Resource::class;
     }
 }

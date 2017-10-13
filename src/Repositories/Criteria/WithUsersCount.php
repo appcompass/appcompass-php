@@ -1,14 +1,11 @@
 <?php
 
-namespace P3in\Repositories\Criteria\Companies;
-
+namespace P3in\Repositories\Criteria;
 
 use P3in\Interfaces\RepositoryInterface;
-use P3in\Repositories\Criteria\Criteria;
 
-class WithUserCount extends Criteria
+class WithUsersCount extends AbstractCriteria
 {
-
     public function apply($model, RepositoryInterface $repo)
     {
         //@TODO: change this withCounts to a join because th withCounts runs a query for each record.

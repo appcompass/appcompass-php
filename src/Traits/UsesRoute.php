@@ -3,6 +3,7 @@
 namespace P3in\Traits;
 
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 
 trait UsesRoute
@@ -34,10 +35,7 @@ trait UsesRoute
 
         $keys = explode('.', $this->route_name);
         $values = array_values(array_map(function ($param) {
-            if (is_string($param)){
-                return $param;
-            }
-            return $param->getKey();
+            return $this->getKeyFromParam($param);
         }, $this->route_params));
 
         $segments = [''];
@@ -60,9 +58,17 @@ trait UsesRoute
         $this->setRouteInfo();
 
         if (isset($this->route_params[$name])){
-            return $this->route_params[$name];
+            return $this->getKeyFromParam($this->route_params[$name]);
         }
 
         throw new \Exception("No route param exist by the name of '{$name}'");
+    }
+
+    private function getKeyFromParam($param)
+    {
+        if ($param instanceof Model)
+            return $param->getKey();
+        return $param;
+
     }
 }

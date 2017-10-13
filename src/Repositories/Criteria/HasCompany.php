@@ -1,12 +1,10 @@
 <?php
 
-namespace P3in\Repositories\Criteria\Users;
-
+namespace P3in\Repositories\Criteria;
 
 use P3in\Interfaces\RepositoryInterface;
-use P3in\Repositories\Criteria\Criteria;
 
-class OfCompany extends Criteria
+class HasCompany extends AbstractCriteria
 {
     private $company_id;
 
@@ -17,9 +15,11 @@ class OfCompany extends Criteria
 
     public function apply($model, RepositoryInterface $repo)
     {
-        $query = $model->newQuery()->whereHas('companies', function($query){
-            $query->where('id', $this->company_id);
-        });
+        $query = $model->newQuery()
+            ->whereHas('companies', function ($query) {
+                $query->where('id', $this->company_id);
+            })
+        ;
 
         return $query;
     }
