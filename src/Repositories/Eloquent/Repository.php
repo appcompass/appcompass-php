@@ -8,13 +8,13 @@ use Illuminate\Support\Collection;
 use P3in\Interfaces\RepositoryInterface;
 use P3in\Interfaces\CriteriaInterface;
 use P3in\Repositories\Criteria\AbstractCriteria;
+use P3in\Repositories\Relationships\Relationship;
 
 abstract class Repository implements RepositoryInterface, CriteriaInterface
 {
-
     protected $app;
     protected $model;
-    protected $newModel;
+    protected $related;
     protected $criteria;
     protected $skipCriteria = false;
     protected $preventCriteriaOverwriting = true;
@@ -35,10 +35,20 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
 
         if (!$model instanceof Model) {
             // RepositoryException
-            throw new \Exception("Class {$this->getModel()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
+            throw new \Exception("Class {$this->getModel()} must be an instance of " . Model::class);
         }
 
         return $this->model = $model;
+    }
+
+    public function related()
+    {
+        return $this->related = new Relationship($this);
+    }
+
+    public function relationship()
+    {
+        return $this->related->relationship();
     }
 
     public function all($columns = ['*'])
@@ -75,13 +85,17 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
 
     public function create(array $data)
     {
-        return $this->model->create($data);
+        if ($this->related) {
+            return $this->relationship()->create($data);
+        }
+
+        return $this->model->update($data);
     }
 
     public function saveModel(array $data)
     {
         foreach ($data as $k => $v) {
-            $this->model->$k = $v;
+            $this->model->{$k} = $v;
         }
 
         return $this->model->save();
@@ -105,7 +119,6 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     {
         return $this->model->destroy($id);
     }
-
 
     public function find($id, $columns = ['*'])
     {

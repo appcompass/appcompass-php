@@ -4,7 +4,7 @@ namespace P3in\Controllers;
 
 use Gate;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use P3in\Models\Resource;
 use P3in\Policies\ResourcesPolicy;
@@ -97,24 +97,31 @@ abstract class AbstractBaseResourceController extends BaseController
 
     public function update(Request $request)
     {
-        $data = $request->validate($this->rules());
+        // $data = $request->validate($this->rules());
+        $data = $request->all();
         $id = $this->getRouteParam($this->param_name);
 
-        return $this->repo->update($data, $id);
+        $result = $this->repo->update($data, $id);
+
+        return $this->output($result);
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate($this->rules());
+        // $data = $request->validate($this->rules());
+        $data = $request->all();
+        $result =  $this->repo->create($data);
 
-        return $this->repo->store($data);
+        return $this->output($result);
     }
 
     public function destroy()
     {
         $id = $this->getRouteParam($this->param_name);
 
-        return $this->repo->delete($id);
+        $result = $this->repo->delete($id);
+
+        return $this->output($result);
     }
 
     public function output($data, $code = 200)
