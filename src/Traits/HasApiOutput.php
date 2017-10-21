@@ -50,7 +50,7 @@ trait HasApiOutput
             }
         } else {
             if (is_numeric($data)) {
-                if (strpos($data, '0') !== 0) {
+                if (strpos($data, '0') !== 0 || strlen($data) === 1) {
                     $data = floatval($data);
                 } else {
                     $data = trim($data);

@@ -41,6 +41,11 @@ Route::group([
 ], function ($router) {
     $router->get('dashboard', 'AppResourcesController@getDashboard')->name('cp-dashboard');
     $router->resource('users', UsersController::class);
+    $router->resource('companies', CompaniesController::class);
+    $router->resource('companies.users', CompanyUsersController::class);
+    $router->resource('companies.users.roles', CompanyUserRolesController::class);
+    $router->resource('companies.users.permissions', CompanyUserPermissionsController::class);
+
     $router->resource('roles', RolesController::class);
     $router->resource('roles.permissions', RolePermissionsController::class);
     $router->resource('permissions', PermissionsController::class);

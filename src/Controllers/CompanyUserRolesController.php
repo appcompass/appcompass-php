@@ -2,15 +2,14 @@
 
 namespace P3in\Controllers;
 
-use App\User;
+use App\Company;
 use P3in\Models\Role;
 use P3in\Policies\ResourcesPolicy;
-use P3in\Repositories\Criteria\ExcludeAssignedCompanyRoles;
 use P3in\Repositories\Criteria\HasCompany;
 use P3in\Repositories\Criteria\HasUser;
 use P3in\Repositories\RolesRepository;
 
-class UserRolesController extends UserPermissionsController
+class CompanyUserRolesController extends UserPermissionsController
 {
     protected $param_name = 'role';
     protected $view_types = ['MultiSelect'];
@@ -19,20 +18,17 @@ class UserRolesController extends UserPermissionsController
     {
         $this->repo = $repo;
 
+        $this->company_id = $this->getRouteParam('company');
         $this->user_id = $this->getRouteParam('user');
 
+        $this->repo->pushCriteria(new HasCompany($this->company_id));
+        $this->repo->pushCriteria(new HasUser($this->user_id));
+
         $this->repo->related()
-            ->first(User::class, $this->user_id)
+            ->first(Company::class, $this->company_id)
+            ->next('users', $this->user_id)
             ->last('roles')
         ;
-
-        // $this->repo->pushCriteria(new HasUser($user_id));
-
-        $this->repo->pushCriteria(new ExcludeAssignedCompanyRoles($this->user_id));
-
-        // $company_id = $this->getRouteParam('company');
-        // $this->repo->pushCriteria(new HasCompany($company_id));
-
 
         $this->selectable = Role::byAllowed()->get();
     }

@@ -3,11 +3,12 @@
 namespace P3in\Repositories;
 
 use P3in\Models\Form;
+use P3in\Repositories\Eloquent\Repository;
 
-class FormsRepository extends AbstractRepository
+class FormsRepository extends Repository
 {
-    public function __construct(Form $model)
+    public function getModel()
     {
-        $this->model = $model;
+        return Form::class;
     }
 }

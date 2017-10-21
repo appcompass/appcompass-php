@@ -2,13 +2,13 @@
 
 namespace P3in\Repositories;
 
-use App\User;
+use App\Company;
 use P3in\Repositories\Eloquent\Repository;
 
-class UsersRepository extends Repository
+class CompaniesRepository extends Repository
 {
     public function getModel()
     {
-        return User::class;
+        return Company::class;
     }
 }

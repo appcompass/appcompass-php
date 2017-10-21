@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreatePermissions extends Migration
 {
@@ -44,9 +45,19 @@ class CreatePermissions extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('permission_id')->unsigned();
             $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
-            $table->unique(['user_id', 'permission_id']);
+            $table->integer('company_id')->unsigned()->nullable();
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            // $table->unique(['user_id', 'permission_id', 'company_id']);
             $table->timestamps();
         });
+
+        DB::connection()
+          ->getPdo()
+          ->exec('CREATE UNIQUE INDEX permission_user_user_id_permission_id_company_id_unique ON permission_user (user_id, permission_id, company_id) WHERE company_id IS NOT NULL');
+        DB::connection()
+          ->getPdo()
+          ->exec('CREATE UNIQUE INDEX permission_user_user_id_permission_id_unique ON permission_user (user_id, permission_id) WHERE company_id IS NULL');
+
     }
 
     /**

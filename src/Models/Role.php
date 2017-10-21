@@ -56,6 +56,11 @@ class Role extends Model
         return $this->belongsToMany(User::class)->withTimestamps();
     }
 
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'role_user');
+    }
+
     /**
      * Add a User to the Role
      */

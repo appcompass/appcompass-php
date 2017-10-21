@@ -2,11 +2,11 @@
 
 namespace P3in\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use P3in\Traits\SetsAndChecksPermission;
+use App\Company;
 
 class Permission extends Model
 {
@@ -56,6 +56,11 @@ class Permission extends Model
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'permission_user');
     }
 
     /**
