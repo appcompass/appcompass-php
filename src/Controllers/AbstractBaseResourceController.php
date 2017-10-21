@@ -99,9 +99,10 @@ abstract class AbstractBaseResourceController extends BaseController
     {
         // $data = $request->validate($this->rules());
         $data = $request->all();
+
         $id = $this->getRouteParam($this->param_name);
 
-        $result = $this->repo->update($data, $id);
+        $result = ['data' => $this->repo->updateRich($data, $id)];
 
         return $this->output($result);
     }
