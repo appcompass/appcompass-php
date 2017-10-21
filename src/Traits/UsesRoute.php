@@ -2,7 +2,6 @@
 
 namespace P3in\Traits;
 
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 
@@ -13,20 +12,21 @@ trait UsesRoute
 
     public function setRouteInfo($force = false)
     {
-        if (is_null($this->route_params) || $force){
+        if (is_null($this->route_params) || $force) {
             $route = Route::current();
 
             $this->route_name = $route->getName();
             $this->route_params = $route->parameters();
         }
-
     }
 
     public function getRouteType()
     {
         $this->setRouteInfo();
-
-        return substr($this->route_name, strrpos($this->route_name, '.') + 1);
+        if(strrpos($this->route_name, '.') !== false){
+            return substr($this->route_name, strrpos($this->route_name, '.') + 1);
+        }
+        return $this->route_name;
     }
 
     public function getApiUrl()
@@ -53,11 +53,14 @@ trait UsesRoute
         return implode('/', $segments);
     }
 
-    public function getRouteParam($name)
+    public function getRouteParam($name, $getModel = false)
     {
-        $this->setRouteInfo();
+        $this->setRouteInfo($getModel);
 
-        if (isset($this->route_params[$name])){
+        if (isset($this->route_params[$name])) {
+            if ($getModel) {
+                return $this->route_params[$name];
+            }
             return $this->getKeyFromParam($this->route_params[$name]);
         }
 
@@ -66,9 +69,9 @@ trait UsesRoute
 
     private function getKeyFromParam($param)
     {
-        if ($param instanceof Model)
+        if ($param instanceof Model) {
             return $param->getKey();
+        }
         return $param;
-
     }
 }

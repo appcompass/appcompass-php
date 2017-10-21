@@ -47,9 +47,9 @@ class Relationship
         return $this;
     }
 
-    public function getQuery()
+    public function getTable()
     {
-        return $this->relationship;
+        return $this->relationship->getTable();
     }
 
     public function create($data)

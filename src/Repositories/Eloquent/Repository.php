@@ -41,14 +41,13 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
         return $this->model = $model;
     }
 
-    public function related()
+    public function related() : Relationship
     {
-        return $this->related = new Relationship($this);
-    }
+        if (!$this->related){
+            $this->related = new Relationship($this);
+        }
 
-    public function relationship()
-    {
-        return $this->related->relationship();
+        return $this->related;
     }
 
     public function all($columns = ['*'])
@@ -86,7 +85,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     public function create(array $data)
     {
         if ($this->related) {
-            return $this->relationship()->create($data);
+            return $this->related()->create($data);
         }
 
         return $this->model->update($data);

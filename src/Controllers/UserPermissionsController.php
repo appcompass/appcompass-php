@@ -49,10 +49,8 @@ class UserPermissionsController extends AbstractBaseResourceController
         // $data = $request->validate($this->rules());
         $data = $request->all();
 
-        $rel = $this->repo->relationship()->getQuery();
-
         if ($data['removed']) {
-            DB::table($rel->getTable())
+            DB::table($this->repo->related()->getTable())
                 ->where('company_id', $this->company_id)
                 ->where('user_id', $this->user_id)
                 ->whereIn($this->param_name.'_id', $data['removed'])
