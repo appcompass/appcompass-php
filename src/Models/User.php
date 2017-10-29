@@ -22,8 +22,6 @@ use P3in\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 use App\Company;
 
-// use P3in\Traits\HasProfileTrait;
-
 class User extends Model implements
     AuthenticatableContract,
     AuthenticatableUserContract,

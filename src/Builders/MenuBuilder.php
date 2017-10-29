@@ -77,7 +77,7 @@ class MenuBuilder
         $instance = (new static($menu))->setParent($parent);
 
         if (!is_null($closure)) {
-            $closure($this);
+            $closure($instance);
         }
 
         return $instance;
