@@ -66,7 +66,9 @@ class Role extends Model
      */
     public function addUser(User $user)
     {
-        if (!$this->users->contains($user->id)) {
+        if (!$this->whereHas('users', function($query) use ($user) {
+            $query->where('id', $user->id);
+        })->count()) {
             return $this->users()->attach($user);
         }
 
