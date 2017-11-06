@@ -104,7 +104,8 @@ trait HasRoles
      */
     public function hasRole($role)
     {
-        return $this->whereHas('roles', function ($query) use ($role) {
+        return $this->where('id', $this->id) // @TODO: seems to be a bug in Laravel?  report it and see what comes of it.
+            ->whereHas('roles', function ($query) use ($role) {
             $field = 'id';
             $value = null;
             if ($role instanceof Role) {
