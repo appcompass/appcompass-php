@@ -66,9 +66,8 @@ class Role extends Model
      */
     public function addUser(User $user)
     {
-        if (!$this->whereHas('users', function($query) use ($user) {
-            $query->where('id', $user->id);
-        })->count()) {
+        // \Log::info('add user to role: ', [$this->hasUser($user), $this->toArray(), $user->toArray()]);
+        if (!$this->hasUser($user)) {
             return $this->users()->attach($user);
         }
 
@@ -88,7 +87,9 @@ class Role extends Model
      */
     public function hasUser(User $user)
     {
-        return $this->users->contains($user->id);
+        return $this->whereHas('users', function($query) use ($user) {
+            $query->where('id', $user->id);
+        })->exists();
     }
 
     public function notify(Notification $notification)

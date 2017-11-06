@@ -54,6 +54,7 @@ trait SetsAndChecksPermission
             $query->whereIn($this->permissionFieldName(), Permission::getAuthPerms());
 
             $user = Auth::check() ? Auth::user() : null;
+
             if ($this->allowNullPermission() || ($user && $user->isAdmin())) {
                 $query->orWhereNull($this->permissionFieldName());
             }

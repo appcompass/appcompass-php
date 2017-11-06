@@ -2,11 +2,10 @@
 
 namespace P3in\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use P3in\Models\Resource;
 
-class AppResourcesController extends Controller
+class AppResourcesController extends BaseController
 {
     public function getDashboard(Request $request)
     {
@@ -18,8 +17,8 @@ class AppResourcesController extends Controller
         $data = [
             'routes' => $request->web_property->buildRoutesTree(),
         ];
-
-        return response()->json($data);
+        return $this->output($data);
+        // return response()->json($data);
     }
 
     public function resources(Request $request, string $route = null)
@@ -33,7 +32,7 @@ class AppResourcesController extends Controller
 
         $menus = $request
             ->web_property
-            ->menus()->with(['items' => function($query){
+            ->menus()->with(['items' => function ($query) {
                 $query->byAllowed();
             }])->get();
 

@@ -40,7 +40,7 @@ class CreateRoles extends Migration
           ->exec('CREATE UNIQUE INDEX permission_user_role_id_user_id_company_id_unique ON role_user (role_id, user_id, company_id) WHERE company_id IS NOT NULL');
         DB::connection()
           ->getPdo()
-          ->exec('CREATE UNIQUE INDEX role_user_role_id_user_id_unique ON role_user (user_id, user_id) WHERE company_id IS NULL');
+          ->exec('CREATE UNIQUE INDEX role_user_role_id_user_id_unique ON role_user (role_id, user_id) WHERE company_id IS NULL');
 
     }
 

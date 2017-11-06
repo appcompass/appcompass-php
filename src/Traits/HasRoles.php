@@ -55,11 +55,7 @@ trait HasRoles
     }
 
     /**
-     * Add current user to a role
-     *
-     * @param      mixed $role The role
-     *
-     * @return     <type>  ( description_of_the_return_value )
+     *  Assign role to current model.
      */
     public function assignRole($role)
     {
@@ -75,11 +71,13 @@ trait HasRoles
                 break;
         }
 
-        return $role->addUser($this);
+        if (!$this->hasRole($role)) {
+            $this->roles()->attach($role);
+        }
     }
 
     /**
-     *  Remove current user from a role
+     *  Remove role form current model.
      */
     public function revokeRole(Role $role)
     {
@@ -106,24 +104,35 @@ trait HasRoles
      */
     public function hasRole($role)
     {
-        try {
+        return $this->whereHas('roles', function ($query) use ($role) {
+            $field = 'id';
+            $value = null;
             if ($role instanceof Role) {
-                // do nothing.
-            } else {
-                if (is_string($role)) {
-                    $role = Role::whereName($role)->firstOrFail();
-                } else {
-                    if (is_int($role)) {
-                        $role = Role::findOrFail($role);
-                    }
-                }
+                $field = 'id';
+                $value = $role->id;
+            } elseif (is_string($role)) {
+                $field = 'name';
+                $value = $role;
+            } elseif (is_int($role)) {
+                $field = 'id';
+                $value = $role;
             }
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return false;
-        }
-
-        return $role->hasUser($this);
+            $query->where($field, $value);
+        })->exists()
+            ;
     }
+
+    /**
+     *
+     */
+    public function hasUser(User $user)
+    {
+        return $this->whereHas('users', function ($query) use ($user) {
+            $query->where('id', $user->id);
+        })->exists()
+            ;
+    }
+
 
     /**
      * Allows for role/group matching using  is[name] pattern

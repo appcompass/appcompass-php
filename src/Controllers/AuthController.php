@@ -40,8 +40,8 @@ class AuthController extends BaseController
 
         return $this->success([
             'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'expires_in'   => config('jwt.ttl') * 60,
+            'token_type' => 'Bearer',
+            'expires_in' => config('jwt.ttl') * 60,
         ]);
     }
 
@@ -49,7 +49,7 @@ class AuthController extends BaseController
     {
         $user = auth()->user();
 
-        if ($fire_event){
+        if ($fire_event) {
             event(new UserCheck($user));
         }
 
@@ -119,9 +119,9 @@ class AuthController extends BaseController
         $request->merge(['remember' => true]);
 
         return $this->validate($request, [
-            'remember'        => 'boolean',
+            'remember' => 'boolean',
             $this->username() => 'required',
-            'password'        => 'required',
+            'password' => 'required',
         ]);
     }
 
@@ -149,9 +149,9 @@ class AuthController extends BaseController
 
         return $this->success([
             'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'expires_in'   => config('jwt.ttl') * 60,
-            'user'         => $user,
+            'token_type' => 'Bearer',
+            'expires_in' => config('jwt.ttl') * 60,
+            'user' => $user,
         ]);
     }
 }
