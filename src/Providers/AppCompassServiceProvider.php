@@ -6,6 +6,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Laravel\Passport\Passport;
 use P3in\Commands\AddUser;
 use P3in\Commands\Install;
+use P3in\Listeners\UserEventSubscriber;
 use P3in\Middleware\SanitizeEmail;
 use P3in\Middleware\ValidateWebProperty;
 use App\User;
@@ -79,6 +80,10 @@ class AppCompassServiceProvider extends BaseServiceProvider
         PermissionObserver::class => Permission::class,
         FieldObserver::class      => Field::class,
         UserObserver::class       => User::class,
+    ];
+
+    protected $subscribe = [
+        UserEventSubscriber::class,
     ];
 
     protected $appBindings = [

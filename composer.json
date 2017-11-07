@@ -30,8 +30,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "P3in\\Providers\\AppCompassServiceProvider",
-        "P3in\\Providers\\AppCompassEventServiceProvider"
+        "P3in\\Providers\\AppCompassServiceProvider"
       ]
     }
   }
