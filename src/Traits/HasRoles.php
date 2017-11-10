@@ -52,6 +52,7 @@ trait HasRoles
         foreach ($roles as $role) {
             $this->assignRole($role);
         }
+        return $this;
     }
 
     /**
@@ -74,6 +75,7 @@ trait HasRoles
         if (!$this->hasRole($role)) {
             $this->roles()->attach($role);
         }
+        return $this;
     }
 
     /**

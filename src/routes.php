@@ -18,6 +18,7 @@ Route::group([
     $router->group([
         'middleware' => ['app_compass_auth'],
     ], function ($router) {
+        $router->post('select-company', 'AuthController@selectCompany');
         $router->get('logout', 'AuthController@logout');
         $router->get('user', 'AuthController@user');
         $router->put('user', 'AuthController@updateUser');

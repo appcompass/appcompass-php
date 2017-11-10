@@ -93,10 +93,9 @@ class User extends Model implements
         'password'   => 'min:6|confirmed', //|required when registering only.
     ];
 
-
     public function companies()
     {
-        return $this->belongsToMany(Company::class);
+        return $this->belongsToMany(Company::class)->withPivot('current');
     }
     /**
      * Photos
@@ -141,6 +140,72 @@ class User extends Model implements
         }
     }
 
+    public function assignCompanies($companies)
+    {
+        foreach ($companies as $company) {
+            $this->assignCompany($company);
+        }
+    }
+
+    public function assignCompany($company)
+    {
+        switch (true) {
+            case $company instanceof Company:
+                break;
+            case is_int($company):
+                $company = Company::findOrFail($company);
+                break;
+            case is_string($company):
+            default:
+                $company = Company::whereName($company)->firstOrFail();
+                break;
+        }
+
+        if (!$this->belongsToCompany($company)) {
+            $this->companies()->attach($company);
+        }
+        return $this;
+
+    }
+
+    public function belongsToCompany($company)
+    {
+        return $this->where('id', $this->id) // @TODO: seems to be a bug in Laravel?  report it and see what comes of it.
+        ->whereHas('companies', function ($query) use ($company) {
+            $field = 'id';
+            $value = null;
+            if ($company instanceof Company) {
+                $field = 'id';
+                $value = $company->id;
+            } elseif (is_string($company)) {
+                $field = 'name';
+                $value = $company;
+            } elseif (is_int($company)) {
+                $field = 'id';
+                $value = $company;
+            }
+            $query->where($field, $value);
+        })->exists()
+            ;
+    }
+
+    public function setCompany($company_id)
+    {
+        $this->companies()
+            ->newPivotStatement()
+            ->where('company_id', $company_id)
+            ->where('user_id', $this->id)
+            ->update(['current' => true]);
+
+        $this->companies()
+            ->newPivotStatement()
+            ->where('company_id', '!=', $company_id)
+            ->where('user_id', $this->id)
+            ->update(['current' => false]);
+
+        return $this;
+    }
+
     /**
      *  Get user's full name
      *
@@ -148,6 +213,21 @@ class User extends Model implements
     public function getFullNameAttribute()
     {
         return sprintf("%s %s", $this->first_name, $this->last_name);
+    }
+
+    public function getCurrentCompanyAttribute()
+    {
+        if (!is_array($this->companies)) {
+            $current = $this->companies->where('pivot.current', true)->first();
+            if (!$current) {
+                $current = $this->companies->first();
+                if ($current) {
+                    $this->setCompany($current->id);
+                }
+            }
+
+            return $current;
+        }
     }
 
     /**

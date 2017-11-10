@@ -23,6 +23,20 @@ class SeedAppCompassFormBuilderData extends Migration
             'host'   => config('app-compass.admin_site_host'),
         ])->firstOrFail();
 
+        $companiesForm = FormBuilder::new('companies', function (FormBuilder $builder) {
+            $builder->string('Customer Number', 'customer_number')->list()->edit(false)->sortable()->searchable();
+            $builder->string('Name', 'name')->list()->edit(false)->sortable()->searchable();
+            $builder->string('User Count', 'users_count')->list()->edit(false)->sortable()->searchable();
+        })->getForm();
+
+        Resource::buildAll([
+            'companies.index',
+            'companies.show',
+            'companies.create',
+            'companies.update',
+            'companies.store',
+        ], $cp, $companiesForm, 'users_admin');
+
         $users = FormBuilder::new('users', function (FormBuilder $builder) {
             $builder->string('First Name', 'first_name')->list()->validation(['required', 'max:255'])->sortable()->searchable();
             $builder->string('Last Name', 'last_name')->list()->validation(['required', 'max:255'])->sortable()->searchable();
