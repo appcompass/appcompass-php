@@ -6,6 +6,7 @@ use P3in\Models\FieldSource;
 use P3in\Models\Permission;
 use P3in\Models\Resource;
 use P3in\Models\WebProperty;
+use App\Company;
 
 class SeedAppCompassFormBuilderData extends Migration
 {
@@ -47,6 +48,18 @@ class SeedAppCompassFormBuilderData extends Migration
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Last Login', 'last_login')->list()->edit(false)->sortable()->searchable();
             $builder->password('Password', 'password')->validation(['min:6', 'confirmed']);
+
+            $builder->dropdownSearch('Associated Companies', 'companies')->dynamic(Company::class,
+                function (FieldSource $source) {
+                    $source->select(['id AS index', 'name AS label']);
+                })->list(false)->edit()->required()->multiple(true);
+
+            $builder->checkboxes('Companies', 'companies')
+                ->list()
+                ->edit(false)
+                ->sortable(false)
+                ->searchable(false);
+
         })->getForm();
 
         Resource::buildAll([
