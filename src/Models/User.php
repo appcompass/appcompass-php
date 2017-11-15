@@ -295,16 +295,25 @@ class User extends Model implements
     {
         // $this->load('roles.permissions');
 
-
-        $user_permissions = $this->permissions()->allRelatedIds();
-        $user_roles = $this->roles->load('permissions');
-
-        $all_permissions = collect($user_permissions);
+        // get User specific permissions.
+        $all_permissions = $this->permissions()->whereNull('permission_user.company_id')->pluck('id');
+        $user_roles = $this->roles()->whereNull('role_user.company_id')->with('permissions')->get();
 
         foreach ($user_roles as $role) {
-            $role_permissions = $role->permissions->pluck('id');
+            $all_permissions = $all_permissions->merge($role->permissions->pluck('id'));
+        }
 
-            $all_permissions = $all_permissions->merge($role_permissions);
+        // get Company User specific permissions
+        if ($this->current_company){
+            $company_user_permissions = $this->permissions()->where('permission_user.company_id', $this->current_company->id)->pluck('id');
+            $company_user_roles = $this->roles()->where('role_user.company_id', $this->current_company->id)->with('permissions')->get();
+
+            foreach ($company_user_roles as $role) {
+                $company_user_permissions = $company_user_permissions->merge($role->permissions->pluck('id'));
+            }
+
+            $all_permissions = $all_permissions->merge($company_user_permissions);
+
         }
 
         return $all_permissions->unique()->values()->all();

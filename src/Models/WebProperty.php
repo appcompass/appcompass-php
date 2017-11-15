@@ -76,7 +76,7 @@ class WebProperty extends Model implements WebPropertyModelInterface
         $resources = $this->resources()->byConfig('layout', '!=', '')
             ->byAllowed()
             ->get();
-
+        // dd($resources);
         $rtn = [];
         foreach ($resources->unique('config.layout')->pluck('config.layout') as $layout) {
             if ($layout) {
