@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use P3in\Models\Resource;
 use P3in\Policies\ResourcesPolicy;
+use P3in\Repositories\Criteria\FilterBySearch;
+use P3in\Repositories\Criteria\FilterBySort;
 use P3in\Requests\FormRequest;
 use P3in\Traits\UsesRoute;
 
@@ -59,6 +61,9 @@ abstract class AbstractBaseResourceController extends BaseController
 
     public function index()
     {
+        $this->repo->pushCriteria(new FilterBySearch());
+        $this->repo->pushCriteria(new FilterBySort());
+
         $result = $this->repo->paginate($this->per_page, $this->columns);
 
         // @TODO: refactor to make properly functional.
