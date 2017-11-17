@@ -65,9 +65,9 @@ class SeedAppCompassUsersData extends Migration
         ]);
 
         Permission::create([
-            'name' => 'own_users_admin',
-            'label' => 'Own Users Admin',
-            'description' => 'A Permission giving it\'s holder the ability to manage all users of their company.',
+            'name' => 'all_users_admin',
+            'label' => 'All Users Admin',
+            'description' => 'A Permission giving it\'s holder the ability to manage all users under the system.',
             'system' => true,
         ]);
 

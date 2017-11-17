@@ -23,7 +23,7 @@ class HasCompanyIfNotAdmin extends AbstractCriteria
             $this->company_id = $user->current_company->id;
 
 
-            if($user->hasPermission('own_users_admin')) {
+            if(!$user->hasPermission('all_users_admin')) {
                 $query->whereHas('companies', function ($query) {
                     $query->where('id', $this->company_id);
                 })
@@ -32,7 +32,7 @@ class HasCompanyIfNotAdmin extends AbstractCriteria
 
             return $query;
         }
-        
+
         $query->where('id', null);
 
         return $query;
