@@ -16,139 +16,154 @@ class SeedAppCompassUsersData extends Migration
     public function up()
     {
         $systemRole = Role::create([
-            'name'        => 'system',
-            'label'       => 'System',
+            'name' => 'system',
+            'label' => 'System',
             'description' => 'System users',
-            'active'      => true,
+            'active' => true,
         ]);
 
         Role::create([
-            'name'        => 'admin',
-            'label'       => 'Admin',
+            'name' => 'admin',
+            'label' => 'Admin',
             'description' => 'Administrators',
-            'active'      => true,
+            'active' => true,
         ]);
 
         $userRole = Role::create([
-            'name'        => 'user',
-            'label'       => 'User',
+            'name' => 'user',
+            'label' => 'User',
             'description' => 'Regular User',
-            'active'      => true,
+            'active' => true,
         ]);
 
         Permission::create([
-            'name'        => Permission::GUEST_PERM_NAME,
-            'label'       => 'Guest',
+            'name' => Permission::GUEST_PERM_NAME,
+            'label' => 'Guest',
             'description' => 'Permission used to allow resources to be viewable only to guest users.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         $loggedInPerm = Permission::create([
-            'name'        => Permission::LOGGED_IN_PERM_NAME,
-            'label'       => 'User',
+            'name' => Permission::LOGGED_IN_PERM_NAME,
+            'label' => 'User',
             'description' => 'The user can log into the application frontend (websites)',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'cp_login',
-            'label'       => 'Cp Login',
+            'name' => 'cp_login',
+            'label' => 'Cp Login',
             'description' => 'A Permission giving it\'s holder the ability to log into the control panel.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         $users_admin = Permission::create([
-            'name'        => 'users_admin',
-            'label'       => 'Users Admin',
+            'name' => 'users_admin',
+            'label' => 'Users Admin',
             'description' => 'A Permission giving it\'s holder the ability to manage all users in the system.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'permissions_admin',
-            'label'       => 'Permissions Admin',
+            'name' => 'own_users_admin',
+            'label' => 'Own Users Admin',
+            'description' => 'A Permission giving it\'s holder the ability to manage all users of their company.',
+            'system' => true,
+        ]);
+
+        $companies_admin = Permission::create([
+            'name' => 'companies_admin',
+            'label' => 'Companies Admin',
+            'description' => 'A Permission giving it\'s holder the ability to manage all companies in the system.',
+            'system' => true,
+        ]);
+
+        Permission::create([
+            'name' => 'permissions_admin',
+            'label' => 'Permissions Admin',
             'description' => 'A Permission giving it\'s holder the ability to manage all permissions in the system.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'resources_admin',
-            'label'       => 'Resources Admin',
+            'name' => 'resources_admin',
+            'label' => 'Resources Admin',
             'description' => 'A Permission giving it\'s holder the ability to manage all Control Panel available features.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'websites_admin_view',
-            'label'       => 'Websites Admin View',
+            'name' => 'websites_admin_view',
+            'label' => 'Websites Admin View',
             'description' => 'A Permission giving it\'s holder the ability to view all websites from within the control panel.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'websites_admin_create',
-            'label'       => 'Websites Admin Create',
+            'name' => 'websites_admin_create',
+            'label' => 'Websites Admin Create',
             'description' => 'A Permission giving it\'s holder the ability to create websites.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'websites_layouts_admin',
-            'label'       => 'Websites Layouts Admin',
+            'name' => 'websites_layouts_admin',
+            'label' => 'Websites Layouts Admin',
             'description' => 'A Permission giving it\'s holder the ability to manage website layouts.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'websites_menus_admin',
-            'label'       => 'Websites Menus Admin',
+            'name' => 'websites_menus_admin',
+            'label' => 'Websites Menus Admin',
             'description' => 'A Permission giving it\'s holder the ability to manage Website Navigation Menus.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'websites_pages_admin',
-            'label'       => 'Websites Pages Admin',
+            'name' => 'websites_pages_admin',
+            'label' => 'Websites Pages Admin',
             'description' => 'A Permission giving it\'s holder the ability to manage a website\'s pages.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'storage_admin',
-            'label'       => 'Storage Admin',
+            'name' => 'storage_admin',
+            'label' => 'Storage Admin',
             'description' => 'A Permission giving it\'s holder the ability to manage Disk instances used by the websites.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'forms_admin',
-            'label'       => 'Forms Admin',
+            'name' => 'forms_admin',
+            'label' => 'Forms Admin',
             'description' => 'A Permission giving it\'s holder the ability to manage Forms.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         Permission::create([
-            'name'        => 'websites_admin_destroy',
-            'label'       => 'Websites Admin Destroy',
+            'name' => 'websites_admin_destroy',
+            'label' => 'Websites Admin Destroy',
             'description' => 'A Permission giving it\'s holder the ability to delete a website.',
-            'system'      => true,
+            'system' => true,
         ]);
 
         $userRole->setPermission($users_admin);
 
         $userRole->grantPermissions([
-            $loggedInPerm
+            $loggedInPerm,
         ]);
 
         $loggedInPerm->setPermission($users_admin);
 
         User::create([
             'first_name' => 'System',
-            'last_name'  => 'User',
-            'email'      => config('app-compass.system_user'),
-            'password'   => '',
-            'phone'      => '',
-        ])->assignRole($systemRole);
+            'last_name' => 'User',
+            'email' => config('app-compass.system_user'),
+            'password' => '',
+            'phone' => '',
+        ])->assignRole($systemRole)
+        ;
     }
 
     /**

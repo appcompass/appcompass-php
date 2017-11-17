@@ -27,21 +27,3 @@ class FilterBySort extends AbstractCriteria
         return $query;
     }
 }
-
-// public function sort($sorters = null)
-// {
-//     if (!request()->has('sorters') && is_null($sorters)) {
-//         return;
-//     }
-//
-//     if (is_null($sorters)) {
-//         $sorters = request()->sorters;
-//         if (is_string($sorters)) {
-//             $sorters = json_decode($sorters, true);
-//         }
-//     }
-//
-//     foreach ((array)$sorters as $field => $order) {
-//         $this->builder->orderBy($field, $order);
-//     }
-// }

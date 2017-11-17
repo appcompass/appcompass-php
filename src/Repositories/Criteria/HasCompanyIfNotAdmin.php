@@ -11,21 +11,31 @@ class HasCompanyIfNotAdmin extends AbstractCriteria
 
     public function apply($model, RepositoryInterface $repo)
     {
+        $query = $model->newQuery();
+
         $user = Auth::user();
+
+        if ($user->isAdmin()){
+            return $query;
+        }
 
         if ($user->current_company) {
             $this->company_id = $user->current_company->id;
-        }
 
-        $query = $model->newQuery();
 
-        if (!$user->isAdmin() && $this->company_id){
-            $query->whereHas('companies', function ($query) {
+            if($user->hasPermission('own_users_admin')) {
+                $query->whereHas('companies', function ($query) {
                     $query->where('id', $this->company_id);
                 })
-            ;
+                ;
+            }
+
+            return $query;
         }
+        
+        $query->where('id', null);
 
         return $query;
+
     }
 }
