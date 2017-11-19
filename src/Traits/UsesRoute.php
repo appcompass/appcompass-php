@@ -4,11 +4,13 @@ namespace P3in\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
+use P3in\Models\Resource;
 
 trait UsesRoute
 {
     protected $route_params = null;
     protected $route_name = null;
+    protected $resource = null;
 
     public function setRouteInfo($force = false)
     {
@@ -17,6 +19,13 @@ trait UsesRoute
 
             $this->route_name = $route->getName();
             $this->route_params = $route->parameters();
+
+            $this->resource = Resource::byAllowed()
+                ->where('name', $this->route_name)
+                ->with('form')
+                ->first()
+                ;
+
         }
     }
 

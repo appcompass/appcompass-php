@@ -3,19 +3,16 @@
 namespace P3in\Controllers;
 
 use Gate;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use P3in\Models\Resource;
+use P3in\Models\MenuItem;
 use P3in\Policies\ResourcesPolicy;
 use P3in\Repositories\Criteria\FilterBySearch;
 use P3in\Repositories\Criteria\FilterBySort;
-use P3in\Requests\FormRequest;
 use P3in\Traits\UsesRoute;
 
 abstract class AbstractBaseResourceController extends BaseController
 {
-
     use UsesRoute;
 
     protected $repo;
@@ -47,15 +44,16 @@ abstract class AbstractBaseResourceController extends BaseController
 
     public function callAction($method, $params)
     {
-        if (method_exists($this, $method)){
+        if (method_exists($this, $method)) {
             $this->setRouteInfo();
 
             $this->checkPolicy();
 
             Gate::authorize($method, $this->repo);
 
-            return call_user_func_array(array($this,$method), $params);
+            return call_user_func_array([$this, $method], $params);
         }
+
         return parent::callAction($method, $params);
     }
 
@@ -75,7 +73,7 @@ abstract class AbstractBaseResourceController extends BaseController
 
         $data = [
             'pagination' => array_except($array, ['data']),
-            'data'       => $array['data'],
+            'data' => $array['data'],
         ];
 
         return $this->output($data);
@@ -116,7 +114,7 @@ abstract class AbstractBaseResourceController extends BaseController
     {
         // $data = $request->validate($this->rules());
         $data = $request->all();
-        $result =  $this->repo->create($data);
+        $result = $this->repo->create($data);
 
         return $this->output($result);
     }
@@ -135,28 +133,68 @@ abstract class AbstractBaseResourceController extends BaseController
         $this->cleanupFormat($data);
 
         $structured = array_merge([
-            'route'       => $this->route_name,
-            'parameters'  => $this->route_params,
-            'api_url'     => $this->getApiUrl(),
-            'view_types'  => $this->view_types,
+            'route' => $this->route_name,
+            'breadcrumbs' => $this->getBreadcrumbs(),
+            'navigation' => $this->getResourceNavs(),
+            'api_url' => $this->getApiUrl(),
+            'view_types' => $this->view_types,
             'create_type' => $this->create_type,
             'update_type' => $this->update_type,
-            'abilities'   => ['create', 'edit', 'destroy', 'index', 'show'],
+            'abilities' => ['create', 'edit', 'destroy', 'index', 'show'],
             // @TODO show is per-item in the collection
-            'form'        => $this->getResourceForm(),
-            'selectable'       => $this->selectable,
+            'form' => $this->getResourceForm(),
+            'selectable' => $this->selectable,
         ], (array) $data);
 
         return response()->json($structured, $code);
     }
 
-    public function getResourceForm()
+    public function getBreadcrumbs()
     {
-        $resource = Resource::byAllowed()
-            ->where('name', $this->route_name)
-            ->with('form')
+        return $this->route_params;
+    }
+
+    public function getResourceNavs()
+    {
+        $rtn = [];
+
+        $menu_item = MenuItem::where('navigatable_type', get_class($this->resource))
+            ->where('navigatable_id', $this->resource->id)
+            ->with('parent.children')
             ->first()
         ;
+        // return $menu_item->parent->parent;
+        if (!empty($menu_item->parent->parent)) {
+            $items = $menu_item->parent->children;
+            $items->each(function ($item) {
+                $item->makeHidden([
+                    'id',
+                    'menu_id',
+                    'parent_id',
+                    'req_perm',
+                    'navigatable_id',
+                    'navigatable_type',
+                    'created_at',
+                ]);
+            });
+
+            $rtn['side_nav'] = [
+                'title' => $menu_item->parent->title,
+                'icon' => $menu_item->parent->icon,
+                'children' => $items,
+            ];
+        }
+
+        return $rtn;
+
+        // $menu = $menu_item->menu;
+        //
+        // return $menu->render(true);
+    }
+
+    public function getResourceForm()
+    {
+        $resource = $this->resource;
 
         if (!empty($resource->form)) {
             return $resource->renderForm($this->getRouteType());
