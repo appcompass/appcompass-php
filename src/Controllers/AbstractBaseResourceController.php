@@ -157,12 +157,12 @@ abstract class AbstractBaseResourceController extends BaseController
         foreach ($this->route_params as $name => $val) {
             $tree[] = [
                 'label' => str_plural(ucwords($name)),
-                'link' => $this->getResourceUrl($depth),
+                'url' => $this->getResourceUrl($depth),
             ];
             $depth++;
             $tree[] = [
                 'label' => $val,
-                'link' => $this->getResourceUrl($depth),
+                'url' => $this->getResourceUrl($depth),
             ];
         }
 
