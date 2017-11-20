@@ -151,7 +151,29 @@ abstract class AbstractBaseResourceController extends BaseController
 
     public function getBreadcrumbs()
     {
-        return $this->route_params;
+        $tree = [];
+        $url = '';
+        $depth = 1;
+        foreach ($this->route_params as $name => $val) {
+            $tree[] = [
+                'label' => str_plural(ucwords($name)),
+                'link' => $this->getResourceUrl($depth),
+            ];
+            $depth++;
+            $tree[] = [
+                'label' => $val,
+                'link' => $this->getResourceUrl($depth),
+            ];
+        }
+
+        if($title = $this->resource->getConfig('meta.title')){
+            $tree[] = [
+                'label' => $title,
+                'link' => null,
+            ];
+        }
+
+        return $tree;
     }
 
     public function getResourceNavs()
