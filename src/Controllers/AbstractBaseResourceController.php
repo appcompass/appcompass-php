@@ -5,6 +5,7 @@ namespace P3in\Controllers;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Model;
 use P3in\Models\MenuItem;
 use P3in\Policies\ResourcesPolicy;
 use P3in\Repositories\Criteria\FilterBySearch;
@@ -154,19 +155,21 @@ abstract class AbstractBaseResourceController extends BaseController
         $tree = [];
         $url = '';
         $depth = 1;
+
         foreach ($this->route_params as $name => $val) {
             $tree[] = [
                 'label' => str_plural(ucwords($name)),
                 'url' => $this->getResourceUrl($depth),
             ];
             $depth++;
+            $val = $val instanceof Model ? $val->getKey() : $val;
             $tree[] = [
                 'label' => $val,
                 'url' => $this->getResourceUrl($depth),
             ];
         }
 
-        if($title = $this->resource->getConfig('meta.title')){
+        if ($title = $this->resource->getConfig('meta.title')) {
             $tree[] = [
                 'label' => $title,
                 'link' => null,
