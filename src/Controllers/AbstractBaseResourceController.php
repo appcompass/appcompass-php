@@ -10,6 +10,7 @@ use P3in\Models\MenuItem;
 use P3in\Policies\ResourcesPolicy;
 use P3in\Repositories\Criteria\FilterBySearch;
 use P3in\Repositories\Criteria\FilterBySort;
+use P3in\Requests\FormRequest;
 use P3in\Traits\UsesRoute;
 
 abstract class AbstractBaseResourceController extends BaseController
@@ -99,10 +100,10 @@ abstract class AbstractBaseResourceController extends BaseController
         return $this->show();
     }
 
-    public function update(Request $request)
+    public function update(FormRequest $request)
     {
         // $data = $request->validate($this->rules());
-        $data = $request->all();
+        $data = $request->validated();
 
         $id = $this->getRouteParam($this->param_name);
 
@@ -111,10 +112,10 @@ abstract class AbstractBaseResourceController extends BaseController
         return $this->output($result);
     }
 
-    public function store(Request $request)
+    public function store(FormRequest $request)
     {
         // $data = $request->validate($this->rules());
-        $data = $request->all();
+        $data = $request->validated();
         $result = $this->repo->create($data);
 
         return $this->output($result);

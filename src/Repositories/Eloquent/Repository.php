@@ -43,7 +43,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
 
     public function related() : Relationship
     {
-        if (!$this->related){
+        if (!$this->related) {
             $this->related = new Relationship($this);
         }
 
