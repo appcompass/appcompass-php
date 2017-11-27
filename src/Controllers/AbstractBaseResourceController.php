@@ -190,32 +190,33 @@ abstract class AbstractBaseResourceController extends BaseController
         $menu = Menu::whereName('main_nav')->first();
 
         $items = collect($menu->items->toArray());
+        if ($this->resource){
+            $item = $items->filter(function($item) {
+                return rtrim($item['url'], '/') === rtrim($this->resource->url, '/');
+            })->sortBy('id')->first();
 
-        $item = $items->filter(function($item) {
-           return rtrim($item['url'], '/') === rtrim($this->resource->url, '/');
-        })->sortBy('id')->first();
+            $menu_item = MenuItem::with('parent.children')->find($item['id']);
 
-        $menu_item = MenuItem::with('parent.children')->find($item['id']);
+            if (!empty($menu_item->parent->parent)) {
+                $items = $menu_item->parent->children;
+                $items->each(function ($item) {
+                    $item->makeHidden([
+                        'id',
+                        'menu_id',
+                        'parent_id',
+                        'req_perm',
+                        'navigatable_id',
+                        'navigatable_type',
+                        'created_at',
+                    ]);
+                });
 
-        if (!empty($menu_item->parent->parent)) {
-            $items = $menu_item->parent->children;
-            $items->each(function ($item) {
-                $item->makeHidden([
-                    'id',
-                    'menu_id',
-                    'parent_id',
-                    'req_perm',
-                    'navigatable_id',
-                    'navigatable_type',
-                    'created_at',
-                ]);
-            });
-
-            $rtn['side_nav'] = [
-                'title' => $menu_item->parent->title,
-                'icon' => $menu_item->parent->icon,
-                'children' => $items,
-            ];
+                $rtn['side_nav'] = [
+                    'title' => $menu_item->parent->title,
+                    'icon' => $menu_item->parent->icon,
+                    'children' => $items,
+                ];
+            }
         }
 
         return $rtn;
