@@ -16,13 +16,14 @@ trait UsesRoute
     {
         if (is_null($this->route_params) || $force) {
             $route = Route::current();
-
             if ($route){
                 $this->route_name = $route->getName();
                 $this->route_params = $route->parameters();
 
-                $this->resource = Resource::byAllowed()
-                    ->where('name', $this->route_name)
+                $this->resource = Resource::
+                    // @TODO: fix this to bring back byAllowed()
+                    // byAllowed()
+                    where('name', $this->route_name)
                     ->with('form')
                     ->first()
                 ;

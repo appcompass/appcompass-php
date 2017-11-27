@@ -6,6 +6,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
+use P3in\Models\Menu;
 use P3in\Models\MenuItem;
 use P3in\Policies\ResourcesPolicy;
 use P3in\Repositories\Criteria\FilterBySearch;
@@ -170,11 +171,13 @@ abstract class AbstractBaseResourceController extends BaseController
             ];
         }
 
-        if ($title = $this->resource->getConfig('meta.title')) {
-            $tree[] = [
-                'label' => $title,
-                'link' => null,
-            ];
+        if($this->resource){
+            if ($title = $this->resource->getConfig('meta.title')) {
+                $tree[] = [
+                    'label' => $title,
+                    'link' => null,
+                ];
+            }
         }
 
         return $tree;
@@ -184,12 +187,16 @@ abstract class AbstractBaseResourceController extends BaseController
     {
         $rtn = [];
 
-        $menu_item = MenuItem::where('navigatable_type', get_class($this->resource))
-            ->where('navigatable_id', $this->resource->id)
-            ->with('parent.children')
-            ->first()
-        ;
-        // return $menu_item->parent->parent;
+        $menu = Menu::whereName('main_nav')->first();
+
+        $items = collect($menu->items->toArray());
+
+        $item = $items->filter(function($item) {
+           return rtrim($item['url'], '/') === rtrim($this->resource->url, '/');
+        })->sortBy('id')->first();
+
+        $menu_item = MenuItem::with('parent.children')->find($item['id']);
+
         if (!empty($menu_item->parent->parent)) {
             $items = $menu_item->parent->children;
             $items->each(function ($item) {
