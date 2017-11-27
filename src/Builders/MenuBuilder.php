@@ -155,6 +155,17 @@ class MenuBuilder
         }
     }
 
+    // //@TODO: very weak way to do it, we need to sort this out.
+    // public function drop($title)
+    // {
+    //     if ($this->hasParent()) {
+    //
+    //         // we are pointing the last inserted menu_item aka the parent -f
+    //         $this->menu_item->setParent($this->parent->menu_item);
+    //     }else{
+    //         $this->menu->whereNull('parent_id')->drop()
+    //     }
+    // }
     /**
      * { function_description }
      *

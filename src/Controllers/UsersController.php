@@ -3,10 +3,9 @@
 namespace P3in\Controllers;
 
 use P3in\Policies\ResourcesPolicy;
-use P3in\Repositories\Criteria\ByAllowed;
-use P3in\Repositories\Criteria\HasCompany;
 use P3in\Repositories\Criteria\HasCompanyIfNotAdmin;
 use P3in\Repositories\UsersRepository;
+use Auth;
 
 class UsersController extends AbstractBaseResourceController
 {
@@ -15,7 +14,7 @@ class UsersController extends AbstractBaseResourceController
     public function __construct(UsersRepository $repo)
     {
         $this->repo = $repo;
-        $this->repo->pushCriteria(new HasCompanyIfNotAdmin());
+        $this->repo->pushCriteria(new HasCompanyIfNotAdmin(Auth::user()));
     }
 
     public function getPolicy()

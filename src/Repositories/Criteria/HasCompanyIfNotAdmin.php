@@ -3,39 +3,40 @@
 namespace P3in\Repositories\Criteria;
 
 use P3in\Interfaces\RepositoryInterface;
-use Auth;
+use P3in\Models\User;
 
 class HasCompanyIfNotAdmin extends AbstractCriteria
 {
     protected $company_id;
+    protected $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
 
     public function apply($model, RepositoryInterface $repo)
     {
         $query = $model->newQuery();
 
-        $user = Auth::user();
-
-        if ($user->isAdmin()){
+        if ($this->user->isAdmin()) {
             return $query;
         }
 
-        if ($user->current_company) {
-            $this->company_id = $user->current_company->id;
-
-
-            if(!$user->hasPermission('all_users_admin')) {
-                $query->whereHas('companies', function ($query) {
-                    $query->where('id', $this->company_id);
-                })
-                ;
-            }
-
+        if ($this->user->hasPermission('all_users_admin')) {
             return $query;
         }
 
-        $query->where('id', null);
+        if ($this->user->current_company) {
+            $this->company_id = $this->user->current_company->id;
+
+            $query->whereHas('companies', function ($query) {
+                $query->where('id', $this->company_id);
+            });
+        } else {
+            $query->where('id', null);
+        }
 
         return $query;
-
     }
 }
