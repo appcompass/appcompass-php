@@ -68,6 +68,11 @@ class SeedAppCompassFormBuilderData extends Migration
             'users.create',
             'users.update',
             'users.store',
+            'companies.users.index',
+            'companies.users.show',
+            'companies.users.create',
+            'companies.users.update',
+            'companies.users.store',
         ], $cp, $users, 'users_admin');
 
         $userRoles = FormBuilder::new('user-roles', function (FormBuilder $builder) {
