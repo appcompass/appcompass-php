@@ -10,6 +10,7 @@ use P3in\Policies\ResourcesPolicy;
 use P3in\Repositories\Criteria\ExcludeAssignedCompanyPermissions;
 use P3in\Repositories\Criteria\HasUser;
 use P3in\Repositories\PermissionsRepository;
+use P3in\Requests\FormRequest;
 
 class UserPermissionsController extends AbstractBaseResourceController
 {
@@ -44,7 +45,7 @@ class UserPermissionsController extends AbstractBaseResourceController
         return ResourcesPolicy::class;
     }
 
-    public function store(Request $request)
+    public function store(FormRequest $request)
     {
         // $data = $request->validate($this->rules());
         $data = $request->all();
