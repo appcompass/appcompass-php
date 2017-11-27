@@ -287,6 +287,15 @@ class User extends Model implements
         $this->attributes['email'] = strtolower($value);
     }
 
+    public function setCompaniesAttribute($value)
+    {
+        if (is_array($value)){
+            $collection = collect($value);
+            $ids = $collection->pluck('id')->all();
+            $this->companies()->sync($ids);
+        }
+    }
+
     /**
      *
      * @return     <type>  ( description_of_the_return_value )
