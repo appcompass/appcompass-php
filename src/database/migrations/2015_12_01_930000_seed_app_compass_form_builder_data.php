@@ -65,15 +65,28 @@ class SeedAppCompassFormBuilderData extends Migration
         Resource::buildAll([
             'users.index',
             'users.show',
-            'users.create',
             'users.update',
-            'users.store',
             'companies.users.index',
             'companies.users.show',
-            'companies.users.create',
             'companies.users.update',
-            'companies.users.store',
         ], $cp, $users, 'users_admin');
+
+        $newUsers = FormBuilder::new('users_create', function (FormBuilder $builder) {
+            $builder->string('First Name', 'first_name')->validation(['required', 'max:255'])->sortable()->searchable();
+            $builder->string('Last Name', 'last_name')->validation(['required', 'max:255'])->sortable()->searchable();
+            $builder->string('Email', 'email')->validation(['required', 'email', 'unique:users,email', 'max:255'])->sortable()->searchable();
+            $builder->string('Phone Number', 'phone')->validation(['phone:AUTO,US'])->sortable()->searchable();
+            $builder->boolean('Active', 'active')->sortable();
+            $builder->password('Password', 'password')->validation(['required', 'min:6', 'confirmed']);
+
+        })->getForm();
+
+        Resource::buildAll([
+            'users.create',
+            'users.store',
+            'companies.users.create',
+            'companies.users.store',
+        ], $cp, $newUsers, 'users_admin');
 
         $userRoles = FormBuilder::new('user-roles', function (FormBuilder $builder) {
             $builder->string('Name', 'label')->list()->required()->sortable()->searchable();

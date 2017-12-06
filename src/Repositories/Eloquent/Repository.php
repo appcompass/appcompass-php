@@ -87,8 +87,9 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
         if ($this->related) {
             return $this->related()->create($data);
         }
+        $this->saveModel($data);
 
-        return $this->model->update($data);
+        return $this->model;
     }
 
     public function saveModel(array $data)
@@ -97,7 +98,9 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
             $this->model->{$k} = $v;
         }
 
-        return $this->model->save();
+        $this->model->save();
+
+        return $this->model;
     }
 
     public function update(array $data, $id, $attribute = "id")
@@ -111,7 +114,9 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
             return false;
         }
 
-        return $model->fill($data)->save();
+        $model->fill($data)->save();
+
+        return $model;
     }
 
     public function delete($id)

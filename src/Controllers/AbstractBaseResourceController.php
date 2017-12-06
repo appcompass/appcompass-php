@@ -82,6 +82,12 @@ abstract class AbstractBaseResourceController extends BaseController
         return $this->output($data);
     }
 
+    private function getById($id)
+    {
+        $data = ['data' => $this->repo->find($id, $this->columns)];
+
+        return $this->output($data);
+    }
     public function create()
     {
         return $this->output([]);
@@ -91,9 +97,7 @@ abstract class AbstractBaseResourceController extends BaseController
     {
         $id = $this->getRouteParam($this->param_name);
 
-        $data = ['data' => $this->repo->find($id, $this->columns)];
-
-        return $this->output($data);
+        return $this->getById($id);
     }
 
     public function edit()
@@ -108,18 +112,27 @@ abstract class AbstractBaseResourceController extends BaseController
 
         $id = $this->getRouteParam($this->param_name);
 
-        $result = ['data' => $this->repo->updateRich($data, $id)];
+        if ($this->repo->updateRich($data, $id)){
+            return $this->getById($id);
+        }
 
-        return $this->output($result);
+        // @TODO: return error message.
+        // $result = ['data' => []];
+        //
+        // return $this->output($result);
     }
 
     public function store(FormRequest $request)
     {
         // $data = $request->validate($this->rules());
         $data = $request->validated();
-        $result = $this->repo->create($data);
+        if ($record = $this->repo->create($data)){
+            $data = ['data' => $record];
 
-        return $this->output($result);
+            return $this->output($data);
+        }
+
+        // @TODO: return error message.
     }
 
     public function destroy()

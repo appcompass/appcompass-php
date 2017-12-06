@@ -289,7 +289,7 @@ class User extends Model implements
 
     public function setCompaniesAttribute($value)
     {
-        if (is_array($value)){
+        if (is_array($value) && $this->exists){
             $collection = collect($value);
             $ids = $collection->pluck('id')->all();
             $this->companies()->sync($ids);
