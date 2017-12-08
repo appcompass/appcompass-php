@@ -112,7 +112,8 @@ trait UsesRoute
         }
 
         if (!app()->runningInConsole()){
-            throw new \Exception("No route param exist by the name of '{$name}'");
+            return null;
+            // throw new \Exception("No route param exist by the name of '{$name}'");
         }
     }
 
