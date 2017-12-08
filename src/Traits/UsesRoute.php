@@ -93,7 +93,9 @@ trait UsesRoute
             $filtered = array_values(array_filter($segments));
             $segments = [''];
             for ($i = 0; $i < $depth; $i++) {
-                $segments[] = $filtered[$i];
+                if (isset($filtered[$i])){
+                    $segments[] = $filtered[$i];
+                }
             }
         }
 
