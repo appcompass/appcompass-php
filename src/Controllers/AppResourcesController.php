@@ -18,7 +18,7 @@ class AppResourcesController extends BaseController
             $data = [
                 'routes' => $routes,
             ];
-            // return $this->output($data);
+            return $this->output($data);
         }
         if ($user = $request->user()){
             $message = "You are not authorized to use this website.";
