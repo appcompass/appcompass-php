@@ -20,8 +20,17 @@ class IsCompanyIfNotAdmin extends AbstractCriteria
             return $query;
         }
 
+        if ($user->hasPermission('all_users_admin')) {
+            return $query;
+        }
+
+        foreach ($user->roles as $role) {
+            if($role->hasPermission('all_users_admin')){
+                return $query;
+            }
+        }
+
         if ($user->current_company) {
-            // $this->company_id = $user->current_company->id;
 
             $query->where('id', $user->current_company->id);
 
