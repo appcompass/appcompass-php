@@ -43,7 +43,7 @@ class SeedAppCompassFormBuilderData extends Migration
             $builder->string('Last Name', 'last_name')->list()->validation(['required', 'max:255'])->sortable()->searchable();
             $builder->string('Email', 'email')->list()->validation(['required', 'email', 'unique:users,email', 'max:255'])->sortable()->searchable();
             $builder->string('Phone Number', 'phone')->list()->validation(['phone:AUTO,US'])->sortable()->searchable();
-            $builder->boolean('Active', 'active')->list()->sortable();
+            $builder->boolean('Active', 'active')->validation(['nullable'])->list()->sortable();
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Last Login', 'last_login')->list()->edit(false)->sortable()->searchable();
@@ -76,7 +76,7 @@ class SeedAppCompassFormBuilderData extends Migration
             $builder->string('Last Name', 'last_name')->validation(['required', 'max:255'])->sortable()->searchable();
             $builder->string('Email', 'email')->validation(['required', 'email', 'unique:users,email', 'max:255'])->sortable()->searchable();
             $builder->string('Phone Number', 'phone')->validation(['phone:AUTO,US'])->sortable()->searchable();
-            $builder->boolean('Active', 'active')->sortable();
+            $builder->boolean('Active', 'active')->validation(['nullable'])->sortable();
             $builder->password('Password', 'password')->validation(['required', 'min:6', 'confirmed']);
 
         })->getForm();
