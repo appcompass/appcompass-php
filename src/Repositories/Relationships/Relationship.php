@@ -82,6 +82,21 @@ class Relationship
         }
     }
 
+    public function detach($data)
+    {
+        return $this->relationship->detach($data);
+    }
+
+    public function attach($data, $pivot = [])
+    {
+        return $this->relationship->attach($data, $pivot);
+    }
+
+    public function get()
+    {
+        return $this->relationship->get();
+    }
+
     private function checkForMethod($name)
     {
         if (!method_exists($this->relationship, $name)) {
