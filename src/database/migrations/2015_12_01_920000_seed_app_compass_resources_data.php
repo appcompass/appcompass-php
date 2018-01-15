@@ -116,7 +116,6 @@ class SeedAppCompassResourcesData extends Migration
             ->setComponent('Edit')
             ->setTitle('User')
             ->setPermission('users_admin')
-            ->setForm($usersForm)
             ->requiresAuth()
         ;
         $create_company_user = Resource::build('companies.users.create', $cp)
