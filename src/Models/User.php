@@ -300,25 +300,25 @@ class User extends Model implements
      *
      * @return     <type>  ( description_of_the_return_value )
      */
-    public function allPermissions()
+    public function allPermissions($pluck = 'id')
     {
         // $this->load('roles.permissions');
 
         // get User specific permissions.
-        $all_permissions = $this->permissions()->whereNull('permission_user.company_id')->pluck('id');
+        $all_permissions = $this->permissions()->whereNull('permission_user.company_id')->pluck($pluck);
         $user_roles = $this->roles()->whereNull('role_user.company_id')->with('permissions')->get();
 
         foreach ($user_roles as $role) {
-            $all_permissions = $all_permissions->merge($role->permissions->pluck('id'));
+            $all_permissions = $all_permissions->merge($role->permissions->pluck($pluck));
         }
 
         // get Company User specific permissions
         if ($this->current_company){
-            $company_user_permissions = $this->permissions()->where('permission_user.company_id', $this->current_company->id)->pluck('id');
+            $company_user_permissions = $this->permissions()->where('permission_user.company_id', $this->current_company->id)->pluck($pluck);
             $company_user_roles = $this->roles()->where('role_user.company_id', $this->current_company->id)->with('permissions')->get();
 
             foreach ($company_user_roles as $role) {
-                $company_user_permissions = $company_user_permissions->merge($role->permissions->pluck('id'));
+                $company_user_permissions = $company_user_permissions->merge($role->permissions->pluck($pluck));
             }
 
             $all_permissions = $all_permissions->merge($company_user_permissions);

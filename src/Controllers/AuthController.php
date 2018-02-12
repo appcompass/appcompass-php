@@ -60,6 +60,13 @@ class AuthController extends BaseController
         return $this->success($user);
     }
 
+    public function permissions()
+    {
+        $user = auth()->user();
+
+        return $this->success($user->allPermissions('name'));
+    }
+
     public function updateUser(Request $request)
     {
         $user = $request->user();

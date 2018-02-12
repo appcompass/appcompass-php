@@ -22,6 +22,7 @@ Route::group([
         $router->get('logout', 'AuthController@logout');
         $router->get('user', 'AuthController@user');
         $router->put('user', 'AuthController@updateUser');
+        $router->get('permissions', 'AuthController@permissions');
     });
 
     // jwt token stuff.
