@@ -1,12 +1,12 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use P3in\Interfaces\WebPropertyModelInterface;
+use AppCompass\Interfaces\WebPropertyModelInterface;
 
 class WebProperty extends Model implements WebPropertyModelInterface
 {
@@ -76,7 +76,7 @@ class WebProperty extends Model implements WebPropertyModelInterface
         $resources = $this->resources()->byConfig('layout', '!=', '')
             ->byAllowed()
             ->get();
-
+        // dd($resources);
         $rtn = [];
         foreach ($resources->unique('config.layout')->pluck('config.layout') as $layout) {
             if ($layout) {

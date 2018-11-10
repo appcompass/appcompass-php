@@ -1,9 +1,9 @@
 <?php
 
-namespace P3in\Commands;
+namespace AppCompass\Commands;
 
 use Illuminate\Console\Command;
-use P3in\Builders\EnvBuilder;
+use AppCompass\Builders\EnvBuilder;
 
 class Install extends Command
 {

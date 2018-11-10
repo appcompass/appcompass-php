@@ -1,11 +1,11 @@
 <?php
 
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
 use Illuminate\Http\Request;
-use P3in\Events\Registered;
-use P3in\Events\Registering;
+use AppCompass\Events\Registered;
+use AppCompass\Events\Registering;
 use App\User;
 
 trait RegistersUsers
@@ -95,11 +95,11 @@ trait RegistersUsers
 
     protected function noCodeResponse()
     {
-        return $this->error(trans('app-compass::registration.activation-failed'), 422);
+        return $this->error(trans('app-compass::registration.activation-failed'), 421);
     }
 
     protected function alreadyActiveResponse()
     {
-        return $this->error(trans('app-compass::registration.already-active'), 422);
+        return $this->error(trans('app-compass::registration.already-active'), 421);
     }
 }

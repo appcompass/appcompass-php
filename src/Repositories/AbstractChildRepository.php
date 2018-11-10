@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Repositories;
+namespace AppCompass\Repositories;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
@@ -112,7 +112,8 @@ class AbstractChildRepository extends AbstractRepository
                     ->where($this->parent->getKeyName(), $this->parent->id)
                     ->with($this->relationName)
                     ->first()
-                    ->{$this->relationName}();
+                    ->{$this->relationName}()
+                ;
         }
 
         return $this->builder;
@@ -200,7 +201,9 @@ class AbstractChildRepository extends AbstractRepository
             ->builder
             ->paginate($per_page, ['*'], 'page', $page);
 
-        $this->populateOwned();
+        if (!static::CHILDREN_ONLY) {
+            $this->populateOwned();
+        }
 
         if (static::EDIT_OWNED && !Auth::user()->isAdmin()) {
             foreach ($data as $record) {

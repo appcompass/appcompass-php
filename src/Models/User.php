@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -14,14 +14,13 @@ use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Illuminate\Database\Eloquent\Model;
-use P3in\Notifications\ConfirmRegistration;
-use P3in\Notifications\ResetPassword;
-use P3in\Traits\HasCardView;
-use P3in\Traits\HasPermissions;
-use P3in\Traits\HasRoles;
+use AppCompass\Notifications\ConfirmRegistration;
+use AppCompass\Notifications\ResetPassword;
+use AppCompass\Traits\HasCardView;
+use AppCompass\Traits\HasPermissions;
+use AppCompass\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
-
-// use P3in\Traits\HasProfileTrait;
+use App\Company;
 
 class User extends Model implements
     AuthenticatableContract,
@@ -94,7 +93,10 @@ class User extends Model implements
         'password'   => 'min:6|confirmed', //|required when registering only.
     ];
 
-
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class)->withPivot('current');
+    }
     /**
      * Photos
      *
@@ -138,6 +140,72 @@ class User extends Model implements
         }
     }
 
+    public function assignCompanies($companies)
+    {
+        foreach ($companies as $company) {
+            $this->assignCompany($company);
+        }
+    }
+
+    public function assignCompany($company)
+    {
+        switch (true) {
+            case $company instanceof Company:
+                break;
+            case is_int($company):
+                $company = Company::findOrFail($company);
+                break;
+            case is_string($company):
+            default:
+                $company = Company::whereName($company)->firstOrFail();
+                break;
+        }
+
+        if (!$this->belongsToCompany($company)) {
+            $this->companies()->attach($company);
+        }
+        return $this;
+
+    }
+
+    public function belongsToCompany($company)
+    {
+        return $this->where('id', $this->id) // @TODO: seems to be a bug in Laravel?  report it and see what comes of it.
+        ->whereHas('companies', function ($query) use ($company) {
+            $field = 'id';
+            $value = null;
+            if ($company instanceof Company) {
+                $field = 'id';
+                $value = $company->id;
+            } elseif (is_string($company)) {
+                $field = 'name';
+                $value = $company;
+            } elseif (is_int($company)) {
+                $field = 'id';
+                $value = $company;
+            }
+            $query->where($field, $value);
+        })->exists()
+            ;
+    }
+
+    public function setCompany($company_id)
+    {
+        $this->companies()
+            ->newPivotStatement()
+            ->where('company_id', $company_id)
+            ->where('user_id', $this->id)
+            ->update(['current' => true]);
+
+        $this->companies()
+            ->newPivotStatement()
+            ->where('company_id', '!=', $company_id)
+            ->where('user_id', $this->id)
+            ->update(['current' => false]);
+
+        return $this;
+    }
+
     /**
      *  Get user's full name
      *
@@ -145,6 +213,21 @@ class User extends Model implements
     public function getFullNameAttribute()
     {
         return sprintf("%s %s", $this->first_name, $this->last_name);
+    }
+
+    public function getCurrentCompanyAttribute()
+    {
+        if (!is_array($this->companies)) {
+            $current = $this->companies->where('pivot.current', true)->first();
+            if (!$current) {
+                $current = $this->companies->first();
+                if ($current) {
+                    $this->setCompany($current->id);
+                }
+            }
+
+            return $current;
+        }
     }
 
     /**
@@ -204,24 +287,42 @@ class User extends Model implements
         $this->attributes['email'] = strtolower($value);
     }
 
+    public function setCompaniesAttribute($value)
+    {
+        if (is_array($value) && $this->exists){
+            $collection = collect($value);
+            $ids = $collection->pluck('id')->all();
+            $this->companies()->sync($ids);
+        }
+    }
+
     /**
      *
      * @return     <type>  ( description_of_the_return_value )
      */
-    public function allPermissions()
+    public function allPermissions($pluck = 'id')
     {
         // $this->load('roles.permissions');
 
-
-        $user_permissions = $this->permissions()->allRelatedIds();
-        $user_roles = $this->roles->load('permissions');
-
-        $all_permissions = collect($user_permissions);
+        // get User specific permissions.
+        $all_permissions = $this->permissions()->whereNull('permission_user.company_id')->pluck($pluck);
+        $user_roles = $this->roles()->whereNull('role_user.company_id')->with('permissions')->get();
 
         foreach ($user_roles as $role) {
-            $role_permissions = $role->permissions->pluck('id');
+            $all_permissions = $all_permissions->merge($role->permissions->pluck($pluck));
+        }
 
-            $all_permissions = $all_permissions->merge($role_permissions);
+        // get Company User specific permissions
+        if ($this->current_company){
+            $company_user_permissions = $this->permissions()->where('permission_user.company_id', $this->current_company->id)->pluck($pluck);
+            $company_user_roles = $this->roles()->where('role_user.company_id', $this->current_company->id)->with('permissions')->get();
+
+            foreach ($company_user_roles as $role) {
+                $company_user_permissions = $company_user_permissions->merge($role->permissions->pluck($pluck));
+            }
+
+            $all_permissions = $all_permissions->merge($company_user_permissions);
+
         }
 
         return $all_permissions->unique()->values()->all();

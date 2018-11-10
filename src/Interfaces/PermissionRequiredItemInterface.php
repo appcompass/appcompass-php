@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Interfaces;
+namespace AppCompass\Interfaces;
 
 use Illuminate\Database\Eloquent\Builder;
 

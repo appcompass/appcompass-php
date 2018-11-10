@@ -1,11 +1,11 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Notification;
-use P3in\Notifications\FormStored;
+use AppCompass\Notifications\FormStored;
 
 class FormStorage extends Model
 {

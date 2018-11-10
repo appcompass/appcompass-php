@@ -6,7 +6,7 @@
  *
  */
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
 trait HasJsonConfigFieldTrait
 {

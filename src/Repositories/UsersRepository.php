@@ -1,22 +1,14 @@
 <?php
 
-namespace P3in\Repositories;
+namespace AppCompass\Repositories;
 
 use App\User;
+use AppCompass\Repositories\Eloquent\Repository;
 
-class UsersRepository extends AbstractRepository
+class UsersRepository extends Repository
 {
-
-//    const SEE_OWNED = 1;
-
-//    const EDIT_OWNED = 1;
-
-    protected $owned_key = 'id';
-
-    protected $view_types = ['Table', 'Card'];
-
-    public function __construct(User $model)
+    public function getModel()
     {
-        $this->model = $model;
+        return User::class;
     }
 }

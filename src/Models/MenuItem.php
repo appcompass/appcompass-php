@@ -1,10 +1,11 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use P3in\Traits\HasPermission;
+use Illuminate\Support\Collection;
+use AppCompass\Traits\HasPermission;
 
 class MenuItem extends Model
 {
@@ -281,4 +282,5 @@ class MenuItem extends Model
             throw new \Exception('Unable to set icon');
         }
     }
+
 }

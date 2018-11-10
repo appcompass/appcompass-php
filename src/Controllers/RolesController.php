@@ -1,13 +1,24 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
-use P3in\Repositories\RolesRepository;
+use AppCompass\Policies\ResourcesPolicy;
+use AppCompass\Repositories\Criteria\ByAllowed;
+use AppCompass\Repositories\RolesRepository;
 
-class RolesController extends AbstractController
+class RolesController extends AbstractBaseResourceController
 {
+    protected $param_name = 'role';
+
     public function __construct(RolesRepository $repo)
     {
         $this->repo = $repo;
+
+        $this->repo->pushCriteria(new ByAllowed());
+    }
+
+    public function getPolicy()
+    {
+        return ResourcesPolicy::class;
     }
 }

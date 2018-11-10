@@ -1,16 +1,14 @@
 <?php
 
-namespace P3in\Repositories;
+namespace AppCompass\Repositories;
 
-use P3in\Models\Role;
+use AppCompass\Models\Role;
+use AppCompass\Repositories\Eloquent\Repository;
 
-class RolesRepository extends AbstractRepository
+class RolesRepository extends Repository
 {
-    public $model;
-    const REQUIRES_PERMISSION = 1;
-
-    public function __construct(Role $model)
+    public function getModel()
     {
-        $this->model = $model;
+        return Role::class;
     }
 }

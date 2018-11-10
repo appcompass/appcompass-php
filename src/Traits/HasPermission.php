@@ -1,8 +1,8 @@
 <?php
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
-use P3in\Models\Permission;
+use AppCompass\Models\Permission;
 
 trait HasPermission
 {

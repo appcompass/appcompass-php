@@ -1,12 +1,12 @@
 <?php
 
-namespace P3in\Notifications;
+namespace AppCompass\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use P3in\Models\FormStorage;
+use AppCompass\Models\FormStorage;
 
 class FormStored extends Notification
 {

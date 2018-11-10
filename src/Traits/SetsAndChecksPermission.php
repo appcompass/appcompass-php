@@ -1,13 +1,13 @@
 <?php
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use P3in\Models\Permission;
-use P3in\Models\User;
+use AppCompass\Models\Permission;
+use AppCompass\Models\User;
 
 trait SetsAndChecksPermission
 {
@@ -54,6 +54,7 @@ trait SetsAndChecksPermission
             $query->whereIn($this->permissionFieldName(), Permission::getAuthPerms());
 
             $user = Auth::check() ? Auth::user() : null;
+
             if ($this->allowNullPermission() || ($user && $user->isAdmin())) {
                 $query->orWhereNull($this->permissionFieldName());
             }

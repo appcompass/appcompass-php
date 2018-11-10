@@ -1,10 +1,10 @@
 <?php
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
 use Illuminate\Database\Eloquent\Collection;
-use P3in\Models\Permission;
-use P3in\Models\PermissionsRequired;
+use AppCompass\Models\Permission;
+use AppCompass\Models\PermissionsRequired;
 
 trait HasPermissions
 {
@@ -91,4 +91,46 @@ trait HasPermissions
         }
     }
 
+    public function scopeHavingPermission($query, $perm)
+    {
+        $query->whereHas('permissions', function ($query) use ($perm) {
+            switch (true) {
+                case $perm instanceof Role:
+                    $key = 'id';
+                    $val = $perm->id;
+                    break;
+                case is_int($perm):
+                    $key = 'id';
+                    $val = $perm;
+                    break;
+                case is_string($perm):
+                default:
+                    $key = 'name';
+                    $val = $perm;
+                    break;
+            }
+            $query->where($key, $val);
+        });
+    }
+
+    public function hasPermission($perm)
+    {
+        return $this->where('id', $this->id) // @TODO: seems to be a bug in Laravel?  report it and see what comes of it.
+        ->whereHas('permissions', function ($query) use ($perm) {
+            $field = 'id';
+            $value = null;
+            if ($perm instanceof Role) {
+                $field = 'id';
+                $value = $perm->id;
+            } elseif (is_string($perm)) {
+                $field = 'name';
+                $value = $perm;
+            } elseif (is_int($perm)) {
+                $field = 'id';
+                $value = $perm;
+            }
+            $query->where($field, $value);
+        })->exists()
+            ;
+    }
 }

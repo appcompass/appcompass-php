@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 
 class PasswordController extends BaseController
 {
-
     use SendsPasswordResetEmails, ResetsPasswords;
 
     protected function broker()
@@ -26,7 +25,7 @@ class PasswordController extends BaseController
 
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-        return $this->error(['email' => [trans($response)]], 422);
+        return $this->error($this->validation_message, 422, ['email' => [trans($response)]]);
     }
 
     protected function sendResetResponse($response)
@@ -36,7 +35,7 @@ class PasswordController extends BaseController
 
     protected function sendResetFailedResponse(Request $request, $response)
     {
-        return $this->error(['token' => [trans($response)]], 422);
+        return $this->error($this->validation_message, 422, ['token' => [trans($response)]]);
     }
 
     protected function rules()

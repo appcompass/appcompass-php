@@ -1,35 +1,37 @@
 {
-  "name": "p3in/app-compass",
-  "description": "Plus 3 Interactive's App Management System",
+  "name": "appcompass/appcompass",
+  "description": "App Compass - An App Management System",
   "authors": [
     {
-      "name": "Plus 3 Interactive, LLC",
-      "email": "support@p3in.com"
+      "name": "Jubair Saidi",
+      "email": "jubair.saidi@gmail.com"
     }
   ],
   "require": {
     "php": ">=7.0.0",
-    "laravel/framework": "5.5.*",
-    "laravel/passport": "^3.0",
+    "fideloper/proxy": "~4.0",
+    "laravel/tinker": "~1.0",
+    "laravel/framework": "5.6.*",
+    "laravel/passport": "~5.0",
     "predis/predis": "^1.1",
+    "optimus/bruno": "^3.1",
     "tymon/jwt-auth": "dev-develop",
     "propaganistas/laravel-phone": "^3.0",
     "pusher/pusher-php-server": "~3.0",
     "guzzlehttp/guzzle": "~6.0",
-    "p3in/form-builder": "^1.0.0"
+    "appcompass/skeleton-mapper": "dev-develop"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
-      "P3in\\": "src/"
+      "AppCompass\\": "src/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "P3in\\Providers\\AppCompassServiceProvider",
-        "P3in\\Providers\\AppCompassEventServiceProvider"
+        "AppCompass\\Providers\\AppCompassServiceProvider"
       ]
     }
   }

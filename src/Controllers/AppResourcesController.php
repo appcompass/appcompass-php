@@ -1,15 +1,11 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use P3in\Models\Permission;
-use P3in\Models\Resource;
+use AppCompass\Models\Resource;
 
-class AppResourcesController extends Controller
+class AppResourcesController extends BaseController
 {
     public function getDashboard(Request $request)
     {
@@ -18,11 +14,22 @@ class AppResourcesController extends Controller
 
     public function routes(Request $request)
     {
-        $data = [
-            'routes' => $request->web_property->buildRoutesTree(),
-        ];
+        if ($routes = $request->web_property->buildRoutesTree()){
+            $data = [
+                'routes' => $routes,
+            ];
+            return $this->output($data);
+        }
+        if ($user = $request->user()){
+            $message = "You are not authorized to use this website.";
+            if ($user->companies->count() >= 2){
+                $name = $user->current_company->name;
+                $message .= " Please contact your {$name} Administrator.";
+            }
+            return $this->error($message, 401);
+        }
 
-        return response()->json($data);
+        return $this->error("You must be logged in to use this website.", 401);
     }
 
     public function resources(Request $request, string $route = null)
@@ -36,7 +43,7 @@ class AppResourcesController extends Controller
 
         $menus = $request
             ->web_property
-            ->menus()->with(['items' => function($query){
+            ->menus()->with(['items' => function ($query) {
                 $query->byAllowed();
             }])->get();
 

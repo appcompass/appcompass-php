@@ -1,8 +1,8 @@
 <?php
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
-use P3in\Models\User;
+use AppCompass\Models\User;
 
 trait IsProfileTrait
 {

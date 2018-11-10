@@ -1,9 +1,9 @@
 <?php
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
 use Illuminate\Support\Facades\Cache;
-use P3in\Models\Profiles\Profile;
+use AppCompass\Models\Profiles\Profile;
 
 trait HasProfileTrait
 {

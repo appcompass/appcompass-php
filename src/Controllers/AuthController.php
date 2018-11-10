@@ -1,19 +1,21 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
-use P3in\Events\Login;
-use P3in\Events\Logout;
+use Illuminate\Validation\Rule;
+use AppCompass\Events\Login;
+use AppCompass\Events\Logout;
 use App\User;
-use P3in\Events\UserCheck;
-use P3in\Events\UserUpdated;
-use P3in\Rules\UserPassword;
-use P3in\Traits\RegistersUsers;
+use AppCompass\Events\UserCheck;
+use AppCompass\Events\UserCurrentCompanySet;
+use AppCompass\Events\UserUpdated;
+use AppCompass\Rules\UserPassword;
+use AppCompass\Traits\RegistersUsers;
 
 class AuthController extends BaseController
 {
@@ -40,8 +42,8 @@ class AuthController extends BaseController
 
         return $this->success([
             'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'expires_in'   => config('jwt.ttl') * 60,
+            'token_type' => 'Bearer',
+            'expires_in' => config('jwt.ttl') * 60,
         ]);
     }
 
@@ -49,18 +51,20 @@ class AuthController extends BaseController
     {
         $user = auth()->user();
 
-        if ($fire_event){
+        $this->formatUser($user);
+
+        if ($fire_event) {
             event(new UserCheck($user));
         }
 
-        $user->makeHidden([
-            'roles',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ]);
-
         return $this->success($user);
+    }
+
+    public function permissions()
+    {
+        $user = auth()->user();
+
+        return $this->success($user->allPermissions('name'));
     }
 
     public function updateUser(Request $request)
@@ -83,8 +87,27 @@ class AuthController extends BaseController
         return $this->user(false);
     }
 
+    public function selectCompany(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'company_id' => [
+                'required',
+                'numeric',
+                Rule::exists('company_user', 'company_id')
+                    ->where('user_id', $user->id),
+            ],
+        ]);
+
+        $user->setCompany($validated['company_id']);
+
+        event(new UserCurrentCompanySet($user));
+
+        return $this->user(false);
+    }
     // we need to do things a bit differently using JWTAuth since it doesn't
-    // fire events and the remember.  We also need the token to be setfor later
+    // fire events and the remember.  We also need the token to be set for later
     // use in the controller, not sure why JWT doesn't do it internally...
     protected function attemptLogin(Request $request)
     {
@@ -119,9 +142,9 @@ class AuthController extends BaseController
         $request->merge(['remember' => true]);
 
         return $this->validate($request, [
-            'remember'        => 'boolean',
+            'remember' => 'boolean',
             $this->username() => 'required',
-            'password'        => 'required',
+            'password' => 'required',
         ]);
     }
 
@@ -140,18 +163,26 @@ class AuthController extends BaseController
         } else {
             return $this->sendFailedLoginResponse();
         }
+
+        $this->formatUser($user);
+
+        return $this->success([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'expires_in' => config('jwt.ttl') * 60,
+            'user' => $user,
+        ]);
+    }
+
+    private function formatUser(User &$user)
+    {
+        $user->load('companies');
+        $user->append('current_company');
         $user->makeHidden([
             'roles',
             'created_at',
             'updated_at',
             'deleted_at',
-        ]);
-
-        return $this->success([
-            'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'expires_in'   => config('jwt.ttl') * 60,
-            'user'         => $user,
         ]);
     }
 }

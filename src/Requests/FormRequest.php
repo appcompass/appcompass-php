@@ -1,11 +1,11 @@
 <?php
 
-namespace P3in\Requests;
+namespace AppCompass\Requests;
 
 use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;
 use Illuminate\Http\Request;
-use P3in\Models\Form;
-use P3in\Models\Resource;
+use AppCompass\Models\Form;
+use AppCompass\Models\Resource;
 use Route;
 
 class FormRequest extends BaseFormRequest

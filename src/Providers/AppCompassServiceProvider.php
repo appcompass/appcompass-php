@@ -1,23 +1,25 @@
 <?php
 
-namespace P3in\Providers;
+namespace AppCompass\Providers;
 
-use App\User;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Laravel\Passport\Passport;
-use P3in\Commands\AddUser;
-use P3in\Commands\Install;
-use P3in\Middleware\SanitizeEmail;
-use P3in\Middleware\ValidateWebProperty;
-use P3in\Models\Field;
-use P3in\Models\Form;
-use P3in\Models\Menu;
-use P3in\Models\Permission;
-use P3in\Models\Resource;
-use P3in\Models\Role;
-use P3in\Observers\FieldObserver;
-use P3in\Observers\PermissionObserver;
-use P3in\Observers\UserObserver;
+use AppCompass\Commands\AddUser;
+use AppCompass\Commands\Install;
+use AppCompass\Listeners\UserEventSubscriber;
+use AppCompass\Middleware\SanitizeEmail;
+use AppCompass\Middleware\ValidateWebProperty;
+use App\User;
+use App\Company;
+use AppCompass\Models\Field;
+use AppCompass\Models\Form;
+use AppCompass\Models\Menu;
+use AppCompass\Models\Permission;
+use AppCompass\Models\Resource;
+use AppCompass\Models\Role;
+use AppCompass\Observers\FieldObserver;
+use AppCompass\Observers\PermissionObserver;
+use AppCompass\Observers\UserObserver;
 use Tymon\JWTAuth\Http\Middleware\Check;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 use Tymon\JWTAuth\Http\Middleware\Authenticate;
@@ -77,13 +79,18 @@ class AppCompassServiceProvider extends BaseServiceProvider
     protected $observe = [
         PermissionObserver::class => Permission::class,
         FieldObserver::class      => Field::class,
-        UserObserver::class      => User::class,
+        UserObserver::class       => User::class,
+    ];
+
+    protected $subscribe = [
+        UserEventSubscriber::class,
     ];
 
     protected $appBindings = [
     ];
 
     protected $routeBindings = [
+        'company'    => Company::class,
         'user'       => User::class,
         'permission' => Permission::class,
         'role'       => Role::class,
@@ -111,7 +118,7 @@ class AppCompassServiceProvider extends BaseServiceProvider
         parent::boot();
 
 
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'app-compass');
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'app-compass');
 
         $this->publishes([
             __DIR__ . '/../config/app-compass.php' => config_path('app-compass.php'),

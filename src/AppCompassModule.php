@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in;
+namespace AppCompass;
 
 class AppCompassModule extends BaseModule
 {

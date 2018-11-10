@@ -1,12 +1,12 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use P3in\Interfaces\Linkable;
-use P3in\Traits\HasJsonConfigFieldTrait;
-use P3in\Traits\HasPermission;
+use AppCompass\Interfaces\Linkable;
+use AppCompass\Traits\HasJsonConfigFieldTrait;
+use AppCompass\Traits\HasPermission;
 
 class Resource extends Model implements Linkable
 {
@@ -112,7 +112,11 @@ class Resource extends Model implements Linkable
      */
     public function setForm(Form $form)
     {
-        return $this->form()->associate($form);
+        $this->form()->associate($form);
+
+        $this->save();
+
+        return $this;
     }
 
     public static function resolve($name)
@@ -197,7 +201,7 @@ class Resource extends Model implements Linkable
     {
         $form = $this->form;
 
-        $form->setRenderWhere(['type' => 'String']);
+        // $form->setRenderWhere(['type' => 'String']);
 
         switch ($mode) {
             case 'list': //@TODO: Delete/rename, index is the resource to use.

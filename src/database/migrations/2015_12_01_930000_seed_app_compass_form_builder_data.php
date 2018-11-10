@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use P3in\Builders\FormBuilder;
-use P3in\Models\FieldSource;
-use P3in\Models\Permission;
-use P3in\Models\Resource;
-use P3in\Models\WebProperty;
+use AppCompass\Builders\FormBuilder;
+use AppCompass\Models\FieldSource;
+use AppCompass\Models\Permission;
+use AppCompass\Models\Resource;
+use AppCompass\Models\WebProperty;
+use App\Company;
 
 class SeedAppCompassFormBuilderData extends Migration
 {
@@ -23,25 +24,69 @@ class SeedAppCompassFormBuilderData extends Migration
             'host'   => config('app-compass.admin_site_host'),
         ])->firstOrFail();
 
+        $companiesForm = FormBuilder::new('companies', function (FormBuilder $builder) {
+            $builder->string('Customer Number', 'customer_number')->list()->edit(false)->sortable()->searchable();
+            $builder->string('Name', 'name')->list()->edit(false)->sortable()->searchable();
+            $builder->string('User Count', 'users_count')->list()->edit(false)->sortable()->searchable();
+        })->getForm();
+
+        Resource::buildAll([
+            'companies.index',
+            'companies.show',
+            'companies.create',
+            'companies.update',
+            'companies.store',
+        ], $cp, $companiesForm, 'users_admin');
+
         $users = FormBuilder::new('users', function (FormBuilder $builder) {
             $builder->string('First Name', 'first_name')->list()->validation(['required', 'max:255'])->sortable()->searchable();
             $builder->string('Last Name', 'last_name')->list()->validation(['required', 'max:255'])->sortable()->searchable();
             $builder->string('Email', 'email')->list()->validation(['required', 'email', 'unique:users,email', 'max:255'])->sortable()->searchable();
             $builder->string('Phone Number', 'phone')->list()->validation(['phone:AUTO,US'])->sortable()->searchable();
-            $builder->boolean('Active', 'active')->list()->sortable();
+            $builder->boolean('Active', 'active')->validation(['nullable'])->list()->sortable();
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Last Login', 'last_login')->list()->edit(false)->sortable()->searchable();
             $builder->password('Password', 'password')->validation(['min:6', 'confirmed']);
+
+            $builder->dropdownSearch('Associated Companies', 'companies')->dynamic(Company::class,
+                function (FieldSource $source) {
+                    $source->select(['id AS index', 'name AS label']);
+                })->list(false)->edit()->required()->multiple(true);
+
+            $builder->checkboxes('Companies', 'companies')
+                ->list()
+                ->edit(false)
+                ->sortable(false)
+                ->searchable(false);
+
         })->getForm();
 
         Resource::buildAll([
             'users.index',
             'users.show',
-            'users.create',
             'users.update',
-            'users.store',
+            'companies.users.index',
+            'companies.users.show',
+            'companies.users.update',
         ], $cp, $users, 'users_admin');
+
+        $newUsers = FormBuilder::new('users_create', function (FormBuilder $builder) {
+            $builder->string('First Name', 'first_name')->validation(['required', 'max:255'])->sortable()->searchable();
+            $builder->string('Last Name', 'last_name')->validation(['required', 'max:255'])->sortable()->searchable();
+            $builder->string('Email', 'email')->validation(['required', 'email', 'unique:users,email', 'max:255'])->sortable()->searchable();
+            $builder->string('Phone Number', 'phone')->validation(['phone:AUTO,US'])->sortable()->searchable();
+            $builder->boolean('Active', 'active')->validation(['nullable'])->sortable();
+            $builder->password('Password', 'password')->validation(['required', 'min:6', 'confirmed']);
+
+        })->getForm();
+
+        Resource::buildAll([
+            'users.create',
+            'users.store',
+            'companies.users.create',
+            'companies.users.store',
+        ], $cp, $newUsers, 'users_admin');
 
         $userRoles = FormBuilder::new('user-roles', function (FormBuilder $builder) {
             $builder->string('Name', 'label')->list()->required()->sortable()->searchable();
@@ -113,7 +158,7 @@ class SeedAppCompassFormBuilderData extends Migration
             $builder->string('Resource', 'resource')->list()->sortable()->searchable()->required();
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
-            $builder->select('Role required', 'req_role')->dynamic(\P3in\Models\Role::class,
+            $builder->select('Role required', 'req_role')->dynamic(\AppCompass\Models\Role::class,
                 function (FieldSource $source) {
                     $source->select(['id As index', 'label']);
                 })->nullable();

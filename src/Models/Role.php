@@ -1,12 +1,12 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notification;
-use P3in\Traits\HasPermissions;
-use P3in\Traits\SetsAndChecksPermission;
+use AppCompass\Traits\HasPermissions;
+use AppCompass\Traits\SetsAndChecksPermission;
 
 class Role extends Model
 {
@@ -56,12 +56,18 @@ class Role extends Model
         return $this->belongsToMany(User::class)->withTimestamps();
     }
 
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'role_user');
+    }
+
     /**
      * Add a User to the Role
      */
     public function addUser(User $user)
     {
-        if (!$this->users->contains($user->id)) {
+        // \Log::info('add user to role: ', [$this->hasUser($user), $this->toArray(), $user->toArray()]);
+        if (!$this->hasUser($user)) {
             return $this->users()->attach($user);
         }
 
@@ -81,7 +87,9 @@ class Role extends Model
      */
     public function hasUser(User $user)
     {
-        return $this->users->contains($user->id);
+        return $this->whereHas('users', function($query) use ($user) {
+            $query->where('id', $user->id);
+        })->exists();
     }
 
     public function notify(Notification $notification)

@@ -1,14 +1,14 @@
 <?php
 
-namespace P3in\Builders;
+namespace AppCompass\Builders;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use P3in\Interfaces\WebPropertyModelInterface;
-use P3in\Models\Page;
-use P3in\Models\Link;
-use P3in\Models\Menu;
-use P3in\Models\MenuItem;
+use AppCompass\Interfaces\WebPropertyModelInterface;
+use AppCompass\Models\Page;
+use AppCompass\Models\Link;
+use AppCompass\Models\Menu;
+use AppCompass\Models\MenuItem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MenuBuilder
@@ -77,7 +77,7 @@ class MenuBuilder
         $instance = (new static($menu))->setParent($parent);
 
         if (!is_null($closure)) {
-            $closure($this);
+            $closure($instance);
         }
 
         return $instance;
@@ -86,7 +86,7 @@ class MenuBuilder
     /**
      * UI update, takes whatever the UI sends back
      *
-     * @param      \P3in\Models\Menu $menu The menu
+     * @param      \AppCompass\Models\Menu $menu The menu
      * @param      (array)            $structure  The menu structure coming from the UI
      */
     public static function update(Menu $menu, array $structure)
@@ -155,6 +155,17 @@ class MenuBuilder
         }
     }
 
+    // //@TODO: very weak way to do it, we need to sort this out.
+    // public function drop($title)
+    // {
+    //     if ($this->hasParent()) {
+    //
+    //         // we are pointing the last inserted menu_item aka the parent -f
+    //         $this->menu_item->setParent($this->parent->menu_item);
+    //     }else{
+    //         $this->menu->whereNull('parent_id')->drop()
+    //     }
+    // }
     /**
      * { function_description }
      *

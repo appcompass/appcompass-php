@@ -1,15 +1,14 @@
 <?php
 
-namespace P3in\Repositories;
+namespace AppCompass\Repositories;
 
-use P3in\Models\Permission;
+use AppCompass\Models\Permission;
+use AppCompass\Repositories\Eloquent\Repository;
 
-class PermissionsRepository extends AbstractRepository
+class PermissionsRepository extends Repository
 {
-    const REQUIRES_PERMISSION = 1;
-
-    public function __construct(Permission $model)
+    public function getModel()
     {
-        $this->model = $model;
+        return Permission::class;
     }
 }

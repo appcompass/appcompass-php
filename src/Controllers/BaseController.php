@@ -1,10 +1,10 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
-use P3in\Traits\HasApiOutput;
+use AppCompass\Traits\HasApiOutput;
 
 class BaseController extends Controller
 {
@@ -21,6 +21,6 @@ class BaseController extends Controller
 
     protected function handleValidationException(ValidationException $e)
     {
-        return $this->error($e->errors(), $e->status);
+        return $this->error($e->getMessage(), $e->status, $e->errors());
     }
 }

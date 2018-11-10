@@ -1,11 +1,11 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\Controller;
-use P3in\Policies\ResourcesPolicy;
-use P3in\Requests\FormRequest;
+use AppCompass\Policies\ResourcesPolicy;
+use AppCompass\Requests\FormRequest;
 use Gate;
 
 abstract class AbstractChildController extends Controller

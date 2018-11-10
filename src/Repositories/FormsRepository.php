@@ -1,13 +1,14 @@
 <?php
 
-namespace P3in\Repositories;
+namespace AppCompass\Repositories;
 
-use P3in\Models\Form;
+use AppCompass\Models\Form;
+use AppCompass\Repositories\Eloquent\Repository;
 
-class FormsRepository extends AbstractRepository
+class FormsRepository extends Repository
 {
-    public function __construct(Form $model)
+    public function getModel()
     {
-        $this->model = $model;
+        return Form::class;
     }
 }
