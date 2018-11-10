@@ -1,14 +1,14 @@
 <?php
 
-namespace P3in\Repositories\Eloquent;
+namespace AppCompass\Repositories\Eloquent;
 
 use Illuminate\Container\Container as App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use P3in\Interfaces\RepositoryInterface;
-use P3in\Interfaces\CriteriaInterface;
-use P3in\Repositories\Criteria\AbstractCriteria;
-use P3in\Repositories\Relationships\Relationship;
+use AppCompass\Interfaces\RepositoryInterface;
+use AppCompass\Interfaces\CriteriaInterface;
+use AppCompass\Repositories\Criteria\AbstractCriteria;
+use AppCompass\Repositories\Relationships\Relationship;
 
 abstract class Repository implements RepositoryInterface, CriteriaInterface
 {

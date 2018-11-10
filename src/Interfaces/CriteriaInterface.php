@@ -1,8 +1,8 @@
 <?php
 
-namespace P3in\Interfaces;
+namespace AppCompass\Interfaces;
 
-use P3in\Repositories\Criteria\AbstractCriteria;
+use AppCompass\Repositories\Criteria\AbstractCriteria;
 
 interface CriteriaInterface
 {

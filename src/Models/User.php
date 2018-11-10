@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -14,11 +14,11 @@ use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Illuminate\Database\Eloquent\Model;
-use P3in\Notifications\ConfirmRegistration;
-use P3in\Notifications\ResetPassword;
-use P3in\Traits\HasCardView;
-use P3in\Traits\HasPermissions;
-use P3in\Traits\HasRoles;
+use AppCompass\Notifications\ConfirmRegistration;
+use AppCompass\Notifications\ResetPassword;
+use AppCompass\Traits\HasCardView;
+use AppCompass\Traits\HasPermissions;
+use AppCompass\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 use App\Company;
 

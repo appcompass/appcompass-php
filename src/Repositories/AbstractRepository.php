@@ -1,14 +1,14 @@
 <?php
 
-namespace P3in\Repositories;
+namespace AppCompass\Repositories;
 
 use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Route;
-use P3in\Interfaces\AbstractRepositoryInterface;
-use P3in\Models\Resource;
+use AppCompass\Interfaces\AbstractRepositoryInterface;
+use AppCompass\Models\Resource;
 
 abstract class AbstractRepository implements AbstractRepositoryInterface
 {

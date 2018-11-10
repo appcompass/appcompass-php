@@ -1,11 +1,11 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
-use P3in\Traits\HasPermissions;
-use P3in\Traits\HasRoles;
+use AppCompass\Traits\HasPermissions;
+use AppCompass\Traits\HasRoles;
 
 class Company extends Model
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
-use P3in\Models\Permission;
-use P3in\Policies\ResourcesPolicy;
-use P3in\Repositories\Criteria\HasRole;
-use P3in\Repositories\PermissionsRepository;
+use AppCompass\Models\Permission;
+use AppCompass\Policies\ResourcesPolicy;
+use AppCompass\Repositories\Criteria\HasRole;
+use AppCompass\Repositories\PermissionsRepository;
 
 class RolePermissionsController extends AbstractBaseResourceController
 {

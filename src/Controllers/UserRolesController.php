@@ -1,14 +1,14 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use App\User;
-use P3in\Models\Role;
-use P3in\Policies\ResourcesPolicy;
-use P3in\Repositories\Criteria\ExcludeAssignedCompanyRoles;
-use P3in\Repositories\Criteria\HasCompany;
-use P3in\Repositories\Criteria\HasUser;
-use P3in\Repositories\RolesRepository;
+use AppCompass\Models\Role;
+use AppCompass\Policies\ResourcesPolicy;
+use AppCompass\Repositories\Criteria\ExcludeAssignedCompanyRoles;
+use AppCompass\Repositories\Criteria\HasCompany;
+use AppCompass\Repositories\Criteria\HasUser;
+use AppCompass\Repositories\RolesRepository;
 
 class UserRolesController extends UserPermissionsController
 {

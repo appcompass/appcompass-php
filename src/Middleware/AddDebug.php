@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Middleware;
+namespace AppCompass\Middleware;
 
 use Closure;
 use DB;

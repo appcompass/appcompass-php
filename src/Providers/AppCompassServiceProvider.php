@@ -1,25 +1,25 @@
 <?php
 
-namespace P3in\Providers;
+namespace AppCompass\Providers;
 
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Laravel\Passport\Passport;
-use P3in\Commands\AddUser;
-use P3in\Commands\Install;
-use P3in\Listeners\UserEventSubscriber;
-use P3in\Middleware\SanitizeEmail;
-use P3in\Middleware\ValidateWebProperty;
+use AppCompass\Commands\AddUser;
+use AppCompass\Commands\Install;
+use AppCompass\Listeners\UserEventSubscriber;
+use AppCompass\Middleware\SanitizeEmail;
+use AppCompass\Middleware\ValidateWebProperty;
 use App\User;
 use App\Company;
-use P3in\Models\Field;
-use P3in\Models\Form;
-use P3in\Models\Menu;
-use P3in\Models\Permission;
-use P3in\Models\Resource;
-use P3in\Models\Role;
-use P3in\Observers\FieldObserver;
-use P3in\Observers\PermissionObserver;
-use P3in\Observers\UserObserver;
+use AppCompass\Models\Field;
+use AppCompass\Models\Form;
+use AppCompass\Models\Menu;
+use AppCompass\Models\Permission;
+use AppCompass\Models\Resource;
+use AppCompass\Models\Role;
+use AppCompass\Observers\FieldObserver;
+use AppCompass\Observers\PermissionObserver;
+use AppCompass\Observers\UserObserver;
 use Tymon\JWTAuth\Http\Middleware\Check;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 use Tymon\JWTAuth\Http\Middleware\Authenticate;

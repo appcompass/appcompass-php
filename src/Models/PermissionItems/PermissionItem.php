@@ -1,10 +1,10 @@
 <?php
 
-namespace P3in\Models\PermissionsRequired\PermissionItems;
+namespace AppCompass\Models\PermissionsRequired\PermissionItems;
 
 use Illuminate\Database\Eloquent\Builder;
-use P3in\Interfaces\PermissionRequiredItemInterface;
-use P3in\Models\Website;
+use AppCompass\Interfaces\PermissionRequiredItemInterface;
+use AppCompass\Models\Website;
 
 class PermissionItem
 {

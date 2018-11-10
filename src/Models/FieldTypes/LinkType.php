@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Models\FieldTypes;
+namespace AppCompass\Models\FieldTypes;
 
 class LinkType extends BaseField
 {

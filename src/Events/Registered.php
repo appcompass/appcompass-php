@@ -1,7 +1,7 @@
 <?php
 
 
-namespace P3in\Events;
+namespace AppCompass\Events;
 
 use Illuminate\Queue\SerializesModels;
 

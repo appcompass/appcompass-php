@@ -1,10 +1,10 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
-use P3in\Traits\HasApiOutput;
+use AppCompass\Traits\HasApiOutput;
 
 class BaseController extends Controller
 {

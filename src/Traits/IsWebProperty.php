@@ -1,11 +1,11 @@
 <?php
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
-use P3in\Models\Menu;
-use P3in\Models\Scopes\WebPropertyScope;
-use P3in\Models\WebProperty;
-use P3in\Observers\IsWebPropertyObserver;
+use AppCompass\Models\Menu;
+use AppCompass\Models\Scopes\WebPropertyScope;
+use AppCompass\Models\WebProperty;
+use AppCompass\Observers\IsWebPropertyObserver;
 
 trait IsWebProperty
 {
@@ -13,7 +13,7 @@ trait IsWebProperty
     {
         //for handling changes.
         static::observe(IsWebPropertyObserver::class);
-        
+
         // for handling reads.
         static::addGlobalScope(new WebPropertyScope());
     }

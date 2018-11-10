@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\ResetsPasswords;

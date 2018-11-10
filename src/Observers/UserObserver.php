@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Observers;
+namespace AppCompass\Observers;
 
 use Illuminate\Database\Eloquent\Model;
 

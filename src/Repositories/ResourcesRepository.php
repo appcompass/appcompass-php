@@ -1,9 +1,9 @@
 <?php
 
-namespace P3in\Repositories;
+namespace AppCompass\Repositories;
 
-use P3in\Models\Resource;
-use P3in\Repositories\Eloquent\Repository;
+use AppCompass\Models\Resource;
+use AppCompass\Repositories\Eloquent\Repository;
 
 class ResourcesRepository extends Repository
 {

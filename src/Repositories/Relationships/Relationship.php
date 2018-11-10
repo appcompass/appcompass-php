@@ -1,11 +1,11 @@
 <?php
 
-namespace P3in\Repositories\Relationships;
+namespace AppCompass\Repositories\Relationships;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use P3in\Interfaces\RepositoryInterface;
+use AppCompass\Interfaces\RepositoryInterface;
 
 class Relationship
 {

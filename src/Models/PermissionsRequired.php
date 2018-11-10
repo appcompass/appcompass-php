@@ -1,12 +1,12 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
-// use P3in\Models\Website;
+// use AppCompass\Models\Website;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use P3in\Interfaces\PermissionRequiredItemInterface as PermissionItemContract;
+use AppCompass\Interfaces\PermissionRequiredItemInterface as PermissionItemContract;
 
 class PermissionsRequired extends Model
 {

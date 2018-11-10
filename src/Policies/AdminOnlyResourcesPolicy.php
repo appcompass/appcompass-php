@@ -1,8 +1,8 @@
 <?php
 
-namespace P3in\Policies;
+namespace AppCompass\Policies;
 
-use P3in\Models\User;
+use AppCompass\Models\User;
 
 class AdminOnlyResourcesPolicy
 {

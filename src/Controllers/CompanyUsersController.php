@@ -1,11 +1,11 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
-use P3in\Models\Company;
-use P3in\Policies\ResourcesPolicy;
-use P3in\Repositories\Criteria\HasCompany;
-use P3in\Repositories\UsersRepository;
+use AppCompass\Models\Company;
+use AppCompass\Policies\ResourcesPolicy;
+use AppCompass\Repositories\Criteria\HasCompany;
+use AppCompass\Repositories\UsersRepository;
 
 class CompanyUsersController extends AbstractBaseResourceController
 {

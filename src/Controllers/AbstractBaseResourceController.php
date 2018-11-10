@@ -1,18 +1,18 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
-use P3in\Models\Menu;
-use P3in\Models\MenuItem;
-use P3in\Policies\ResourcesPolicy;
-use P3in\Repositories\Criteria\FilterBySearch;
-use P3in\Repositories\Criteria\FilterBySort;
-use P3in\Requests\FormRequest;
-use P3in\Traits\UsesRoute;
+use AppCompass\Models\Menu;
+use AppCompass\Models\MenuItem;
+use AppCompass\Policies\ResourcesPolicy;
+use AppCompass\Repositories\Criteria\FilterBySearch;
+use AppCompass\Repositories\Criteria\FilterBySort;
+use AppCompass\Requests\FormRequest;
+use AppCompass\Traits\UsesRoute;
 
 abstract class AbstractBaseResourceController extends BaseController
 {

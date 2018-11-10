@@ -1,10 +1,10 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
-use P3in\Policies\ResourcesPolicy;
-use P3in\Repositories\Criteria\HasCompanyIfNotAdmin;
-use P3in\Repositories\UsersRepository;
+use AppCompass\Policies\ResourcesPolicy;
+use AppCompass\Repositories\Criteria\HasCompanyIfNotAdmin;
+use AppCompass\Repositories\UsersRepository;
 use Auth;
 
 class UsersController extends AbstractBaseResourceController

@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Models\Scopes;
+namespace AppCompass\Models\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

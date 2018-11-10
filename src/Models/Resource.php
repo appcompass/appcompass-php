@@ -1,12 +1,12 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use P3in\Interfaces\Linkable;
-use P3in\Traits\HasJsonConfigFieldTrait;
-use P3in\Traits\HasPermission;
+use AppCompass\Interfaces\Linkable;
+use AppCompass\Traits\HasJsonConfigFieldTrait;
+use AppCompass\Traits\HasPermission;
 
 class Resource extends Model implements Linkable
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace P3in\Builders;
+namespace AppCompass\Builders;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use P3in\Interfaces\WebPropertyModelInterface;
-use P3in\Models\Page;
-use P3in\Models\Link;
-use P3in\Models\Menu;
-use P3in\Models\MenuItem;
+use AppCompass\Interfaces\WebPropertyModelInterface;
+use AppCompass\Models\Page;
+use AppCompass\Models\Link;
+use AppCompass\Models\Menu;
+use AppCompass\Models\MenuItem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MenuBuilder
@@ -86,7 +86,7 @@ class MenuBuilder
     /**
      * UI update, takes whatever the UI sends back
      *
-     * @param      \P3in\Models\Menu $menu The menu
+     * @param      \AppCompass\Models\Menu $menu The menu
      * @param      (array)            $structure  The menu structure coming from the UI
      */
     public static function update(Menu $menu, array $structure)

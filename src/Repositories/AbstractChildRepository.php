@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Repositories;
+namespace AppCompass\Repositories;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;

@@ -1,11 +1,11 @@
 <?php
 
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
 use Illuminate\Http\Request;
-use P3in\Events\Registered;
-use P3in\Events\Registering;
+use AppCompass\Events\Registered;
+use AppCompass\Events\Registering;
 use App\User;
 
 trait RegistersUsers

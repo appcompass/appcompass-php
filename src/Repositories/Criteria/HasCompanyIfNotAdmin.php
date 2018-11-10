@@ -1,9 +1,9 @@
 <?php
 
-namespace P3in\Repositories\Criteria;
+namespace AppCompass\Repositories\Criteria;
 
-use P3in\Interfaces\RepositoryInterface;
-use P3in\Models\User;
+use AppCompass\Interfaces\RepositoryInterface;
+use AppCompass\Models\User;
 
 class HasCompanyIfNotAdmin extends AbstractCriteria
 {

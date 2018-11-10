@@ -1,9 +1,9 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
-use P3in\Policies\AdminOnlyResourcesPolicy;
-use P3in\Repositories\FormsRepository;
+use AppCompass\Policies\AdminOnlyResourcesPolicy;
+use AppCompass\Repositories\FormsRepository;
 
 class FormsController extends AbstractBaseResourceController
 {

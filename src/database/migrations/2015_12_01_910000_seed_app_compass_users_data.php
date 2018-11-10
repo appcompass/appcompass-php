@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use P3in\Models\User;
-use P3in\Models\Permission;
-use P3in\Models\Role;
+use AppCompass\Models\User;
+use AppCompass\Models\Permission;
+use AppCompass\Models\Role;
 
 class SeedAppCompassUsersData extends Migration
 {

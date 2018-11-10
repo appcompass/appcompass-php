@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rule;
-use P3in\Events\Login;
-use P3in\Events\Logout;
+use AppCompass\Events\Login;
+use AppCompass\Events\Logout;
 use App\User;
-use P3in\Events\UserCheck;
-use P3in\Events\UserCurrentCompanySet;
-use P3in\Events\UserUpdated;
-use P3in\Rules\UserPassword;
-use P3in\Traits\RegistersUsers;
+use AppCompass\Events\UserCheck;
+use AppCompass\Events\UserCurrentCompanySet;
+use AppCompass\Events\UserUpdated;
+use AppCompass\Rules\UserPassword;
+use AppCompass\Traits\RegistersUsers;
 
 class AuthController extends BaseController
 {

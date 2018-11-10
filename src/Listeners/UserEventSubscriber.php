@@ -1,13 +1,13 @@
 <?php
 
-namespace P3in\Listeners;
+namespace AppCompass\Listeners;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use P3in\Events\Login;
-use P3in\Events\Logout;
-use P3in\Events\UserCheck;
-use P3in\Events\UserUpdated;
+use AppCompass\Events\Login;
+use AppCompass\Events\Logout;
+use AppCompass\Events\UserCheck;
+use AppCompass\Events\UserUpdated;
 
 class UserEventSubscriber
 {
@@ -64,22 +64,22 @@ class UserEventSubscriber
     {
         $events->listen(
             Login::class,
-            'P3in\Listeners\UserEventSubscriber@onUserLogin'
+            'AppCompass\Listeners\UserEventSubscriber@onUserLogin'
         );
 
         $events->listen(
             Logout::class,
-            'P3in\Listeners\UserEventSubscriber@onUserLogout'
+            'AppCompass\Listeners\UserEventSubscriber@onUserLogout'
         );
 
         $events->listen(
             UserCheck::class,
-            'P3in\Listeners\UserEventSubscriber@onUserCheck'
+            'AppCompass\Listeners\UserEventSubscriber@onUserCheck'
         );
 
         $events->listen(
             UserUpdated::class,
-            'P3in\Listeners\UserEventSubscriber@onUserUpdated'
+            'AppCompass\Listeners\UserEventSubscriber@onUserUpdated'
         );
     }
 }

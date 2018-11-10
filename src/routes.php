@@ -1,7 +1,7 @@
 <?php
 Route::group([
     'middleware' => ['app_compass_api'],
-    'namespace'  => 'P3in\Controllers',
+    'namespace'  => 'AppCompass\Controllers',
 ], function ($router) {
     $router->get('routes', 'AppResourcesController@routes');
     $router->get('get-resources/{route?}', 'AppResourcesController@resources');
@@ -11,7 +11,7 @@ Route::group([
 Route::group([
     'prefix'     => 'auth',
     'middleware' => ['app_compass_api'],
-    'namespace'  => 'P3in\Controllers',
+    'namespace'  => 'AppCompass\Controllers',
 ], function ($router) {
     // login and auth check
     $router->post('login', 'AuthController@login');
@@ -38,7 +38,7 @@ Route::group([
 });
 
 Route::group([
-    'namespace'  => 'P3in\Controllers',
+    'namespace'  => 'AppCompass\Controllers',
     'middleware' => ['app_compass_auth', 'app_compass_api'],
 ], function ($router) {
     $router->get('dashboard', 'AppResourcesController@getDashboard')->name('cp-dashboard');

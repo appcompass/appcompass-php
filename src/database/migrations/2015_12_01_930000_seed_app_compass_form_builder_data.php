@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use P3in\Builders\FormBuilder;
-use P3in\Models\FieldSource;
-use P3in\Models\Permission;
-use P3in\Models\Resource;
-use P3in\Models\WebProperty;
+use AppCompass\Builders\FormBuilder;
+use AppCompass\Models\FieldSource;
+use AppCompass\Models\Permission;
+use AppCompass\Models\Resource;
+use AppCompass\Models\WebProperty;
 use App\Company;
 
 class SeedAppCompassFormBuilderData extends Migration
@@ -158,7 +158,7 @@ class SeedAppCompassFormBuilderData extends Migration
             $builder->string('Resource', 'resource')->list()->sortable()->searchable()->required();
             $builder->string('Created', 'created_at')->list()->edit(false)->sortable()->searchable();
             $builder->string('Updated', 'updated_at')->list()->edit(false)->sortable()->searchable();
-            $builder->select('Role required', 'req_role')->dynamic(\P3in\Models\Role::class,
+            $builder->select('Role required', 'req_role')->dynamic(\AppCompass\Models\Role::class,
                 function (FieldSource $source) {
                     $source->select(['id As index', 'label']);
                 })->nullable();

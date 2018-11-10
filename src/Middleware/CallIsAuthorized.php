@@ -1,12 +1,12 @@
 <?php
 
-namespace P3in\Middleware;
+namespace AppCompass\Middleware;
 
 use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use P3in\Models\PermissionsRequired;
-use P3in\Models\PermissionsRequired\PermissionItems\Route;
+use AppCompass\Models\PermissionsRequired;
+use AppCompass\Models\PermissionsRequired\PermissionItems\Route;
 
 class CallIsAuthorized
 {
@@ -43,7 +43,7 @@ class CallIsAuthorized
 
                 // \Log::info($model->id);
 
-                // P3in\Models\Website@2 req user@7
+                // AppCompass\Models\Website@2 req user@7
             }
         }
 

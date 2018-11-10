@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -75,7 +75,7 @@ class Menu extends Model
     /**
      * Recursively cleans MenuItem and children
      *
-     * @param      \P3in\Models\MenuItem $menuitem The menuitem
+     * @param      \AppCompass\Models\MenuItem $menuitem The menuitem
      */
     private function clean(MenuItem $menuitem)
     {

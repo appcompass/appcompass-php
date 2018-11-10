@@ -1,10 +1,10 @@
 <?php
 
-namespace P3in\Traits;
+namespace AppCompass\Traits;
 
 use Illuminate\Database\Eloquent\Collection;
-use P3in\Models\Permission;
-use P3in\Models\PermissionsRequired;
+use AppCompass\Models\Permission;
+use AppCompass\Models\PermissionsRequired;
 
 trait HasPermissions
 {

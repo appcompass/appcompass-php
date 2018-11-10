@@ -1,8 +1,8 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
-use P3in\Requests\FormRequest;
+use AppCompass\Requests\FormRequest;
 
 // in case we move this
 
@@ -24,7 +24,7 @@ class FormButler
     /**
      * { function_description }
      *
-     * @param      \P3in\Requests\FormRequest $request The request
+     * @param      \AppCompass\Requests\FormRequest $request The request
      *
      * @return     <type>                      ( description_of_the_return_value )
      */

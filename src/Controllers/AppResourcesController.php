@@ -1,9 +1,9 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
 use Illuminate\Http\Request;
-use P3in\Models\Resource;
+use AppCompass\Models\Resource;
 
 class AppResourcesController extends BaseController
 {

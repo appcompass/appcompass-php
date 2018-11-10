@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Builders;
+namespace AppCompass\Builders;
 
 use Exception;
 

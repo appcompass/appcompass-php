@@ -1,10 +1,10 @@
 <?php
 
-namespace P3in\Controllers;
+namespace AppCompass\Controllers;
 
-use P3in\Policies\ResourcesPolicy;
-use P3in\Repositories\Criteria\ByAllowed;
-use P3in\Repositories\RolesRepository;
+use AppCompass\Policies\ResourcesPolicy;
+use AppCompass\Repositories\Criteria\ByAllowed;
+use AppCompass\Repositories\RolesRepository;
 
 class RolesController extends AbstractBaseResourceController
 {

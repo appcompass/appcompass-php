@@ -1,11 +1,11 @@
 <?php
 
-namespace P3in\Models;
+namespace AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
-use P3in\Traits\SetsAndChecksPermission;
+use AppCompass\Traits\SetsAndChecksPermission;
 use App\Company;
 
 class Permission extends Model

@@ -1,6 +1,6 @@
 <?php
 
-namespace P3in\Rules;
+namespace AppCompass\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Hash;

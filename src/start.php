@@ -1,6 +1,6 @@
 <?php
 
-$module_class_name = "\P3in\AppCompassModule";
+$module_class_name = "\AppCompass\AppCompassModule";
 
 $dependencies = [];
 
