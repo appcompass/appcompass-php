@@ -157,11 +157,9 @@ class SeedAppCompassUsersData extends Migration
         $loggedInPerm->setPermission($users_admin);
 
         User::create([
-            'first_name' => 'System',
-            'last_name' => 'User',
+            'name' => 'System User',
             'email' => config('app-compass.system_user'),
-            'password' => '',
-            'phone' => '',
+            'password' => str_random(32),
         ])->assignRole($systemRole)
         ;
     }

@@ -40,11 +40,14 @@ class Install extends Command
     public function handle()
     {
         $this->info('Lets get started!');
-        $bar = $this->output->createProgressBar(7);
+        $bar = $this->output->createProgressBar(8);
 
         $this->call('vendor:publish', [
             '--all' => true,
         ]);
+        $bar->advance();
+
+        $this->call('jwt:secret');
         $bar->advance();
 
         $app_url = $this->ask('What is your app URL?');

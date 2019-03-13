@@ -14,7 +14,9 @@ class UsersController extends AbstractBaseResourceController
     public function __construct(UsersRepository $repo)
     {
         $this->repo = $repo;
-        $this->repo->pushCriteria(new HasCompanyIfNotAdmin(Auth::user()));
+        if (strpos(php_sapi_name(), 'cli') !== false) {
+            $this->repo->pushCriteria(new HasCompanyIfNotAdmin(Auth::user()));
+        }
     }
 
     public function getPolicy()

@@ -18,10 +18,6 @@ class Company extends Model
 
     protected $table = 'companies';
 
-    /**
-     * Specifiy the connectin for good measure
-     */
-    protected $connection = 'pgsql';
 
     /**
      * The attributes that are mass assignable.

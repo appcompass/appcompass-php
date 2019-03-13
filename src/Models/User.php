@@ -2,38 +2,25 @@
 
 namespace AppCompass\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
-use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumberUtil;
-use Propaganistas\LaravelPhone\PhoneNumber;
-use Illuminate\Database\Eloquent\Model;
 use AppCompass\Notifications\ConfirmRegistration;
 use AppCompass\Notifications\ResetPassword;
 use AppCompass\Traits\HasCardView;
 use AppCompass\Traits\HasPermissions;
 use AppCompass\Traits\HasRoles;
-use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Company;
 
-class User extends Model implements
-    AuthenticatableContract,
-    AuthenticatableUserContract,
-    AuthorizableContract,
-    CanResetPasswordContract
+class User extends Authenticatable implements JWTSubject
+    // AuthenticatableContract,
+    // AuthorizableContract,
+    // CanResetPasswordContract
 {
 
-    use
-        Authenticatable,
-        Authorizable,
-        CanResetPassword,
-        Notifiable,
+    use Notifiable,
         HasCardView,
         HasPermissions,
         HasRoles // , HasProfileTrait
@@ -46,10 +33,6 @@ class User extends Model implements
      */
     protected $table = 'users';
 
-    /**
-     * Specifiy the connectin for good measure
-     */
-    protected $connection = 'pgsql';
 
     /**
      * The attributes that are mass assignable.
@@ -57,13 +40,8 @@ class User extends Model implements
      * @var array
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'phone',
-        'email',
-        'password',
-        'active',
-        'activation_code',
+        'name', 'email', 'password',
+        'active', 'activation_code',
     ];
 
     /**
@@ -83,13 +61,11 @@ class User extends Model implements
      *
      *
      */
-    protected $appends = ['full_name', 'gravatar_url'];
+    protected $appends = ['gravatar_url'];
 
     public static $rules = [
-        'first_name' => 'required|max:255',
-        'last_name'  => 'required|max:255',
+        'name' => 'required|max:255',
         'email'      => 'required|email|max:255', //|unique:users when registrering only
-        'phone'      => 'required', // @TODO: add better support for 'phone:AUTO,US',
         'password'   => 'min:6|confirmed', //|required when registering only.
     ];
 
@@ -120,24 +96,6 @@ class User extends Model implements
     public function scopeSystem(Builder $query)
     {
         $query->where('email', config('app-compass.system_user'));
-    }
-
-    public function getPhoneAttribute($value)
-    {
-        $country = $this->country ?? 'US';
-        try {
-            $lib = PhoneNumberUtil::getInstance();
-
-            $phoneNumber = PhoneNumber::make($value, $country);
-
-            $phoneNumberInstance = $phoneNumber->getPhoneNumberInstance();
-
-            if ($lib->isValidNumber($phoneNumberInstance)) {
-                return $phoneNumber->formatInternational();
-            }
-        } catch (NumberParseException $e) {
-            return $value;
-        }
     }
 
     public function assignCompanies($companies)
@@ -289,7 +247,7 @@ class User extends Model implements
 
     public function setCompaniesAttribute($value)
     {
-        if (is_array($value) && $this->exists){
+        if (is_array($value) && $this->exists) {
             $collection = collect($value);
             $ids = $collection->pluck('id')->all();
             $this->companies()->sync($ids);
@@ -313,9 +271,13 @@ class User extends Model implements
         }
 
         // get Company User specific permissions
-        if ($this->current_company){
-            $company_user_permissions = $this->permissions()->where('permission_user.company_id', $this->current_company->id)->pluck($pluck);
-            $company_user_roles = $this->roles()->where('role_user.company_id', $this->current_company->id)->with('permissions')->get();
+        if ($this->current_company) {
+            $company_user_permissions = $this->permissions()
+                ->where('permission_user.company_id', $this->current_company->id)->pluck($pluck);
+            $company_user_roles = $this->roles()
+                ->where('role_user.company_id', $this->current_company->id)
+                ->with('permissions')
+                ->get();
 
             foreach ($company_user_roles as $role) {
                 $company_user_permissions = $company_user_permissions->merge($role->permissions->pluck($pluck));

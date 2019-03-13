@@ -14,7 +14,7 @@
         "predis/predis": "^1.1",
         "tymon/jwt-auth": "1.0.*",
         "guzzlehttp/guzzle": "^6.3",
-        "appcompass/skeleton-mapper": "dev-develop"
+        "appcompass/form-builder": "^2.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

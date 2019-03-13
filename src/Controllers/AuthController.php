@@ -169,7 +169,7 @@ class AuthController extends BaseController
         return $this->success([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'expires_in' => config('jwt.ttl') * 60,
+            'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => $user,
         ]);
     }
