@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Repositories;
+namespace AppCompass\AppCompass\Repositories;
 
-use App\User;
-use AppCompass\Repositories\Eloquent\Repository;
+use AppCompass\AppCompass\Models\User;
+use AppCompass\AppCompass\Repositories\Eloquent\Repository;
 
 class UsersRepository extends Repository
 {

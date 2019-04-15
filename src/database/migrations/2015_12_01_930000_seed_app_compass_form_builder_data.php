@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use AppCompass\Builders\FormBuilder;
-use AppCompass\Models\FieldSource;
-use AppCompass\Models\Permission;
-use AppCompass\Models\Resource;
-use AppCompass\Models\WebProperty;
+use AppCompass\FormBuilder\Builders\FormBuilder;
+use AppCompass\FormBuilder\Models\FieldSource;
+use AppCompass\AppCompass\Models\Permission;
+use AppCompass\AppCompass\Models\Resource;
+use AppCompass\AppCompass\Models\WebProperty;
 use App\Company;
 
 class SeedAppCompassFormBuilderData extends Migration

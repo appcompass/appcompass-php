@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Notifications;
+namespace AppCompass\AppCompass\Notifications;
 
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use AppCompass\Models\Website;
+use AppCompass\AppCompass\Models\Website;
 
 class ConfirmRegistration extends Notification
 {

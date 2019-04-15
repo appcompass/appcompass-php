@@ -1,13 +1,13 @@
 <?php
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use AppCompass\Models\Permission;
-use AppCompass\Models\User;
+use AppCompass\AppCompass\Models\Permission;
+use AppCompass\AppCompass\Models\User;
 
 trait SetsAndChecksPermission
 {

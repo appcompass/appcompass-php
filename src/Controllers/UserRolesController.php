@@ -1,14 +1,14 @@
 <?php
 
-namespace AppCompass\Controllers;
+namespace AppCompass\AppCompass\Controllers;
 
-use App\User;
-use AppCompass\Models\Role;
-use AppCompass\Policies\ResourcesPolicy;
-use AppCompass\Repositories\Criteria\ExcludeAssignedCompanyRoles;
-use AppCompass\Repositories\Criteria\HasCompany;
-use AppCompass\Repositories\Criteria\HasUser;
-use AppCompass\Repositories\RolesRepository;
+use AppCompass\AppCompass\Models\User;
+use AppCompass\AppCompass\Models\Role;
+use AppCompass\AppCompass\Policies\ResourcesPolicy;
+use AppCompass\AppCompass\Repositories\Criteria\ExcludeAssignedCompanyRoles;
+use AppCompass\AppCompass\Repositories\Criteria\HasCompany;
+use AppCompass\AppCompass\Repositories\Criteria\HasUser;
+use AppCompass\AppCompass\Repositories\RolesRepository;
 
 class UserRolesController extends UserPermissionsController
 {

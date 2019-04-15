@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Events;
+namespace AppCompass\AppCompass\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;

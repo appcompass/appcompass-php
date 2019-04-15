@@ -1,13 +1,13 @@
 <?php
 
-namespace AppCompass\Listeners;
+namespace AppCompass\AppCompass\Listeners;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use AppCompass\Events\Login;
-use AppCompass\Events\Logout;
-use AppCompass\Events\UserCheck;
-use AppCompass\Events\UserUpdated;
+use AppCompass\AppCompass\Events\Login;
+use AppCompass\AppCompass\Events\Logout;
+use AppCompass\AppCompass\Events\UserCheck;
+use AppCompass\AppCompass\Events\UserUpdated;
 
 class UserEventSubscriber
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Models\FieldTypes;
+namespace AppCompass\FormBuilder\Models\FieldTypes;
 
 class MenuElementType extends BaseField
 {

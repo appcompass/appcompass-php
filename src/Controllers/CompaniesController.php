@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Controllers;
+namespace AppCompass\AppCompass\Controllers;
 
-use AppCompass\Policies\ResourcesPolicy;
-use AppCompass\Repositories\CompaniesRepository;
-use AppCompass\Repositories\Criteria\IsCompanyIfNotAdmin;
-use AppCompass\Repositories\Criteria\WithUsersCount;
+use AppCompass\AppCompass\Policies\ResourcesPolicy;
+use AppCompass\AppCompass\Repositories\CompaniesRepository;
+use AppCompass\AppCompass\Repositories\Criteria\IsCompanyIfNotAdmin;
+use AppCompass\AppCompass\Repositories\Criteria\WithUsersCount;
 
 class CompaniesController extends AbstractBaseResourceController
 {

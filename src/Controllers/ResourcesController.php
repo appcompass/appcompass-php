@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Controllers;
+namespace AppCompass\AppCompass\Controllers;
 
-use AppCompass\Policies\AdminOnlyResourcesPolicy;
-use AppCompass\Repositories\ResourcesRepository;
+use AppCompass\AppCompass\Policies\AdminOnlyResourcesPolicy;
+use AppCompass\AppCompass\Repositories\ResourcesRepository;
 
 class ResourcesController extends AbstractBaseResourceController
 {

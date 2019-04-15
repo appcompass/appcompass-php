@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
-use AppCompass\Models\Menu;
-use AppCompass\Models\Scopes\WebPropertyScope;
-use AppCompass\Models\WebProperty;
-use AppCompass\Observers\IsWebPropertyObserver;
+use AppCompass\AppCompass\Models\Menu;
+use AppCompass\AppCompass\Models\Scopes\WebPropertyScope;
+use AppCompass\AppCompass\Models\WebProperty;
+use AppCompass\AppCompass\Observers\IsWebPropertyObserver;
 
 trait IsWebProperty
 {

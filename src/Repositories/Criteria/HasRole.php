@@ -1,8 +1,8 @@
 <?php
 
-namespace AppCompass\Repositories\Criteria;
+namespace AppCompass\AppCompass\Repositories\Criteria;
 
-use AppCompass\Interfaces\RepositoryInterface;
+use AppCompass\AppCompass\Interfaces\RepositoryInterface;
 
 class HasRole extends AbstractCriteria
 {

@@ -1,12 +1,13 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use AppCompass\Interfaces\Linkable;
-use AppCompass\Traits\HasJsonConfigFieldTrait;
-use AppCompass\Traits\HasPermission;
+use AppCompass\AppCompass\Interfaces\Linkable;
+use AppCompass\FormBuilder\Models\Form;
+use AppCompass\FormBuilder\Traits\HasJsonConfigFieldTrait;
+use AppCompass\AppCompass\Traits\HasPermission;
 
 class Resource extends Model implements Linkable
 {

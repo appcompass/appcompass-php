@@ -1,10 +1,10 @@
 <?php
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
-use AppCompass\Models\Resource;
+use AppCompass\AppCompass\Models\Resource;
 
 trait UsesRoute
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace AppCompass\Interfaces;
+namespace AppCompass\AppCompass\Interfaces;
 
-use AppCompass\Models\MenuItem;
+use AppCompass\AppCompass\Models\MenuItem;
 
 interface Linkable
 {

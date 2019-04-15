@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Repositories;
+namespace AppCompass\AppCompass\Repositories;
 
-use AppCompass\Models\Role;
-use AppCompass\Repositories\Eloquent\Repository;
+use AppCompass\AppCompass\Models\Role;
+use AppCompass\AppCompass\Repositories\Eloquent\Repository;
 
 class RolesRepository extends Repository
 {

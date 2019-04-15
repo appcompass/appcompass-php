@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Middleware;
+namespace AppCompass\AppCompass\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use AppCompass\Models\WebProperty;
+use AppCompass\AppCompass\Models\WebProperty;
 
 class ValidateWebProperty
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace AppCompass\Controllers;
+namespace AppCompass\AppCompass\Controllers;
 
-use AppCompass\Policies\ResourcesPolicy;
-use AppCompass\Repositories\Criteria\ByAllowed;
-use AppCompass\Repositories\RolesRepository;
+use AppCompass\AppCompass\Policies\ResourcesPolicy;
+use AppCompass\AppCompass\Repositories\Criteria\ByAllowed;
+use AppCompass\AppCompass\Repositories\RolesRepository;
 
 class RolesController extends AbstractBaseResourceController
 {

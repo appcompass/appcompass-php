@@ -1,12 +1,12 @@
 <?php
 
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
 use Illuminate\Http\Request;
-use AppCompass\Events\Registered;
-use AppCompass\Events\Registering;
-use App\User;
+use AppCompass\AppCompass\Events\Registered;
+use AppCompass\AppCompass\Events\Registering;
+use AppCompass\AppCompass\Models\User;
 
 trait RegistersUsers
 {

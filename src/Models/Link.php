@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use AppCompass\Interfaces\Linkable;
+use AppCompass\AppCompass\Interfaces\Linkable;
 
-use AppCompass\Traits\HasPermission;
+use AppCompass\AppCompass\Traits\HasPermission;
 
 class Link extends Model implements Linkable
 {

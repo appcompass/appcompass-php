@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Models\PermissionsRequired\PermissionItems;
+namespace AppCompass\AppCompass\Models\PermissionsRequired\PermissionItems;
 
 use Illuminate\Database\Eloquent\Builder;
-use AppCompass\Interfaces\PermissionRequiredItemInterface;
-use AppCompass\Models\PermissionsRequired\PermissionItems\PermissionItem;
-use AppCompass\Models\Website;
+use AppCompass\AppCompass\Interfaces\PermissionRequiredItemInterface;
+use AppCompass\AppCompass\Models\PermissionsRequired\PermissionItems\PermissionItem;
+use AppCompass\AppCompass\Models\Website;
 
 class Route extends PermissionItem implements PermissionRequiredItemInterface
 {

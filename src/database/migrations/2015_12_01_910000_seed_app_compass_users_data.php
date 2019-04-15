@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use AppCompass\Models\User;
-use AppCompass\Models\Permission;
-use AppCompass\Models\Role;
+use AppCompass\AppCompass\Models\User;
+use AppCompass\AppCompass\Models\Permission;
+use AppCompass\AppCompass\Models\Role;
 
 class SeedAppCompassUsersData extends Migration
 {
@@ -171,6 +171,123 @@ class SeedAppCompassUsersData extends Migration
      */
     public function down()
     {
-        // @TODO: add deletions for each of the above.
+        User::where([
+            'name' => 'System User',
+            'email' => config('app-compass.system_user'),
+        ])->delete();
+
+        Role::where([
+            'name' => 'system',
+            'label' => 'System',
+            'active' => true,
+        ])->delete();
+
+        Role::where([
+            'name' => 'admin',
+            'label' => 'Admin',
+            'active' => true,
+        ])->delete();
+
+        Role::where([
+            'name' => 'user',
+            'label' => 'User',
+            'active' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => Permission::GUEST_PERM_NAME,
+            'label' => 'Guest',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => Permission::LOGGED_IN_PERM_NAME,
+            'label' => 'User',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'cp_login',
+            'label' => 'Cp Login',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'users_admin',
+            'label' => 'Users Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'all_users_admin',
+            'label' => 'All Users Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'companies_admin',
+            'label' => 'Companies Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'permissions_admin',
+            'label' => 'Permissions Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'resources_admin',
+            'label' => 'Resources Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'websites_admin_view',
+            'label' => 'Websites Admin View',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'websites_admin_create',
+            'label' => 'Websites Admin Create',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'websites_layouts_admin',
+            'label' => 'Websites Layouts Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'websites_menus_admin',
+            'label' => 'Websites Menus Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'websites_pages_admin',
+            'label' => 'Websites Pages Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'storage_admin',
+            'label' => 'Storage Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'forms_admin',
+            'label' => 'Forms Admin',
+            'system' => true,
+        ])->delete();
+
+        Permission::where([
+            'name' => 'websites_admin_destroy',
+            'label' => 'Websites Admin Destroy',
+            'system' => true,
+        ])->delete();
     }
 }

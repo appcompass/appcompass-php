@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Interfaces;
+namespace AppCompass\AppCompass\Interfaces;
 
 interface WebPropertyModelInterface
 {

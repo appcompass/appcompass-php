@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Notifications;
+namespace AppCompass\AppCompass\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

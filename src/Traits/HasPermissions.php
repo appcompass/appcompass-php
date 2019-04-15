@@ -1,10 +1,10 @@
 <?php
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
 use Illuminate\Database\Eloquent\Collection;
-use AppCompass\Models\Permission;
-use AppCompass\Models\PermissionsRequired;
+use AppCompass\AppCompass\Models\Permission;
+use AppCompass\AppCompass\Models\PermissionsRequired;
 
 trait HasPermissions
 {

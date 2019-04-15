@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Middleware;
+namespace AppCompass\AppCompass\Middleware;
 
 use Illuminate\Foundation\Http\Middleware\TransformsRequest;
 

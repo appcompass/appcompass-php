@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use AppCompass\Traits\HasPermission;
+use AppCompass\AppCompass\Traits\HasPermission;
 
 class MenuItem extends Model
 {

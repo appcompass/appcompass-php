@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Controllers;
+namespace AppCompass\AppCompass\Controllers;
 
-use AppCompass\Models\Company;
-use AppCompass\Policies\ResourcesPolicy;
-use AppCompass\Repositories\Criteria\HasCompany;
-use AppCompass\Repositories\UsersRepository;
+use AppCompass\AppCompass\Models\Company;
+use AppCompass\AppCompass\Policies\ResourcesPolicy;
+use AppCompass\AppCompass\Repositories\Criteria\HasCompany;
+use AppCompass\AppCompass\Repositories\UsersRepository;
 
 class CompanyUsersController extends AbstractBaseResourceController
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Commands;
+namespace AppCompass\AppCompass\Commands;
 
 use Illuminate\Console\Command;
-use AppCompass\Builders\EnvBuilder;
+use AppCompass\AppCompass\Builders\EnvBuilder;
 
 class Install extends Command
 {
@@ -50,9 +50,9 @@ class Install extends Command
         $this->call('jwt:secret');
         $bar->advance();
 
-        $app_url = $this->ask('What is your app URL?');
+        $app_url = $this->ask('What is your app URL?', env('APP_URL', ''));
         $bar->advance();
-        $cp_site_name = $this->ask('What is your Control Panel Name?');
+        $cp_site_name = $this->ask('What is your Control Panel Name?', env('ADMIN_WEBSITE_NAME', ''));
         $bar->advance();
         $cp_url = $this->getCpUrl();
         $bar->advance();
@@ -79,7 +79,11 @@ class Install extends Command
 
     private function getCpUrl()
     {
-        $cp_url = $this->ask('What is your Control Panel URL?');
+        $schema = env('ADMIN_WEBSITE_SCHEME', '');
+        $host = env('ADMIN_WEBSITE_HOST', '');
+        $default = $schema && $host ? "{$schema}://{$host}" : '';
+
+        $cp_url = $this->ask('What is your Control Panel URL?', $default);
 
         if (filter_var($cp_url, FILTER_VALIDATE_URL) === false) {
             $this->error('Invalid url.  Make sure you include http://, or https://.');

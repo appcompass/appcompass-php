@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Notification;
-use AppCompass\Notifications\FormStored;
+use AppCompass\AppCompass\Notifications\FormStored;
 
 class FormStorage extends Model
 {

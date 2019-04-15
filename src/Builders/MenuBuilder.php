@@ -1,14 +1,14 @@
 <?php
 
-namespace AppCompass\Builders;
+namespace AppCompass\AppCompass\Builders;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use AppCompass\Interfaces\WebPropertyModelInterface;
-use AppCompass\Models\Page;
-use AppCompass\Models\Link;
-use AppCompass\Models\Menu;
-use AppCompass\Models\MenuItem;
+use AppCompass\AppCompass\Interfaces\WebPropertyModelInterface;
+use AppCompass\AppCompass\Models\Page;
+use AppCompass\AppCompass\Models\Link;
+use AppCompass\AppCompass\Models\Menu;
+use AppCompass\AppCompass\Models\MenuItem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MenuBuilder

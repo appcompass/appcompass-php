@@ -1,12 +1,12 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use AppCompass\Interfaces\WebPropertyModelInterface;
+use AppCompass\AppCompass\Interfaces\WebPropertyModelInterface;
 
 class WebProperty extends Model implements WebPropertyModelInterface
 {

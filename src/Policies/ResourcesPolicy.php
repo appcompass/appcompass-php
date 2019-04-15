@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Policies;
+namespace AppCompass\AppCompass\Policies;
 
-use AppCompass\Models\Resource;
-use AppCompass\Models\User;
+use AppCompass\AppCompass\Models\Resource;
+use AppCompass\AppCompass\Models\User;
 use Route;
 
 class ResourcesPolicy

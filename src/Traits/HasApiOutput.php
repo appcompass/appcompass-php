@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
 use Illuminate\Support\Collection;
 

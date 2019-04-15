@@ -1,16 +1,16 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
-use AppCompass\Notifications\ConfirmRegistration;
-use AppCompass\Notifications\ResetPassword;
-use AppCompass\Traits\HasCardView;
-use AppCompass\Traits\HasPermissions;
-use AppCompass\Traits\HasRoles;
+use AppCompass\AppCompass\Notifications\ConfirmRegistration;
+use AppCompass\AppCompass\Notifications\ResetPassword;
+use AppCompass\AppCompass\Traits\HasCardView;
+use AppCompass\AppCompass\Traits\HasPermissions;
+use AppCompass\AppCompass\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Company;
 
@@ -54,6 +54,15 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
         'activated_at',
         'activation_code',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     /**

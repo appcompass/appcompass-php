@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use AppCompass\Builders\MenuBuilder;
-use AppCompass\Models\Resource;
-use AppCompass\Models\WebProperty;
+use AppCompass\AppCompass\Builders\MenuBuilder;
+use AppCompass\AppCompass\Models\Resource;
+use AppCompass\AppCompass\Models\WebProperty;
 
 class SeedAppCompassResourcesData extends Migration
 {

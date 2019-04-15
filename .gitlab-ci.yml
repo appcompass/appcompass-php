@@ -1,0 +1,45 @@
+image: php:7.2
+
+services:
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: test_db
+  POSTGRES_USER: testrunnner
+  POSTGRES_PASSWORD: ""
+
+connect:
+  image: postgres
+  script:
+  - export PGPASSWORD=$POSTGRES_PASSWORD
+  - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
+
+cache:
+  paths:
+  - vendor/
+
+before_script:
+- >
+  set -xe
+  && apt-get update -yqq
+  && apt-get install -yqq
+  git
+  libicu-dev
+  libpq-dev
+  libzip-dev
+  zlib1g-dev
+- >
+  docker-php-ext-install
+  pdo_pgsql
+  pgsql
+  sockets
+  intl
+  zip
+- curl -sS https://getcomposer.org/installer | php
+- php composer.phar self-update
+- php composer.phar install --no-progress --no-interaction
+- cp .env.gitlab-ci .env
+
+test:app:
+  script:
+  - vendor/bin/phpunit --configuration phpunit.xml --coverage-text

@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
-use AppCompass\Traits\HasPermissions;
-use AppCompass\Traits\HasRoles;
+use AppCompass\AppCompass\Traits\HasPermissions;
+use AppCompass\AppCompass\Traits\HasRoles;
 
 class Company extends Model
 {

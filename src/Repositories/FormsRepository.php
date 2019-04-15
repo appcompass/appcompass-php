@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Repositories;
+namespace AppCompass\AppCompass\Repositories;
 
-use AppCompass\Models\Form;
-use AppCompass\Repositories\Eloquent\Repository;
+use AppCompass\FormBuilder\Models\Form;
+use AppCompass\AppCompass\Repositories\Eloquent\Repository;
 
 class FormsRepository extends Repository
 {

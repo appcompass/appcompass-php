@@ -1,12 +1,12 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notification;
-use AppCompass\Traits\HasPermissions;
-use AppCompass\Traits\SetsAndChecksPermission;
+use AppCompass\AppCompass\Traits\HasPermissions;
+use AppCompass\AppCompass\Traits\SetsAndChecksPermission;
 
 class Role extends Model
 {

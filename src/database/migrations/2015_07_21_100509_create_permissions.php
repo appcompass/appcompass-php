@@ -3,6 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePermissions extends Migration
 {
@@ -67,6 +68,21 @@ class CreatePermissions extends Migration
      */
     public function down()
     {
+        DB::connection()
+          ->getPdo()
+          ->exec('DROP INDEX permission_user_user_id_permission_id_company_id_unique');
+        DB::connection()
+          ->getPdo()
+          ->exec('DROP INDEX permission_user_user_id_permission_id_unique');
+
+        Schema::table('roles', function (Blueprint $table) {
+            $table->dropForeign(['assignable_by_id']);
+        });
+
+        Schema::table('permissions', function (Blueprint $table) {
+            $table->dropForeign(['assignable_by_id']);
+        });
+
         Schema::drop('permission_user');
         Schema::drop('permission_role');
         Schema::drop('permissions');

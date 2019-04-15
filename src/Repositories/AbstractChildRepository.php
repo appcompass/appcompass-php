@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Repositories;
+namespace AppCompass\AppCompass\Repositories;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;

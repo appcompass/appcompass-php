@@ -1,16 +1,16 @@
 <?php
 
-namespace AppCompass\Controllers;
+namespace AppCompass\AppCompass\Controllers;
 
-use App\User;
+use AppCompass\AppCompass\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use AppCompass\Models\Permission;
-use AppCompass\Policies\ResourcesPolicy;
-use AppCompass\Repositories\Criteria\ExcludeAssignedCompanyPermissions;
-use AppCompass\Repositories\Criteria\HasUser;
-use AppCompass\Repositories\PermissionsRepository;
-use AppCompass\Requests\FormRequest;
+use AppCompass\AppCompass\Models\Permission;
+use AppCompass\AppCompass\Policies\ResourcesPolicy;
+use AppCompass\AppCompass\Repositories\Criteria\ExcludeAssignedCompanyPermissions;
+use AppCompass\AppCompass\Repositories\Criteria\HasUser;
+use AppCompass\AppCompass\Repositories\PermissionsRepository;
+use AppCompass\AppCompass\Requests\FormRequest;
 
 class UserPermissionsController extends AbstractBaseResourceController
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
-use AppCompass\Models\Role;
+use AppCompass\AppCompass\Models\Role;
 
 trait HasRoles
 {

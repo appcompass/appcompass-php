@@ -1,16 +1,16 @@
 <?php
 
-namespace AppCompass\Repositories\Criteria;
+namespace AppCompass\AppCompass\Repositories\Criteria;
 
-use AppCompass\Interfaces\RepositoryInterface;
-use AppCompass\Models\User;
+use AppCompass\AppCompass\Interfaces\RepositoryInterface;
+use AppCompass\AppCompass\Models\User;
 
 class HasCompanyIfNotAdmin extends AbstractCriteria
 {
     protected $company_id;
     protected $user;
 
-    public function __construct(User $user)
+    public function __construct(User $user = null)
     {
         $this->user = $user;
     }

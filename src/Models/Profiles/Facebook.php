@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Models\Profiles;
+namespace AppCompass\AppCompass\Models\Profiles;
 
 use Illuminate\Database\Eloquent\Model;
-use AppCompass\Traits\IsProfileTrait;
+use AppCompass\AppCompass\Traits\IsProfileTrait;
 
 class Facebook extends Model
 {

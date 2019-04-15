@@ -1,8 +1,8 @@
 <?php
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
-use AppCompass\Models\Permission;
+use AppCompass\AppCompass\Models\Permission;
 
 trait HasPermission
 {

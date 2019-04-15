@@ -1,10 +1,10 @@
 <?php
 
-namespace AppCompass\Observers;
+namespace AppCompass\AppCompass\Observers;
 
 use Illuminate\Database\Eloquent\Model;
-use AppCompass\Models\Permission;
-use AppCompass\Models\Role;
+use AppCompass\AppCompass\Models\Permission;
+use AppCompass\AppCompass\Models\Role;
 
 class PermissionObserver
 {

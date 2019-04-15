@@ -1,13 +1,13 @@
 <?php
 
-namespace AppCompass\Controllers;
+namespace AppCompass\AppCompass\Controllers;
 
 use App\Company;
-use AppCompass\Models\Permission;
-use AppCompass\Policies\ResourcesPolicy;
-use AppCompass\Repositories\Criteria\HasCompany;
-use AppCompass\Repositories\Criteria\HasUser;
-use AppCompass\Repositories\PermissionsRepository;
+use AppCompass\AppCompass\Models\Permission;
+use AppCompass\AppCompass\Policies\ResourcesPolicy;
+use AppCompass\AppCompass\Repositories\Criteria\HasCompany;
+use AppCompass\AppCompass\Repositories\Criteria\HasUser;
+use AppCompass\AppCompass\Repositories\PermissionsRepository;
 
 class CompanyUserPermissionsController extends UserPermissionsController
 {

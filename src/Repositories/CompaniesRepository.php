@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Repositories;
+namespace AppCompass\AppCompass\Repositories;
 
 use App\Company;
-use AppCompass\Repositories\Eloquent\Repository;
+use AppCompass\AppCompass\Repositories\Eloquent\Repository;
 
 class CompaniesRepository extends Repository
 {

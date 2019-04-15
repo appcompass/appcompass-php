@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Events;
+namespace AppCompass\AppCompass\Events;
 
 use Illuminate\Queue\SerializesModels;
 

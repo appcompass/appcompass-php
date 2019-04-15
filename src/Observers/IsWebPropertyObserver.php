@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Observers;
+namespace AppCompass\AppCompass\Observers;
 
 use Illuminate\Database\Eloquent\Model;
-use AppCompass\Models\WebProperty;
+use AppCompass\AppCompass\Models\WebProperty;
 
 class IsWebPropertyObserver
 {

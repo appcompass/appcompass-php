@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AppCompass\Events;
+namespace AppCompass\AppCompass\Events;
 
 class Registering
 {

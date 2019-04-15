@@ -1,8 +1,8 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
-use AppCompass\Requests\FormRequest;
+use AppCompass\AppCompass\Requests\FormRequest;
 
 // in case we move this
 

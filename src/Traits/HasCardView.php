@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
 trait HasCardView
 {

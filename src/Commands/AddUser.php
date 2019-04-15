@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Commands;
+namespace AppCompass\AppCompass\Commands;
 
 use Firebase\JWT\JWT;
 use Illuminate\Console\Command;
-use AppCompass\Models\User;
-use AppCompass\Models\WebProperty;
+use AppCompass\AppCompass\Models\User;
+use AppCompass\AppCompass\Models\WebProperty;
 
 class AddUser extends Command
 {

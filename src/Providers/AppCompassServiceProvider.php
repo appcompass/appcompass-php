@@ -1,25 +1,25 @@
 <?php
 
-namespace AppCompass\Providers;
+namespace AppCompass\AppCompass\Providers;
 
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Laravel\Passport\Passport;
-use AppCompass\Commands\AddUser;
-use AppCompass\Commands\Install;
-use AppCompass\Listeners\UserEventSubscriber;
-use AppCompass\Middleware\SanitizeEmail;
-use AppCompass\Middleware\ValidateWebProperty;
-use App\User;
+use AppCompass\AppCompass\Commands\AddUser;
+use AppCompass\AppCompass\Commands\Install;
+use AppCompass\AppCompass\Listeners\UserEventSubscriber;
+use AppCompass\AppCompass\Middleware\SanitizeEmail;
+use AppCompass\AppCompass\Middleware\ValidateWebProperty;
+use AppCompass\AppCompass\Models\User;
 use App\Company;
-use AppCompass\Models\Field;
-use AppCompass\Models\Form;
-use AppCompass\Models\Menu;
-use AppCompass\Models\Permission;
-use AppCompass\Models\Resource;
-use AppCompass\Models\Role;
-use AppCompass\Observers\FieldObserver;
-use AppCompass\Observers\PermissionObserver;
-use AppCompass\Observers\UserObserver;
+use AppCompass\FormBuilder\Models\Field;
+use AppCompass\FormBuilder\Models\Form;
+use AppCompass\AppCompass\Models\Menu;
+use AppCompass\AppCompass\Models\Permission;
+use AppCompass\AppCompass\Models\Resource;
+use AppCompass\AppCompass\Models\Role;
+use AppCompass\FormBuilder\Observers\FieldObserver;
+use AppCompass\AppCompass\Observers\PermissionObserver;
+use AppCompass\AppCompass\Observers\UserObserver;
 use Tymon\JWTAuth\Http\Middleware\Check;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 use Tymon\JWTAuth\Http\Middleware\Authenticate;

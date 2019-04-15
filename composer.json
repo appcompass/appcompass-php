@@ -1,32 +1,56 @@
 {
     "name": "appcompass/appcompass",
     "description": "App Compass - An App Management System",
+    "type": "library",
+    "keywords": ["app","management"],
+    "homepage": "https://appcompass.github.io/",
+    "license": "MIT",
     "authors": [{
         "name": "Jubair Saidi",
-        "email": "jubair.saidi@gmail.com"
+        "email": "jubair.saidi@gmail.com",
+        "homepage": "https://github.com/jubairsaidi"
     }],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./../form-builder"
+        }
+    ],
     "require": {
         "php": "^7.2.11",
-        "fideloper/proxy": "^4.0",
-        "laravel/framework": "5.7.*",
-        "laravel/tinker": "^1.0",
         "laravel/passport": "^7.0",
         "predis/predis": "^1.1",
         "tymon/jwt-auth": "1.0.*",
         "guzzlehttp/guzzle": "^6.3",
-        "appcompass/form-builder": "^2.0"
+        "appcompass/form-builder": "dev-develop as 2.0.0"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "^1.4",
+        "mockery/mockery": "^1.0",
+        "nunomaduro/collision": "^3.0",
+        "phpunit/phpunit": "^7.5",
+        "orchestra/testbench": "^3.8"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "AppCompass\\": "src/"
+            "AppCompass\\AppCompass\\": "src/",
+            "AppCompass\\FormBuilder\\Models\\FieldTypes\\": "src/Models/FieldTypes/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AppCompass\\AppCompass\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
     },
     "extra": {
         "laravel": {
             "providers": [
-                "AppCompass\\Providers\\AppCompassServiceProvider"
+                "AppCompass\\AppCompass\\Providers\\AppCompassServiceProvider"
             ]
         }
     }

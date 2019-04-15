@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Builders;
+namespace AppCompass\AppCompass\Builders;
 
 use Exception;
 
@@ -87,7 +87,7 @@ class EnvBuilder
         $this->create($data);
     }
 
-    public function write(array $data = [])
+    public function write(array $data = []): bool
     {
         $this->validateAssociative($data);
 
@@ -100,18 +100,17 @@ class EnvBuilder
 
         // a backup is probably a good idea heh.
         if ($backup = $this->backup()) {
-            file_put_contents($this->file, $lines);
+            return file_put_contents($this->file, $lines);
         }
 
-        return $backup;
+        return false;
     }
 
-    public function backup()
+    public function backup(): bool
     {
         $backupFile = $this->file . '-backup-' . date("Y_m_d_His");
-        copy($this->file, $backupFile);
 
-        return $backupFile;
+        return copy($this->file, $backupFile);
     }
 
     // Data Validation stuff.

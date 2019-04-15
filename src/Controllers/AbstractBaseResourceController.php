@@ -1,18 +1,18 @@
 <?php
 
-namespace AppCompass\Controllers;
+namespace AppCompass\AppCompass\Controllers;
 
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
-use AppCompass\Models\Menu;
-use AppCompass\Models\MenuItem;
-use AppCompass\Policies\ResourcesPolicy;
-use AppCompass\Repositories\Criteria\FilterBySearch;
-use AppCompass\Repositories\Criteria\FilterBySort;
-use AppCompass\Requests\FormRequest;
-use AppCompass\Traits\UsesRoute;
+use AppCompass\AppCompass\Models\Menu;
+use AppCompass\AppCompass\Models\MenuItem;
+use AppCompass\AppCompass\Policies\ResourcesPolicy;
+use AppCompass\AppCompass\Repositories\Criteria\FilterBySearch;
+use AppCompass\AppCompass\Repositories\Criteria\FilterBySort;
+use AppCompass\AppCompass\Requests\FormRequest;
+use AppCompass\AppCompass\Traits\UsesRoute;
 
 abstract class AbstractBaseResourceController extends BaseController
 {

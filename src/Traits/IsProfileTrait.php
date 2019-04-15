@@ -1,8 +1,8 @@
 <?php
 
-namespace AppCompass\Traits;
+namespace AppCompass\AppCompass\Traits;
 
-use AppCompass\Models\User;
+use AppCompass\AppCompass\Models\User;
 
 trait IsProfileTrait
 {

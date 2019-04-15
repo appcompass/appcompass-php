@@ -1,8 +1,8 @@
 <?php
 
-namespace AppCompass\Models\Profiles;
+namespace AppCompass\AppCompass\Models\Profiles;
 
-use AppCompass\Models\User;
+use AppCompass\AppCompass\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model

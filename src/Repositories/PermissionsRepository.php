@@ -1,9 +1,9 @@
 <?php
 
-namespace AppCompass\Repositories;
+namespace AppCompass\AppCompass\Repositories;
 
-use AppCompass\Models\Permission;
-use AppCompass\Repositories\Eloquent\Repository;
+use AppCompass\AppCompass\Models\Permission;
+use AppCompass\AppCompass\Repositories\Eloquent\Repository;
 
 class PermissionsRepository extends Repository
 {

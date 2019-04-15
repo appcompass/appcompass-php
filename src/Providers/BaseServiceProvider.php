@@ -1,6 +1,6 @@
 <?php
 
-namespace AppCompass\Providers;
+namespace AppCompass\AppCompass\Providers;
 
 use Gate;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;

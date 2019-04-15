@@ -1,11 +1,11 @@
 <?php
 
-namespace AppCompass\Models;
+namespace AppCompass\AppCompass\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
-use AppCompass\Traits\SetsAndChecksPermission;
+use AppCompass\AppCompass\Traits\SetsAndChecksPermission;
 use App\Company;
 
 class Permission extends Model
@@ -85,7 +85,7 @@ class Permission extends Model
      *
      *
      * @param      \Illuminate\Database\Eloquent\Builder $builder The builder
-     * @param      \App\User                             $user    The user
+     * @param      \AppCompass\AppCompass\Models\User    $user    The user
      *
      * @return     <type>                                 ( description_of_the_return_value )
      */

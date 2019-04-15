@@ -25,11 +25,11 @@ The following should be set
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model'  => App\User::class,
+            'model'  => AppCompass\AppCompass\Models\User::class,
         ],
         'jwt'   => [
             'driver' => 'eloquent',
-            'model'  => App\User::class,
+            'model'  => AppCompass\AppCompass\Models\User::class,
         ]
 
 ```
