@@ -3,9 +3,9 @@ namespace AppCompass\AppCompass\Tests;
 
 use Illuminate\Support\Facades\Schema;
 
-class MigrationsTest extends TestCase
+class StructureMigrationsTest extends TestCase
 {
-    public function testMigrations()
+    public function testWebPropertiesMigration()
     {
         $web_properties = Schema::getColumnListing('web_properties');
         $this->assertEquals([
@@ -18,6 +18,11 @@ class MigrationsTest extends TestCase
             'deleted_at'
         ], $web_properties);
 
+        $this->assertNotFalse($web_properties);
+    }
+
+    public function testUsersMigration()
+    {
         $users = Schema::getColumnListing('users');
         $this->assertEquals([
             'id',
@@ -33,7 +38,10 @@ class MigrationsTest extends TestCase
             'activated_at',
             'last_login'
         ], $users);
+    }
 
+    public function testCompaniesMigration()
+    {
         $companies = Schema::getColumnListing('companies');
         $this->assertEquals([
             'id',
@@ -41,7 +49,10 @@ class MigrationsTest extends TestCase
             'created_at',
             'updated_at'
         ], $companies);
+    }
 
+    public function testRolesMigration()
+    {
         $roles = Schema::getColumnListing('roles');
         $this->assertEquals([
             'id',
@@ -53,7 +64,9 @@ class MigrationsTest extends TestCase
             'updated_at',
             'assignable_by_id'
         ], $roles);
-
+    }
+    public function testPermissionsStructureMigration()
+    {
         $permissions = Schema::getColumnListing('permissions');
         $this->assertEquals([
             'id',
@@ -65,7 +78,9 @@ class MigrationsTest extends TestCase
             'created_at',
             'updated_at'
         ], $permissions);
-
+    }
+    public function testResourcesStructureMigration()
+    {
         $resources = Schema::getColumnListing('resources');
         $this->assertEquals([
             'id',
@@ -77,7 +92,9 @@ class MigrationsTest extends TestCase
             'created_at',
             'updated_at'
         ], $resources);
-
+    }
+    public function testFormStorageStructureMigration()
+    {
         $form_storage = Schema::getColumnListing('form_storage');
         $this->assertEquals([
             'id',
@@ -86,7 +103,9 @@ class MigrationsTest extends TestCase
             'created_at',
             'updated_at'
         ], $form_storage);
-
+    }
+    public function testMenusStructureMigration()
+    {
         $menus = Schema::getColumnListing('menus');
         $this->assertEquals([
             'id',
@@ -95,7 +114,9 @@ class MigrationsTest extends TestCase
             'created_at',
             'updated_at'
         ], $menus);
-
+    }
+    public function testLinksStructureMigration()
+    {
         $links = Schema::getColumnListing('links');
         $this->assertEquals([
             'id',
@@ -111,7 +132,9 @@ class MigrationsTest extends TestCase
             'created_at',
             'updated_at'
         ], $links);
-
+    }
+    public function testMenuItemsStructureMigration()
+    {
         $menu_items = Schema::getColumnListing('menu_items');
         $this->assertEquals([
             'id',
@@ -131,7 +154,9 @@ class MigrationsTest extends TestCase
             'created_at',
             'updated_at'
         ], $menu_items);
-
+    }
+    public function testFailedJobsStructureMigration()
+    {
         $failed_jobs = Schema::getColumnListing('failed_jobs');
         $this->assertEquals([
             'id',
@@ -141,7 +166,9 @@ class MigrationsTest extends TestCase
             'exception',
             'failed_at'
         ], $failed_jobs);
-
+    }
+    public function testNotificationsStructureMigration()
+    {
         $notifications = Schema::getColumnListing('notifications');
         $this->assertEquals([
             'id',
@@ -153,6 +180,5 @@ class MigrationsTest extends TestCase
             'created_at',
             'updated_at'
         ], $notifications);
-
     }
 }
