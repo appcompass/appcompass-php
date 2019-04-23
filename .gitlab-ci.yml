@@ -1,4 +1,4 @@
-image: php:7.2
+image: php:7.2-cli
 
 services:
   - postgres:latest
@@ -8,13 +8,8 @@ variables:
   POSTGRES_USER: testrunnner
   POSTGRES_PASSWORD: ""
 
-connect:
-  image: postgres
-  script:
-  - export PGPASSWORD=$POSTGRES_PASSWORD
-  - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
-
 cache:
+  key: "$CI_COMMIT_REF_SLUG"
   paths:
   - vendor/
 
@@ -29,17 +24,26 @@ before_script:
   libzip-dev
   zlib1g-dev
 - >
-  docker-php-ext-install
+  docker-php-source extract
+  && docker-php-ext-install
   pdo_pgsql
   pgsql
   sockets
   intl
   zip
+  && docker-php-source delete
 - curl -sS https://getcomposer.org/installer | php
 - php composer.phar self-update
 - php composer.phar install --no-progress --no-interaction
 - cp .env.gitlab-ci .env
 
 test:app:
+  variables:
+    DB_CONNECTION: pgsql
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    DB_DATABASE: test_db
+    DB_USERNAME: testrunnner
+    DB_PASSWORD: ""
   script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-text

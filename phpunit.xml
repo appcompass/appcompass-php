@@ -10,17 +10,17 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="App Compass Form Builder Test Suite">
+        <testsuite name="App Compass Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
     <php>
-        <env name="DB_CONNECTION" value="pgsql" force="true" />
-        <env name="DB_HOST" value="localhost" force="true" />
-        <env name="DB_PORT" value="5432" force="true" />
-        <env name="DB_DATABASE" value="test_db" force="true" />
-        <env name="DB_USERNAME" value="testrunnner" force="true" />
-        <env name="DB_PASSWORD" value="" force="true" />
+        <env name="DB_CONNECTION" value="pgsql" />
+        <env name="DB_HOST" value="localhost" />
+        <env name="DB_PORT" value="5432" />
+        <env name="DB_DATABASE" value="test_db" />
+        <env name="DB_USERNAME" value="testrunnner" />
+        <env name="DB_PASSWORD" value="" />
     </php>
     <filter>
         <whitelist>
